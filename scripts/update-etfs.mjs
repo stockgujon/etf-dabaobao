@@ -27,6 +27,32 @@ const tpexSourceUrl = 'https://www.tpex.org.tw/zh-tw/index.html';
 const tpexEndpoint = 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes';
 const isEtfCode = (value) => /^00\d{3,4}[A-Z]?$/.test(String(value ?? '').trim());
 
+// e添富 的商品結果不含日期，其收盤價實際上是最近交易日的。
+// 證交所「每日收盤行情」的 RWD 端點會回傳 date 欄位（YYYYMMDD），用來標示收盤價日期。
+// 取不到就留 null，畫面上寧可不標日期，也不要標一個猜的。
+const fetchListedPriceDate = async () => {
+  const candidates = [
+    'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json',
+    'https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=json',
+  ];
+  for (const url of candidates) {
+    try {
+      const response = await fetch(url, {
+        headers: { 'user-agent': userAgent, accept: 'application/json', referer: sourceUrl },
+        redirect: 'follow',
+        signal: AbortSignal.timeout(45000),
+      });
+      if (!response.ok) continue;
+      const payload = await response.json();
+      const raw = String(payload?.date ?? '').trim();
+      if (/^\d{8}$/.test(raw)) return `${raw.slice(0, 4)}.${raw.slice(4, 6)}.${raw.slice(6, 8)}`;
+    } catch (error) {
+      console.warn(`取得上市收盤價日期失敗（${url}）：${error.message}`);
+    }
+  }
+  return null;
+};
+
 // 櫃買端點回傳約 11,000 筆、數 MB，偶爾會中斷，因此獨立重試。
 const fetchTpexRows = async (tries = 3) => {
   let lastError = null;
@@ -366,6 +392,9 @@ try {
   }).filter((row) => row.code && row.name);
 
   /* ---------- 上櫃：櫃買中心 ---------- */
+  const listedPriceDate = await fetchListedPriceDate();
+  if (!listedPriceDate) console.warn('::warning::取不到上市收盤價日期，本次不標示上市收盤價日期。');
+
   const twseCodes = new Set(twseEtfs.map((row) => row.code));
   let tpexEtfs = [];
   let tpexWarning = '';
@@ -466,13 +495,14 @@ try {
       sourceUrl,
       tpexSourceUrl,
       officialDate,
+      listedPriceDate,
       otcOfficialDate,
       syncedAt: nowIso,
       count: etfs.length,
       listedCount: twseEtfs.length,
       otcCount: tpexEtfs.length,
       categorySource: '上市依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題（市值限定被動原型 ETF）；上櫃依櫃買中心代號末碼規則推導，策略／主題無官方來源故留空',
-      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃取自櫃買中心上櫃股票行情。日成交量兩市場皆以 1,000 股換算為 1 張。上櫃資產規模為「已發行受益權單位數 × 收盤價」之推估市值（櫃買未公開基金規模），受益人數與基本資料櫃買亦未公開',
+      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃取自櫃買中心上櫃股票行情。日成交量兩市場皆以 1,000 股換算為 1 張。上櫃資產規模為「已發行受益權單位數 × 收盤價」之推估市值（櫃買未公開基金規模），受益人數與基本資料櫃買亦未公開。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑），收盤價日期另見 listedPriceDate 與 otcOfficialDate',
       lastSuccessfulSyncAt: nowIso,
       lastAttemptAt: nowIso,
       syncStatus: 'success',

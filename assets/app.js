@@ -73,6 +73,7 @@ const el = {
   statTotal: $('stat-total'),
   statScale: $('stat-scale'),
   statDate: $('stat-date'),
+  statDateNote: $('stat-date-note'),
   search: $('search-input'),
   selects: {
     掛牌市場: $('select-market'),
@@ -103,6 +104,8 @@ const el = {
   note: {
     source: $('note-source'),
     official: $('note-official'),
+    priceDate: $('note-price-date'),
+    otcDate: $('note-otc-date'),
     success: $('note-success'),
     attempt: $('note-attempt'),
     schedule: $('note-schedule'),
@@ -143,6 +146,15 @@ const getClassification = (etf) => {
 
 const etfs = () => state.dataset?.etfs ?? [];
 const marketOf = (etf) => etf.market || '上市';
+// 收盤價的實際交易日：上市與上櫃各有各的來源，取不到就不顯示（不猜日期）。
+const priceDateOf = (etf) => (marketOf(etf) === '上櫃'
+  ? state.dataset?.meta?.otcOfficialDate
+  : state.dataset?.meta?.listedPriceDate) || null;
+const shortDate = (value) => {
+  const parts = String(value ?? '').split('.');
+  return parts.length === 3 ? `${parts[1]}/${parts[2]}` : null;
+};
+const fullDate = (value) => (value ? String(value).replaceAll('.', '/') : null);
 const isEstimated = (etf) => etf.sizeIsEstimated === true;
 
 const getFiltered = () => {
@@ -251,9 +263,13 @@ const renderStatus = (filtered) => {
   el.statTotal.textContent = `共 ${etfs().length} 檔上市 ETF`;
   el.statScale.textContent = formatAssetScale(filtered.reduce((sum, etf) => sum + (etf.size ?? 0), 0));
   el.statDate.textContent = meta.officialDate ? String(meta.officialDate).replaceAll('.', '/') : '—';
+  el.statDateNote.textContent = '證交所 e添富 標示之更新日';
 
   el.note.source.textContent = meta.source || '臺灣證券交易所 ETF e添富';
-  el.note.official.textContent = `官方資料日：${meta.officialDate ?? '—'}`;
+  el.note.official.textContent = `e添富 資料更新日：${meta.officialDate ?? '—'}（規模／受益人數口徑）`;
+  el.note.priceDate.textContent = `上市收盤價日：${fullDate(meta.listedPriceDate) ?? '證交所未提供'}`;
+  el.note.otcDate.hidden = !meta.otcOfficialDate;
+  el.note.otcDate.textContent = `上櫃資料日：${fullDate(meta.otcOfficialDate) ?? '—'}`;
   el.note.success.textContent = `最後成功更新：${formatTime(meta.lastSuccessfulSyncAt) ?? '—'}`;
   el.note.attempt.textContent = `最近嘗試：${formatTime(meta.lastAttemptAt) ?? '尚未執行'}`;
   el.note.schedule.textContent = `排程：${meta.schedule ?? '每個交易日 18:00 更新；失敗時於 18:15、18:45 自動重試'}`;
@@ -301,7 +317,18 @@ const renderRows = (filtered) => {
     fundTd.append(wrap);
 
     const priceTd = document.createElement('td');
-    priceTd.textContent = fund.price === null || fund.price === undefined ? '—' : `$${formatDecimal(fund.price)}`;
+    const priceValue = document.createElement('b');
+    priceValue.className = 'px-value';
+    priceValue.textContent = fund.price === null || fund.price === undefined ? '—' : `$${formatDecimal(fund.price)}`;
+    priceTd.append(priceValue);
+    const pxShort = shortDate(priceDateOf(fund));
+    if (pxShort) {
+      const pxDate = document.createElement('small');
+      pxDate.className = 'px-date';
+      pxDate.textContent = `${pxShort} 收盤`;
+      pxDate.title = `${fullDate(priceDateOf(fund))} 收盤價`;
+      priceTd.append(pxDate);
+    }
 
     const sizeTd = document.createElement('td');
     const sizeStrong = document.createElement('strong');
@@ -397,7 +424,9 @@ const renderCompare = () => {
 
     const dl = document.createElement('dl');
     [
-      ['收盤價', fund.price === null || fund.price === undefined ? '—' : `${formatDecimal(fund.price)} 元`],
+      ['收盤價', fund.price === null || fund.price === undefined
+        ? '—'
+        : `${formatDecimal(fund.price)} 元${shortDate(priceDateOf(fund)) ? `（${shortDate(priceDateOf(fund))}）` : ''}`],
       ['日成交量', `${formatLots(fund.dailyTradingVolume)} 張`],
       ['受益人數', `${formatInteger(fund.holders)} 人`],
       ['掛牌日期', orMissing(fund.listingDate, fund)],
@@ -548,7 +577,9 @@ const renderDetail = () => {
   const metrics = document.createElement('div');
   metrics.className = 'detail-metrics';
   [
-    ['收盤價', fund.price === null || fund.price === undefined ? '—' : `${formatDecimal(fund.price)} 元`],
+    ['收盤價', fund.price === null || fund.price === undefined
+      ? '—'
+      : `${formatDecimal(fund.price)} 元${fullDate(priceDateOf(fund)) ? `（${fullDate(priceDateOf(fund))}）` : ''}`],
     ['資產規模', `${formatSize(fund.size)}${isEstimated(fund) ? '（推估）' : ''}`],
     ['日成交量', `${formatLots(fund.dailyTradingVolume)} 張`],
     ['受益人數', `${formatInteger(fund.holders)} 人`],

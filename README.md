@@ -90,6 +90,18 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 
 上櫃規模為推估值一事，在表格、比較卡與詳情視窗三處都有明確標示，排序與篩選照常可用。
 
+## 三個日期分別代表什麼
+
+`data/etfs.json` 的 meta 有三個日期，來源不同、更新節奏也不同：
+
+| 欄位 | 意義 | 來源 |
+| --- | --- | --- |
+| `officialDate` | e添富 首頁標示的「資料更新時間」，對應**資產規模與受益人數**的口徑，通常比收盤價晚一天 | `https://www.twse.com.tw/rwd/zh/ETFortune/index` 的 HTML |
+| `listedPriceDate` | **上市收盤價**的實際交易日 | 證交所每日收盤行情 RWD 端點的 `date` 欄位，取不到則為 `null`（畫面就不標日期） |
+| `otcOfficialDate` | **上櫃**收盤價與成交量的交易日 | 櫃買行情每列的 `Date`（民國年轉西元） |
+
+因此畫面上會出現「e添富 資料更新日 09/07」但「收盤價 09/08」的情形，這是證交所本身的更新節奏，不是資料抓錯。每一列 ETF 的收盤價下方都會標示該筆價格的實際交易日。
+
 ## 官方資料來源
 
 - 商品與官方分類入口：<https://www.twse.com.tw/zh/ETFortune/products>
@@ -97,8 +109,18 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 - 收盤價與成交股數：`https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL`
 - 基金基本資料：`https://openapi.twse.com.tw/v1/opendata/t187ap47_L`
 - 上櫃 ETF 行情：`https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes`
+- 上市收盤價日期：`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json` 的 `date` 欄位
 
 分類一律採用證交所 ETF e添富的官方篩選結果交叉比對，不以名稱關鍵字猜測。「市值」僅限官方市值型、被動式、非槓桿、非反向的 ETF；主動式 ETF 不會出現在市值篩選結果。
+
+## 表格的響應式行為
+
+實測固定欄寬要到 **1366px 以上**才能完整顯示 8 個欄位而不截字，因此：
+
+- **≥1366px**：沿用 v17 的固定欄寬（`table-layout:fixed`、`overflow-x:hidden`），桌機不需要左右捲動。
+- **<1366px**（含筆電 1280、平板、手機）：改為 `table-layout:auto` + `min-width:900px`，表格區塊可左右滑動，所有欄位完整顯示不截字，並在表格上方出現「← 左右滑動可看完整欄位 →」提示。
+
+頁面本身在任何寬度都不會產生水平捲軸，只有表格區塊內部會捲動。
 
 ## 本機預覽
 
