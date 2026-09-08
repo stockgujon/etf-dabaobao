@@ -1,0 +1,52 @@
+name: Update ETF snapshot
+
+# 每日資料同步只在 GitHub Actions 執行；網站前台不會、也不能觸發本工作流程。
+# cron 使用 UTC，以下三個時間對應台灣時間 18:00、18:15、18:45（平日）。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10 * * 1-5"
+    - cron: "15 10 * * 1-5"
+    - cron: "45 10 * * 1-5"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-etfs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Sync TWSE ETF snapshot
+        id: sync
+        continue-on-error: true
+        run: node scripts/update-etfs.mjs
+
+      - name: Commit changes
+        run: |
+          if [ -z "$(git status --porcelain data/etfs.json)" ]; then
+            echo "data/etfs.json 沒有變更，不進行 commit。"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/etfs.json
+          git commit -m "data: refresh TWSE ETF snapshot"
+          git push
+
+      - name: Fail if sync did not succeed
+        if: steps.sync.outcome == 'failure'
+        run: |
+          echo "::error::ETF 同步失敗，已保留最後一次成功資料，僅更新同步狀態。"
+          exit 1
