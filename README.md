@@ -97,7 +97,8 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 | 欄位 | 意義 | 來源 |
 | --- | --- | --- |
 | `officialDate` | e添富 首頁標示的「資料更新時間」，對應**資產規模與受益人數**的口徑，通常比收盤價晚一天 | `https://www.twse.com.tw/rwd/zh/ETFortune/index` 的 HTML |
-| `listedPriceDate` | **上市收盤價**的實際交易日 | 證交所每日收盤行情 RWD 端點的 `date` 欄位，取不到則為 `null`（畫面就不標日期） |
+| `listedPriceDate` | **上市收盤價**的實際交易日 | 依序嘗試三支證交所 RWD 端點（見下），全部取不到則為 `null`，畫面就不標日期 |
+| `listedPriceDateSource` | 上面那個日期實際取自哪一支端點 | 由同步腳本記錄，方便日後追查 |
 | `otcOfficialDate` | **上櫃**收盤價與成交量的交易日 | 櫃買行情每列的 `Date`（民國年轉西元） |
 
 因此畫面上會出現「e添富 資料更新日 09/07」但「收盤價 09/08」的情形，這是證交所本身的更新節奏，不是資料抓錯。每一列 ETF 的收盤價下方都會標示該筆價格的實際交易日。
@@ -109,7 +110,12 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 - 收盤價與成交股數：`https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL`
 - 基金基本資料：`https://openapi.twse.com.tw/v1/opendata/t187ap47_L`
 - 上櫃 ETF 行情：`https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes`
-- 上市收盤價日期：`https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json` 的 `date` 欄位
+- 上市收盤價日期（依序嘗試，取到就停）：
+  1. `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_ALL?response=json` — 有 `date` 欄位，回應小，首選
+  2. `https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?type=ALL&response=json` — 也有 `date`，備援
+  3. `https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_AVG_ALL?response=json` — 從標題「115年09月08日」解析
+
+  註：`/rwd/zh/afterTrading/STOCK_DAY_ALL` 與舊路徑 `/exchangeReport/STOCK_DAY_ALL` 實測回傳非 JSON，不可用。
 
 分類一律採用證交所 ETF e添富的官方篩選結果交叉比對，不以名稱關鍵字猜測。「市值」僅限官方市值型、被動式、非槓桿、非反向的 ETF；主動式 ETF 不會出現在市值篩選結果。
 

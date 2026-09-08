@@ -66,22 +66,46 @@ const tpexHeaders = { 'user-agent': userAgent, accept: 'application/json, text/p
 const pause = (ms) => new Promise((done) => setTimeout(done, ms));
 
 // e添富 的商品結果不含日期，其收盤價實際上是最近交易日的。
-// 證交所「每日收盤行情」的 RWD 端點會回傳 date 欄位（YYYYMMDD），用來標示收盤價日期。
-// 取不到就留 null，畫面上寧可不標日期，也不要標一個猜的。
-const fetchListedPriceDate = async () => {
-  for (const url of [
-    'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json',
-    'https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=json',
-  ]) {
-    try {
-      const payload = await fetchJson(url, { headers: twseHeaders }, { tries: 2, label: '上市收盤價日期', timeout: 60000 });
-      const raw = String(payload?.date ?? '').trim();
-      if (/^\d{8}$/.test(raw)) return `${raw.slice(0, 4)}.${raw.slice(4, 6)}.${raw.slice(6, 8)}`;
-    } catch (error) {
-      console.warn(`取得上市收盤價日期失敗：${describeError(error)}`);
-    }
-  }
+// 實測結果（2026-09-08）：
+//   ✅ /rwd/zh/afterTrading/BWIBBU_ALL   → 有 date 欄位（20260908），回應小，首選
+//   ✅ /rwd/zh/afterTrading/MI_INDEX     → 也有 date，但整包很大，當備援
+//   ✅ /rwd/zh/afterTrading/STOCK_DAY_AVG_ALL → 只有標題「115年09月08日」，需解析
+//   ❌ /rwd/zh/afterTrading/STOCK_DAY_ALL 與舊路徑 → 回傳非 JSON，不可用
+// 三支都取不到就留 null，畫面上寧可不標日期，也不要標一個猜的。
+const LISTED_DATE_SOURCES = [
+  { url: 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_ALL?response=json', label: '證交所個股本益比日報' },
+  { url: 'https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?type=ALL&response=json', label: '證交所每日收盤行情' },
+  { url: 'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_AVG_ALL?response=json', label: '證交所個股日收盤價及月平均價' },
+];
+
+// 支援西元 YYYYMMDD、西元 YYYY/MM/DD 與民國 115年09月08日 / 115/09/08 三種寫法
+const parseTwseDate = (payload) => {
+  const raw = String(payload?.date ?? '').trim();
+  if (/^\d{8}$/.test(raw)) return `${raw.slice(0, 4)}.${raw.slice(4, 6)}.${raw.slice(6, 8)}`;
+  const title = String(payload?.title ?? '');
+  const roc = title.match(/(\d{3})\s*[年/]\s*(\d{1,2})\s*[月/]\s*(\d{1,2})/);
+  if (roc) return `${Number(roc[1]) + 1911}.${roc[2].padStart(2, '0')}.${roc[3].padStart(2, '0')}`;
+  const ad = title.match(/(20\d{2})[./-](\d{1,2})[./-](\d{1,2})/);
+  if (ad) return `${ad[1]}.${ad[2].padStart(2, '0')}.${ad[3].padStart(2, '0')}`;
   return null;
+};
+
+const fetchListedPriceDate = async () => {
+  for (const { url, label } of LISTED_DATE_SOURCES) {
+    try {
+      const payload = await fetchJson(url, { headers: twseHeaders }, { tries: 2, label, timeout: 60000 });
+      const date = parseTwseDate(payload);
+      if (date) {
+        console.log(`上市收盤價日期取自「${label}」：${date}`);
+        return { date, source: label };
+      }
+      console.warn(`「${label}」沒有可解析的日期，改試下一支。`);
+    } catch (error) {
+      console.warn(`取得上市收盤價日期失敗（${label}）：${describeError(error)}`);
+    }
+    await pause(800);
+  }
+  return { date: null, source: null };
 };
 
 // 櫃買端點回傳約 11,000 筆、數 MB，最容易在傳輸中途斷線，逾時放寬到 150 秒。
@@ -409,8 +433,8 @@ try {
 
   /* ---------- 上櫃：櫃買中心 ---------- */
   stage = '上市收盤價日期';
-  const listedPriceDate = await fetchListedPriceDate();
-  if (!listedPriceDate) console.warn('::warning::取不到上市收盤價日期，本次不標示上市收盤價日期。');
+  const { date: listedPriceDate, source: listedPriceDateSource } = await fetchListedPriceDate();
+  if (!listedPriceDate) console.warn('::warning::三個來源都取不到上市收盤價日期，本次不標示。');
 
   stage = '櫃買中心上櫃行情';
   const twseCodes = new Set(twseEtfs.map((row) => row.code));
@@ -514,6 +538,7 @@ try {
       tpexSourceUrl,
       officialDate,
       listedPriceDate,
+      listedPriceDateSource,
       otcOfficialDate,
       syncedAt: nowIso,
       count: etfs.length,
