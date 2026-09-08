@@ -531,8 +531,13 @@ try {
   if (staleNotice) console.warn(`::warning::${staleNotice}`);
 
   // 內容與上一次成功保存的完全相同（假日、或交易所尚未更新）就不寫檔，避免無意義的提交。
+  // 「無變更」必須連日期欄位一起比對。只比 ETF 陣列的話，
+  // 遇到「資料相同但這次終於抓到收盤價日期」的情況會被誤判為無變更而丟棄。
+  const sameValue = (a, b) => (a ?? null) === (b ?? null);
   const unchanged = existing?.meta?.syncStatus === 'success'
     && previousDate === officialDate
+    && sameValue(existing.meta.listedPriceDate, listedPriceDate)
+    && sameValue(existing.meta.otcOfficialDate, otcOfficialDate)
     && JSON.stringify(existing.etfs) === JSON.stringify(etfs);
 
   if (unchanged) {

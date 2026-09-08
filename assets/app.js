@@ -105,6 +105,7 @@ const el = {
     source: $('note-source'),
     official: $('note-official'),
     priceDate: $('note-price-date'),
+    priceWhy: $('note-price-why'),
     otcDate: $('note-otc-date'),
     success: $('note-success'),
     attempt: $('note-attempt'),
@@ -268,6 +269,8 @@ const renderStatus = (filtered) => {
   el.note.source.textContent = meta.source || '臺灣證券交易所 ETF e添富';
   el.note.official.textContent = `e添富 資料更新日：${meta.officialDate ?? '—'}（規模／受益人數口徑）`;
   el.note.priceDate.textContent = `上市收盤價日：${fullDate(meta.listedPriceDate) ?? '證交所未提供'}`;
+  el.note.priceWhy.hidden = Boolean(meta.listedPriceDate) || !meta.listedPriceDateNote;
+  el.note.priceWhy.textContent = meta.listedPriceDateNote ? `上市收盤價日取得失敗：${meta.listedPriceDateNote}` : '';
   el.note.otcDate.hidden = !meta.otcOfficialDate;
   el.note.otcDate.textContent = `上櫃資料日：${fullDate(meta.otcOfficialDate) ?? '—'}`;
   el.note.success.textContent = `最後成功更新：${formatTime(meta.lastSuccessfulSyncAt) ?? '—'}`;
