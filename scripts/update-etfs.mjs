@@ -23,8 +23,12 @@ const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 
 // 上櫃（櫃買中心）——證交所 ETF e添富 只涵蓋上市，上櫃 ETF 需另外從櫃買中心取得。
 // 已實測：/tpex_mainboard_daily_close_quotes 是唯一同時提供代號、名稱、收盤價、
 // 成交股數與已發行受益權單位數（Capitals）的端點；櫃買未公開受益人數與基金基本資料。
-const tpexSourceUrl = 'https://www.tpex.org.tw/zh-tw/index.html';
+const tpexSourceUrl = 'https://info.tpex.org.tw/ETF/zh/filter.html';
 const tpexEndpoint = 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes';
+// 櫃買中心「ETF 訊息中心」的篩選 API：官方規模、受益人數、掛牌日期、標的指數、發行人。
+// 實測（2026-09-08）以 POST 表單、不帶條件即回傳全部 119 檔，且欄位 119/119 完整。
+const tpexInfoEndpoint = 'https://info.tpex.org.tw/api/etfFilter';
+const tpexDetailUrl = (code) => `https://info.tpex.org.tw/ETF/zh/detail.html?query=${encodeURIComponent(code)}`;
 const isEtfCode = (value) => /^00\d{3,4}[A-Z]?$/.test(String(value ?? '').trim());
 
 // undici 的 fetch 失敗常包一層，真正原因在 error.cause，錯誤訊息要一併帶出來才查得到。
@@ -114,6 +118,42 @@ const fetchListedPriceDate = async () => {
   return { date: null, source: null, note: notes.join('｜').slice(0, 400) };
 };
 
+// 掛牌日期可能是 2017/01/17 或 2017.01.17，統一成 YYYY.MM.DD 才能跟上市一起排序。
+const normalizeDate = (value) => {
+  const m = String(value ?? '').trim().match(/^(\d{4})[./-](\d{1,2})[./-](\d{1,2})$/);
+  return m ? `${m[1]}.${m[2].padStart(2, '0')}.${m[3].padStart(2, '0')}` : '';
+};
+
+// 櫃買 ETF 訊息中心：不帶條件即回傳全部上櫃 ETF 的基金面資料。
+// 取不到時回傳空 Map，上櫃資料會自動退回「已發行單位數 × 收盤價」的推估模式。
+const fetchTpexOfficial = async () => {
+  try {
+    const payload = await fetchJson(tpexInfoEndpoint, {
+      method: 'POST',
+      headers: {
+        ...tpexHeaders,
+        'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        referer: tpexSourceUrl,
+        origin: 'https://info.tpex.org.tw',
+      },
+      body: new URLSearchParams(),
+    }, { tries: 3, label: '櫃買 ETF 訊息中心', timeout: 60000 });
+    const rows = Array.isArray(payload?.data) ? payload.data : Array.isArray(payload) ? payload : null;
+    if (!rows) throw new Error('回傳中找不到 data 陣列');
+    const map = new Map();
+    for (const row of rows) {
+      const code = String(row?.stockNo ?? '').trim();
+      if (code) map.set(code, row);
+    }
+    console.log(`櫃買 ETF 訊息中心：取得 ${map.size} 檔官方基金資料`);
+    return { map, note: '' };
+  } catch (error) {
+    const note = `櫃買 ETF 訊息中心取得失敗（${describeError(error)}），上櫃規模改用推估值、受益人數與基本資料留空。`;
+    console.warn(`::warning::${note}`);
+    return { map: new Map(), note };
+  }
+};
+
 // 櫃買端點回傳約 11,000 筆、數 MB，最容易在傳輸中途斷線，逾時放寬到 150 秒。
 const fetchTpexRows = async () => {
   const rows = await fetchJson(tpexEndpoint, { headers: tpexHeaders }, { tries: 3, label: '櫃買中心行情', timeout: 150000 });
@@ -163,8 +203,12 @@ const fetchRows = async (filters = [], label = 'e添富 商品結果') => {
   return payload.data;
 };
 
+// 注意：Number('') 會得到 0 而不是 NaN，若不先擋掉，缺值會被當成「數字 0」，
+// 讓「有沒有官方值」的判斷失效（實測會把規模變成 0 億）。空值一律回 null。
 const toNumber = (value) => {
-  const parsed = Number(String(value ?? '').replaceAll(',', '').trim());
+  const text = String(value ?? '').replaceAll(',', '').trim();
+  if (!text || text === '-' || text === '—' || text === 'N/A') return null;
+  const parsed = Number(text);
   return Number.isFinite(parsed) ? parsed : null;
 };
 
@@ -277,31 +321,35 @@ const tpexCategoriesFromCode = (code) => {
   return categories.length ? categories : ['其他'];
 };
 
-const buildTpexEtfs = (rows) => rows
+const buildTpexEtfs = (rows, officialByCode = new Map()) => rows
   .filter((row) => isEtfCode(row?.SecuritiesCompanyCode))
   .map((row) => {
     const code = String(row.SecuritiesCompanyCode).trim();
-    const name = String(row.CompanyName ?? '').trim();
+    const official = officialByCode.get(code) ?? null;
+    const name = String(official?.stockName ?? row.CompanyName ?? '').trim();
     const categories = tpexCategoriesFromCode(code);
     const price = toNumber(row.Close);
     const units = toNumber(row.Capitals); // 已發行受益權單位數
-    // 櫃買未公開基金規模；以「已發行單位數 × 收盤價」推估市值（億元），並標記為推估值。
-    const size = price !== null && units !== null ? Math.round((units * price) / 1e8) : null;
-    const investmentTarget = buildInvestmentTarget('', '', name, categories);
-    const classification = classifyEtf({ fundType: '', indexName: '', investmentTarget, name, categories });
+    // 有官方規模就用官方；取不到才退回「已發行單位數 × 收盤價」的推估市值並標記。
+    const officialSize = toNumber(official?.totalAv);
+    const estimatedSize = price !== null && units !== null ? Math.round((units * price) / 1e8) : null;
+    const size = officialSize ?? estimatedSize;
+    const indexName = String(official?.indexName ?? '').replace('不適用', '').trim();
+    const investmentTarget = buildInvestmentTarget('', indexName, name, categories);
+    const classification = classifyEtf({ fundType: '', indexName, investmentTarget, name, categories });
     return {
       code,
       name,
-      listingDate: '',
-      indexName: '',
+      listingDate: normalizeDate(official?.listingDate),
+      indexName,
       benchmarkName: '',
       fundType: '',
       investmentTarget,
       size,
       price,
-      holders: null, // 櫃買中心未公開受益人數
+      holders: toNumber(official?.holders),
       dailyTradingVolume: sharesToLots(row.TradingShares),
-      issuer: '',
+      issuer: String(official?.issuer ?? '').trim(),
       manager: '',
       custodian: '',
       categories,
@@ -311,7 +359,8 @@ const buildTpexEtfs = (rows) => rows
       themes: classification.themes,
       riskNotes: buildRiskNotes('', categories, investmentTarget),
       market: '上櫃',
-      sizeIsEstimated: true,
+      sizeIsEstimated: officialSize === null,
+      detailUrl: tpexDetailUrl(code),
     };
   })
   .filter((row) => row.code && row.name);
@@ -450,13 +499,17 @@ try {
   let tpexEtfs = [];
   let tpexWarning = '';
   let otcOfficialDate = null;
+  let otcOfficialNote = '';
   try {
+    const officialResult = await fetchTpexOfficial();
+    otcOfficialNote = officialResult.note;
+    await pause(800);
     const tpexRows = await fetchTpexRows();
     // 櫃買回傳的 Date 是民國年（例如 1150907），轉成與證交所一致的 YYYY.MM.DD。
     const roc = String(tpexRows.find((row) => row?.Date)?.Date ?? '').trim();
     if (/^\d{7}$/.test(roc)) otcOfficialDate = `${Number(roc.slice(0, 3)) + 1911}.${roc.slice(3, 5)}.${roc.slice(5, 7)}`;
     // 同一代號若兩邊都有，以證交所官方資料為準（正常情況不會發生）。
-    tpexEtfs = buildTpexEtfs(tpexRows).filter((row) => !twseCodes.has(row.code));
+    tpexEtfs = buildTpexEtfs(tpexRows, officialResult.map).filter((row) => !twseCodes.has(row.code));
     } catch (error) {
     // 櫃買單邊失敗時，沿用上一次成功保存的上櫃資料，讓上市仍能正常更新。
     const previousOtc = (existing?.etfs ?? []).filter((row) => row.market === '上櫃');
@@ -508,6 +561,17 @@ try {
   if (typeof etf00679B.size !== 'number' || etf00679B.size < 1000) throw new Error(`00679B 推估規模異常：${etf00679B.size}`);
   if (etf00679B.assetClass !== '債券') throw new Error('00679B 應分類為債券');
   if (!tpexEtfs.some((row) => row.code === '006201')) throw new Error('上櫃資料缺少 006201');
+  // 若這次成功取得櫃買官方基金資料，關鍵欄位必須到位；取不到則允許退回推估模式。
+  const otcOfficialCount = tpexEtfs.filter((row) => !row.sizeIsEstimated).length;
+  if (otcOfficialCount) {
+    if (etf00679B.sizeIsEstimated) throw new Error('00679B 應取得官方規模卻仍是推估值');
+    if (!(etf00679B.holders > 0)) throw new Error('00679B 未取得受益人數');
+    if (!etf00679B.issuer) throw new Error('00679B 未取得發行人');
+    if (!etf00679B.listingDate) throw new Error('00679B 未取得掛牌日期');
+    if (otcOfficialCount < tpexEtfs.length * 0.9) {
+      throw new Error(`上櫃官方欄位覆蓋率過低：${otcOfficialCount}/${tpexEtfs.length}`);
+    }
+  }
   if (tpexEtfs.some((row) => row.themes.length)) throw new Error('上櫃 ETF 不應帶有策略／主題標籤（櫃買無官方分類來源）');
   if (etfs.some((row) => row.market !== '上市' && row.market !== '上櫃')) throw new Error('有 ETF 缺少市場別');
 
@@ -555,16 +619,17 @@ try {
       listedPriceDateSource,
       listedPriceDateNote,
       otcOfficialDate,
+      otcOfficialFieldCount: tpexEtfs.filter((row) => !row.sizeIsEstimated).length,
       syncedAt: nowIso,
       count: etfs.length,
       listedCount: twseEtfs.length,
       otcCount: tpexEtfs.length,
       categorySource: '上市依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題（市值限定被動原型 ETF）；上櫃依櫃買中心代號末碼規則推導，策略／主題無官方來源故留空',
-      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃取自櫃買中心上櫃股票行情。日成交量兩市場皆以 1,000 股換算為 1 張。上櫃資產規模為「已發行受益權單位數 × 收盤價」之推估市值（櫃買未公開基金規模），受益人數與基本資料櫃買亦未公開。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑），收盤價日期另見 listedPriceDate 與 otcOfficialDate',
+      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃的規模、受益人數、掛牌日期、標的指數與發行人取自櫃買中心 ETF 訊息中心，收盤價與成交量取自櫃買上櫃行情。日成交量兩市場皆以 1,000 股換算為 1 張。若櫃買 ETF 訊息中心暫時取不到，上櫃規模會退回「已發行受益權單位數 × 收盤價」的推估市值並標記為推估。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑），收盤價日期另見 listedPriceDate 與 otcOfficialDate',
       lastSuccessfulSyncAt: nowIso,
       lastAttemptAt: nowIso,
       syncStatus: 'success',
-      syncWarning: [staleNotice, tpexWarning].filter(Boolean).join('　'),
+      syncWarning: [staleNotice, tpexWarning, otcOfficialNote].filter(Boolean).join('　'),
       schedule: '每個交易日 18:00 起檢查更新，18:15、18:45、20:00、22:00 與隔日 08:30 再次確認（GitHub Actions，台灣時間）',
       units: { size: '億元', price: '元', dailyTradingVolume: '張', holders: '人' },
     },

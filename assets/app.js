@@ -13,13 +13,16 @@ import {
 const MARKET_OPTIONS = ['全部市場', '上市', '上櫃'];
 const DATA_URL = './data/etfs.json';
 const SOURCE_URL = 'https://www.twse.com.tw/zh/ETFortune/products';
-const TPEX_URL = 'https://www.tpex.org.tw/zh-tw/index.html';
+const TPEX_URL = 'https://info.tpex.org.tw/ETF/zh/filter.html';
 const etfInfoUrl = (code) => `https://www.twse.com.tw/zh/ETFortune/etfInfo/${encodeURIComponent(code)}`;
-// 上市有證交所單一商品頁；櫃買中心沒有對應的單一商品頁網址，退回官網首頁。
-const officialUrlOf = (etf) => (marketOf(etf) === '上櫃' ? TPEX_URL : etfInfoUrl(etf.code));
-const officialLabelOf = (etf) => (marketOf(etf) === '上櫃' ? '櫃買中心官網 ↗' : '證交所商品頁 ↗');
-// 上櫃缺欄位時，說明「櫃買未公開」比一個破折號有用。
-const orMissing = (value, etf) => value || (marketOf(etf) === '上櫃' ? '櫃買中心未公開' : '—');
+const tpexDetailUrl = (code) => `https://info.tpex.org.tw/ETF/zh/detail.html?query=${encodeURIComponent(code)}`;
+// 兩個市場各有單一商品頁；上櫃優先用資料檔帶的 detailUrl，舊資料沒有時即時組出來。
+const officialUrlOf = (etf) => (marketOf(etf) === '上櫃'
+  ? (etf.detailUrl || tpexDetailUrl(etf.code))
+  : etfInfoUrl(etf.code));
+const officialLabelOf = (etf) => (marketOf(etf) === '上櫃' ? '櫃買中心商品頁 ↗' : '證交所商品頁 ↗');
+// 上櫃缺欄位時，說明比一個破折號有用；這些欄位櫃買的 API 沒提供，但商品頁上查得到。
+const orMissing = (value, etf) => value || (marketOf(etf) === '上櫃' ? '請見櫃買中心商品頁' : '—');
 
 /* ---------------- 格式化 ---------------- */
 const intFormatter = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 });
@@ -610,13 +613,13 @@ const renderDetail = () => {
     detailRow('基金經理人', orMissing(fund.manager, fund)),
     detailRow('保管機構', orMissing(fund.custodian, fund)),
   ], marketOf(fund) === '上櫃'
-    ? '櫃買中心未公開上櫃 ETF 的基金基本資料與受益人數；分類依櫃買代號末碼規則（B/C 債券、D 主動債券、A 主動股票、L 槓桿、R 反向、T 多資產、U 期貨信託）推導。'
+    ? '規模、受益人數、掛牌日期、標的指數與發行人取自櫃買中心 ETF 訊息中心；管理方式、產品結構與資產類別依櫃買代號末碼規則（B/C 債券、D 主動債券、A 主動股票、L 槓桿、R 反向、T 多資產、U 期貨信託）推導，已與官方篩選結果核對一致。'
     : ''));
 
   const investRows = [
     detailRow('投資標的', fund.investmentTarget || '—'),
     detailRow('策略／主題', c.themes.join('、') || '未歸入指定主題'),
-    detailRow('完整標的指數', fund.indexName || (marketOf(fund) === '上櫃' ? '櫃買中心未公開' : '主動式 ETF 不適用')),
+    detailRow('完整標的指數', fund.indexName || '主動式 ETF 不適用'),
   ];
   if (fund.benchmarkName) investRows.push(detailRow('績效指標', fund.benchmarkName));
   investRows.push(detailRow('前十大持股', '各基金公司每日公告，本版整合中'));
@@ -659,7 +662,7 @@ const renderDetail = () => {
   link.href = infoUrl;
   link.target = '_blank';
   link.rel = 'noreferrer';
-  link.textContent = marketOf(fund) === '上櫃' ? '前往櫃買中心官網 ' : '前往證交所商品頁 ';
+  link.textContent = marketOf(fund) === '上櫃' ? '前往櫃買中心商品頁 ' : '前往證交所商品頁 ';
   const arrow = document.createElement('span');
   arrow.textContent = '↗';
   link.append(arrow);

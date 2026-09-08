@@ -80,15 +80,31 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 | --- | --- | --- |
 | 代號、名稱、收盤價 | ✅ 官方 | ✅ 官方 |
 | 日成交量（張） | ✅ `TradeVolume / 1000` | ✅ `TradingShares / 1000`（同口徑） |
-| 資產規模 | ✅ ETF e添富官方 AUM | ⚠️ 推估：`已發行受益權單位數 × 收盤價`，畫面標示「推估」 |
-| 受益人數 | ✅ 官方 | ❌ 櫃買未公開 |
-| 掛牌日期、發行人、經理人、保管機構、標的指數 | ✅ 官方 | ❌ 櫃買未公開 |
+| 資產規模 | ✅ ETF e添富官方 AUM | ✅ 櫃買 ETF 訊息中心官方 `totalAv`；取不到才退回推估並標示 |
+| 受益人數 | ✅ 官方 | ✅ 官方 `holders` |
+| 掛牌日期、標的指數、發行人 | ✅ 官方 | ✅ 官方 |
+| 基金經理人、保管機構 | ✅ 官方 | ❌ API 未提供（詳情視窗導向櫃買商品頁） |
 | 管理方式、產品結構、資產類別 | ✅ ETF e添富官方篩選 | ✅ 依櫃買代號末碼規則推導 |
 | 策略／主題（市值、高股息、產業、ESG、因子） | ✅ 官方篩選 | ➖ 一律留空（櫃買無官方分類來源） |
 
 櫃買代號末碼規則：`B` 台幣計價債券、`C` 外幣計價債券、`D` 主動式債券、`A` 主動式股票、`L` 槓桿、`R` 反向、`T` 多資產、`U` 期貨信託、無尾碼為一般股票型。
 
-上櫃規模為推估值一事，在表格、比較卡與詳情視窗三處都有明確標示，排序與篩選照常可用。
+上櫃的基金面資料取自櫃買中心 ETF 訊息中心：
+
+```
+POST https://info.tpex.org.tw/api/etfFilter        （表單格式，不帶條件即回傳全部 119 檔）
+欄位：stockNo, stockName, listingDate, indexName, totalAv, holders, issuer, issuerLink
+```
+
+實測（2026-09-08）：119 檔全部有規模、受益人數、掛牌日期與發行人，標的指數 118/119（缺的是主動式，本來就不適用）；檔數與代號跟每日行情端點**完全一致**。
+
+**代號末碼推導已與官方篩選核對過**：債券 101 對 101、主動式 7 對 7、槓桿 0 對 0，完全吻合，因此不需要額外呼叫 8 個官方分類篩選端點（每次同步省下 8 個請求）。
+
+若訊息中心暫時取不到，上櫃規模會自動退回「已發行單位數 × 收盤價」的推估值並在畫面標示「推估」，受益人數與基本資料留空，上市資料完全不受影響。
+
+上櫃單一商品頁：`https://info.tpex.org.tw/ETF/zh/detail.html?query=<代號>`
+
+**刻意不採用**：回傳中的 `rorYTD`、`valueYTD`、`volumeYTD`（今年以來報酬率與成交值）——本站不呈現歷史報酬與績效。
 
 ## 三個日期分別代表什麼
 
@@ -109,7 +125,8 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 - ETF e添富商品結果：`https://www.twse.com.tw/rwd/zh/ETFortune/ajaxProductsResult`
 - 收盤價與成交股數：`https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL`
 - 基金基本資料：`https://openapi.twse.com.tw/v1/opendata/t187ap47_L`
-- 上櫃 ETF 行情：`https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes`
+- 上櫃 ETF 收盤價與成交量：`https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes`
+- 上櫃 ETF 基金面資料：`POST https://info.tpex.org.tw/api/etfFilter`
 - 上市收盤價日期（依序嘗試，取到就停）：
   1. `https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_ALL?response=json` — 有 `date` 欄位，回應小，首選
   2. `https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?type=ALL&response=json` — 也有 `date`，備援
