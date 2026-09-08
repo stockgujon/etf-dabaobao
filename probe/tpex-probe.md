@@ -1,345 +1,136 @@
-# 櫃買中心（TPEx）資料端點探測報告 v2
+# 櫃買中心探測報告 v3｜補完基本資料與受益人數
 
-探測時間：2026-09-08T07:07:58.984Z
+探測時間：2026-09-08T07:23:20.750Z
 
-swagger.json 讀取成功，共 **225** 個端點。
+## Q6. 上櫃 ETF 組成分佈
 
-## A. 說明含「ETF」的端點
+上櫃 ETF 共 **119** 檔（資料日 1150907）
 
-**沒有任何端點的名稱或說明包含 ETF。**
+| 代號末碼 | 櫃買定義 | 檔數 |
+| --- | --- | --- |
+| B | 債券（台幣計價） | 95 |
+| （無英文尾碼） | 一般股票型 | 15 |
+| D | 主動式債券 | 5 |
+| A | 主動式股票 | 2 |
+| C | 債券（外幣計價） | 1 |
+| T | 多資產 | 1 |
 
-## B. 說明含「受益人數／規模／淨值／資產」的端點
+無英文尾碼的（可能是股票型）：006201 元大富櫃50、00858 永豐美國500大、00877 復華中國5G、00886 永豐美國科技、00887 永豐中國科技50大、00888 永豐台灣ESG、00928 中信上櫃ESG 30、00955 中信日本商社、009806 台新標普500、009807 台新標普科技精選、009814 富邦標普500、009815 大華美國MAG7+、009822 華南永昌未來金融、009823 群益S&P500、009825 聯邦美國金融創新
 
-- `/tpex_mainboard_peratio_analysis` — 上櫃股票個股本益比、殖利率、股價淨值比
-- `/tpex_dpsp_monthly_CBmcs007` — 可轉債資產交換ASO及ASW銀行承作餘額
-- `/tpex_opfund_recommended_dealer` — 開放式基金受益憑證造市商與造市之基金
-- `/mopsfin_t187ap07_O_basi` — 上櫃公司資產負債表(金融業)
-- `/mopsfin_t187ap07_O_bd` — 上櫃公司資產負債表(證券期貨業)
-- `/mopsfin_t187ap07_O_ci` — 上櫃公司資產負債表(一般業)
-- `/mopsfin_t187ap07_O_fh` — 上櫃公司資產負債表(金控業)
-- `/mopsfin_t187ap07_O_ins` — 上櫃公司資產負債表(保險業)
-- `/mopsfin_t187ap07_O_mim` — 上櫃公司資產負債表(異業)
-- `/mopsfin_t187ap07_U_bd` — 興櫃公司資產負債表-證券期貨業
-- `/mopsfin_t187ap07_U_ci` — 興櫃公司資產負債表-一般業
-- `/mopsfin_t187ap07_U_fh` — 興櫃公司資產負債表-金控業
-- `/mopsfin_t187ap07_U_ins` — 興櫃公司資產負債表-保險業
-- `/mopsfin_t187ap07_U_mim` — 興櫃公司資產負債表-異業
-- `/mopsfin_t187ap07_U_basi` — 興櫃公司資產負債表-金融業
+規模推估抽查（Capitals × Close ÷ 1e8 = 億元）：
 
-## C. 每日行情／收盤類端點
+- 00679B 元大美債20年：1595 億（單位數 6,225,692,000，收盤 25.62）
+- 00687B 國泰20年美債：1148 億（單位數 4,254,880,380，收盤 26.97）
+- 00937B 群益ESG投等債20+：2433 億（單位數 17,100,305,000，收盤 14.23）
+- 006201 元大富櫃50：10 億（單位數 22,946,000，收盤 45.41）
 
-- `/tpex_mainboard_daily_close_quotes` — 上櫃股票行情
-- `/tpex_mainboard_quotes` — 上櫃股票收盤行情
-- `/tpex50_index` — 富櫃50指數歷史收盤指數
-- `/tpex_off_market` — 上櫃股票盤後定價行情
-- `/tpex_ceil_non_trading` — 上櫃漲跌停未成交資訊
-- `/tpex_daily_trading_index` — 上櫃日成交量值指數
-- `/tpex_short_sell` — 上櫃當日融券賣出與借券賣出成交量值
-- `/tpex_active_dollar_volume` — 上櫃盤中個股成交金額排行
-- `/tpex_trading_volume_ratio` — 上櫃歷史類股成交價量比重
-- `/tpex_daily_qutoes_block` — 上櫃鉅額交易日成交資訊
-- `/tpex_daily_trading_block` — 上櫃個股單一證券鉅額交易日成交資訊
-- `/tpex_daily_trading_summary_odd` — 上櫃鉅額交易日成交量值統計
-- `/tpex_monthly_trading_summary_block` — 上櫃鉅額交易月成交量值統計
-- `/tpex_yearly_trading_summary_block` — 上櫃鉅額交易年成交量值統計
-- `/tpex_volume_rank` — 上櫃歷史個股成交量排行
-- `/tpex_amount_rank` — 上櫃歷史個股成交值排行
-- `/tpex_prvol` — 上櫃股票等價系統成交分價表
-- `/tpex_daily_trade_block_day` — 鉅額交易歷史成交資訊
-- `/tpex_delayed_stock_close` — 上櫃每日暫緩收盤股票
-- `/tpex200_change` — 櫃買「富櫃200指數」當日收盤指數
-- `/tpcgi_reward_index` — 上櫃公司治理指數歷史收盤指數
-- `/tpcgi_change` — 上櫃公司治理指數當日收盤指數
-- `/tpex50_change` — 櫃買「富櫃50指數」當日收盤指數
-- `/tphd_change` — 櫃買「高殖利率指數」當日收盤指數
-- `/tpci_change` — 櫃買「薪酬指數」當日收盤指數
-- `/tpci_reward_index` — 櫃買「薪酬指數」歷史收盤指數
-- `/tpex_emp88_change` — 櫃買「勞工就業88指數」當日收盤指數
-- `/tpex_emp88_reward_index` — 櫃買「勞工就業88指數」歷史收盤指數
-- `/tpex_international_bond_quotes` — 國際債券當日盤中報價行情表(含寶島債)
-- `/tpex_international_bond_trade` — 國際債券當日盤中成交行情表(含寶島債)
+## Q4. 基本資料類端點（上市日期／發行人／標的指數）
 
-## D. 實測：行情端點裡找得到上櫃 ETF 嗎
+- `/tpex_margin_trading_marginspot` — 上櫃信用交易餘額概況表
+- `/t187ap46_O_21` — 上櫃公司企業ESG資訊揭露彙總資料-職業安全衛生
+- `/t187ap46_O_9` — 上櫃公司企業ESG資訊揭露彙總資料-功能性委員會
+- `/t187ap46_O_8` — 上櫃公司企業ESG資訊揭露彙總資料-氣候相關議題管理
+- `/tpex_warrant_gold` — 黃金現貨權證發行基本資料
+- `/tpex_warrant_issue` — 上櫃權證發行基本資料
+- `/tpex_warrant_wcb_issue` — 上櫃牛熊證發行基本資料(不含展延型牛熊證)
+- `/tpex_warrant_wxy_issue` — 上櫃展延型牛熊證發行基本資料
+- `/t187ap46_O_20` — 上櫃公司企業ESG資訊揭露彙總資料-反競爭行為法律訴訟
+- `/t187ap46_O_19` — 上櫃公司企業ESG資訊揭露彙總資料-風險管理政策
+- `/t187ap46_O_15` — 上櫃公司企業ESG資訊揭露彙總資料-社區關係
+- `/t187ap46_O_13` — 上櫃公司企業ESG資訊揭露彙總資料-供應鏈管理
+- `/t187ap46_O_12` — 上櫃公司企業ESG資訊揭露彙總資料-食品安全
+- `/t187ap46_O_14` — 上櫃公司企業ESG資訊揭露彙總資料-產品品質與安全
+- `/t187ap41_O` — 上櫃公司召開股東常 (臨時) 會日期、地點及採用電子投票情形等資料彙總表
+- `/t187ap46_O_4` — 上櫃公司企業ESG資訊揭露彙總資料-廢棄物管理
+- `/t187ap46_O_2` — 上櫃公司企業ESG資訊揭露彙總資料-能源管理
+- `/t187ap46_O_7` — 上櫃公司企業ESG資訊揭露彙總資料-投資人溝通
+- `/t187ap46_O_1` — 上櫃公司企業ESG資訊揭露彙總資料-溫室氣體排放
+- `/t187ap46_O_6` — 上櫃公司企業ESG資訊揭露彙總資料-董事會
+- `/t187ap46_O_5` — 上櫃公司企業ESG資訊揭露彙總資料-人力發展
+- `/t187ap46_O_3` — 上櫃公司企業ESG資訊揭露彙總資料-水資源管理
+- `/mopsfin_t187ap37_O` — 上櫃權證基本資料彙總表
+- `/mopsfin_t187ap42_O` — 上櫃認購(售)權證每日成交資料檔
+- `/mopsfin_t187ap03_O` — 上櫃股票基本資料
+- `/mopsfin_t187ap36_O` — 上櫃認購(售)權證年度發行量概況統計表
+- `/mopsfin_t187ap03_R` — 興櫃公司基本資料
 
-- ✅ `/tpex_mainboard_daily_close_quotes` — 10984 筆，疑似 ETF 代號 119 筆，命中目標代號：00679B、00687B、00937B、00772B、00773B、006201
-- ✅ `/tpex_mainboard_quotes` — 1013 筆，疑似 ETF 代號 119 筆，命中目標代號：00679B、00687B、00937B、00772B、00773B、006201
-- ✅ `/tpex50_index` — 5 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_off_market` — 10984 筆，疑似 ETF 代號 119 筆，命中目標代號：00679B、00687B、00937B、00772B、00773B、006201
-- ✅ `/tpex_ceil_non_trading` — 21 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_daily_trading_index` — 5 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_short_sell` — 1006 筆，疑似 ETF 代號 119 筆，命中目標代號：00679B、00687B、00937B、00772B、00773B、006201
-- ✅ `/tpex_active_dollar_volume` — 30 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_trading_volume_ratio` — 28 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_daily_qutoes_block` — 6 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_daily_trading_block` — 770 筆，疑似 ETF 代號 0 筆，命中目標代號：無
-- ✅ `/tpex_daily_trading_summary_odd` — 20 筆，疑似 ETF 代號 0 筆，命中目標代號：無
+## Q5. 受益人數相關端點
 
-### 🎯 找到了
+**swagger 裡沒有任何端點提供受益人數。**
 
-端點：`https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes`
-總筆數：**10984**，其中代號長得像 ETF 的有 **119** 筆
+## 實測基本資料端點
 
-欄位：`Date`, `SecuritiesCompanyCode`, `CompanyName`, `Close`, `Change`, `Open`, `High`, `Low`, `Average`, `TradingShares`, `TransactionAmount`, `TransactionNumber`, `LatestBidPrice`, `LatesAskPrice`, `Capitals`, `NextReferencePrice`, `NextLimitUp`, `NextLimitDown`
-
-目標代號的完整資料：
+- ❌ `/mopsfin_t187ap47_O` — 回傳不是 JSON
+- ❌ `/mopsfin_t187ap47_R` — 回傳不是 JSON
+- ❌ `/tpex_mainboard_basic` — 回傳不是 JSON
+- ❌ `/tpex_company_basic_info` — 回傳不是 JSON
+- ❌ `/tpex_securities_basic` — 回傳不是 JSON
+- ✅ `/tpex_margin_trading_marginspot` — 34 筆，命中 ETF 代號：無
+  欄位：`Month`, `Ranking`, `SecuritiesCompanyCode`, `CompanyName`, `MonthlyAverageMarginPurchaseBalance`, `MarketShare`, `MonthlyAverageShortSaleBalance`, `MonthlyAverageMarginTradingBalance`
+- ✅ `/t187ap46_O_21` — 888 筆，命中 ETF 代號：無
+  欄位：`出表日期`, `報告年度`, `公司代號`, `公司名稱`, `職業災害人數及比率-人數`, `職業災害人數及比率-比率`, `火災件數(件)`, `火災死傷人數(人)`, `火災死傷人數占員工總人數比率`
+- ✅ `/t187ap46_O_9` — 888 筆，命中 ETF 代號：無
+  欄位：`出表日期`, `報告年度`, `公司代號`, `公司名稱`, `薪酬委員會席次(席)`, `薪酬委員會獨立董事席次(席)`, `薪酬委員會出席率`, `審計委員會席次(席)`, `審計委員會出席率`
+- ✅ `/t187ap46_O_8` — 888 筆，命中 ETF 代號：無
+  欄位：`出表日期`, `報告年度`, `公司代號`, `公司名稱`, `董事會與管理階層對於氣候相關風險與機會之監督及治理`, `辨識之氣候風險與機會如何影響企業之業務、策略及財務 (短期、中期、長期)`, `極端氣候事件及轉型行動對財務之影響`, `氣候風險之辨識、評估及管理流程如何整合於整體風險管理制度`, `若使用情境分析評估面對氣候變遷風險之韌性，應說明所使用之情境、參數、假設、分析因子及主要財務影響`, `若有因應管理氣候相關風險之轉型計畫，說明該計畫內容，及用於辨識及管理實體風險及轉型風險之指標與目標`, `使用內部碳定價作為規劃工具，應說明價格制定基礎`, `若有設定氣候相關目標，應說明所涵蓋之活動、溫室氣體排放範疇、規劃期程，每年達成進度等資訊；若使用碳抵換或再生能源憑證(RECs)以達成相關目標，應說明所抵換之減碳額度來源及數量或再生能源憑證(RECs)數量`
+- ✅ `/tpex_warrant_gold` — 2 筆，命中 ETF 代號：無
+  欄位：`Date`, `Code`, `Name`, `ListedDate`, `ExpiryDate`, `UnderlyingStockCode`, `UnderlyingStock`, `Type`, `American/European`, `CapPrice/Index`, `FloorPrice/Index`, `Reset`, `LatestExercisePrice`, `LatestExerciseRatio`, `InitialIssuance`, `Accum.Accum.Issuance`, `Accum.CanceledWarrant`
+- ✅ `/tpex_warrant_issue` — 9971 筆，命中 ETF 代號：00679B
+  欄位：`Date`, `Code`, `Name`, `ListedDate`, `ExpiryDate`, `UnderlyingStockCode`, `UnderlyingStock`, `Type`, `American/European`, `CapPrice/Index`, `FloorPrice/Index`, `Reset`, `LatestExercisePrice`, `Latest ExerciseRatio`, `InitialIssuance`, `Accum.Accum.Issuance`, `Accum.CanceledWarrant`
 
 ```json
-[
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "006201",
-  "CompanyName": "元大富櫃50",
-  "Close": "45.41",
-  "Change": "+1.23",
-  "Open": "44.98",
-  "High": "45.82",
-  "Low": "44.98",
-  "Average": "45.50",
-  "TradingShares": "137950",
-  "TransactionAmount": "6276737",
-  "TransactionNumber": "324",
-  "LatestBidPrice": "45.41",
-  "LatesAskPrice": "45.49",
-  "Capitals": "22946000",
-  "NextReferencePrice": "45.41",
-  "NextLimitUp": "49.95",
-  "NextLimitDown": "40.87"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00679B",
-  "CompanyName": "元大美債20年",
-  "Close": "25.62",
-  "Change": "-0.16 ",
-  "Open": "25.72",
-  "High": "25.72",
-  "Low": "25.62",
-  "Average": "25.66",
-  "TradingShares": "14028064",
-  "TransactionAmount": "359955832",
-  "TransactionNumber": "4115",
-  "LatestBidPrice": "25.62",
-  "LatesAskPrice": "25.63",
-  "Capitals": "6225692000",
-  "NextReferencePrice": "25.62",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00687B",
-  "CompanyName": "國泰20年美債",
-  "Close": "26.97",
-  "Change": "-0.15 ",
-  "Open": "27.06",
-  "High": "27.06",
-  "Low": "26.96",
-  "Average": "26.99",
-  "TradingShares": "9179290",
-  "TransactionAmount": "247729283",
-  "TransactionNumber": "2455",
-  "LatestBidPrice": "26.96",
-  "LatesAskPrice": "26.97",
-  "Capitals": "4254880380",
-  "NextReferencePrice": "26.97",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00772B",
-  "CompanyName": "中信高評級公司債",
-  "Close": "32.17",
-  "Change": "-0.22 ",
-  "Open": "32.30",
-  "High": "32.30",
-  "Low": "32.17",
-  "Average": "32.20",
-  "TradingShares": "2292232",
-  "TransactionAmount": "73806773",
-  "TransactionNumber": "931",
-  "LatestBidPrice": "32.17",
-  "LatesAskPrice": "32.18",
-  "Capitals": "3363290000",
-  "NextReferencePrice": "32.17",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- }
-]
+{
+ "Date": "1150907",
+ "Code": "701064",
+ "Name": "元債20群益61購01",
+ "ListedDate": "20251030",
+ "ExpiryDate": "20270129",
+ "UnderlyingStockCode": "00679B",
+ "UnderlyingStock": "元大美債2",
+ "Type": "認購",
+ "American/European": "美式",
+ "CapPrice/Index": "    ",
+ "FloorPrice/Index": "    ",
+ "Reset": "N",
+ "LatestExercisePrice": "29.73",
+ "Latest ExerciseRatio": "0.678",
+ "InitialIssuance": "5000",
+ "Accum.Accum.Issuance": "0",
+ "Accum.CanceledWarrant": "3500"
+}
 ```
 
-前 8 筆疑似 ETF：
+- ✅ `/tpex_warrant_wcb_issue` — 1 筆，命中 ETF 代號：00679B
+  欄位：`Date`, `Code`, `Name`, `ListedDate`, `ExpiryDate`, `UnderlyingStockCode`, `UnderlyingStock`, `Type`, `American/European`, `CapPrice/Index`, `FloorPrice/Index`, `Reset`, `LatestExercisePrice`, `Latest ExerciseRatio`, `InitialIssuance`, `Accum.Accum.Issuance`, `Accum.CanceledWarrant`
 
 ```json
-[
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00411A",
-  "CompanyName": "主動統一前沿科技",
-  "Close": "9.81",
-  "Change": "0.00 ",
-  "Open": "9.88",
-  "High": "9.90",
-  "Low": "9.81",
-  "Average": "9.84",
-  "TradingShares": "11371620",
-  "TransactionAmount": "111949787",
-  "TransactionNumber": "1680",
-  "LatestBidPrice": "9.81",
-  "LatesAskPrice": "9.82",
-  "Capitals": "632076000",
-  "NextReferencePrice": "9.81",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "006201",
-  "CompanyName": "元大富櫃50",
-  "Close": "45.41",
-  "Change": "+1.23",
-  "Open": "44.98",
-  "High": "45.82",
-  "Low": "44.98",
-  "Average": "45.50",
-  "TradingShares": "137950",
-  "TransactionAmount": "6276737",
-  "TransactionNumber": "324",
-  "LatestBidPrice": "45.41",
-  "LatesAskPrice": "45.49",
-  "Capitals": "22946000",
-  "NextReferencePrice": "45.41",
-  "NextLimitUp": "49.95",
-  "NextLimitDown": "40.87"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00679B",
-  "CompanyName": "元大美債20年",
-  "Close": "25.62",
-  "Change": "-0.16 ",
-  "Open": "25.72",
-  "High": "25.72",
-  "Low": "25.62",
-  "Average": "25.66",
-  "TradingShares": "14028064",
-  "TransactionAmount": "359955832",
-  "TransactionNumber": "4115",
-  "LatestBidPrice": "25.62",
-  "LatesAskPrice": "25.63",
-  "Capitals": "6225692000",
-  "NextReferencePrice": "25.62",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00687B",
-  "CompanyName": "國泰20年美債",
-  "Close": "26.97",
-  "Change": "-0.15 ",
-  "Open": "27.06",
-  "High": "27.06",
-  "Low": "26.96",
-  "Average": "26.99",
-  "TradingShares": "9179290",
-  "TransactionAmount": "247729283",
-  "TransactionNumber": "2455",
-  "LatestBidPrice": "26.96",
-  "LatesAskPrice": "26.97",
-  "Capitals": "4254880380",
-  "NextReferencePrice": "26.97",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00687C",
-  "CompanyName": "國泰20年美債+櫃U",
-  "Close": "9.09",
-  "Change": "0.00 ",
-  "Open": "9.09",
-  "High": "9.09",
-  "Low": "9.09",
-  "Average": "9.09",
-  "TradingShares": "25000",
-  "TransactionAmount": "227250",
-  "TransactionNumber": "2",
-  "LatestBidPrice": "9.07",
-  "LatesAskPrice": "9.10",
-  "Capitals": "1942268",
-  "NextReferencePrice": "9.09",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00694B",
-  "CompanyName": "富邦美債1-3",
-  "Close": "41.56",
-  "Change": "-0.17 ",
-  "Open": "41.61",
-  "High": "41.62",
-  "Low": "41.51",
-  "Average": "41.55",
-  "TradingShares": "117055",
-  "TransactionAmount": "4863357",
-  "TransactionNumber": "51",
-  "LatestBidPrice": "41.55",
-  "LatesAskPrice": "41.56",
-  "Capitals": "27576000",
-  "NextReferencePrice": "41.56",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00695B",
-  "CompanyName": "富邦美債7-10",
-  "Close": "34.41",
-  "Change": "-0.21 ",
-  "Open": "34.39",
-  "High": "34.48",
-  "Low": "34.39",
-  "Average": "34.42",
-  "TradingShares": "152198",
-  "TransactionAmount": "5238124",
-  "TransactionNumber": "59",
-  "LatestBidPrice": "34.40",
-  "LatesAskPrice": "34.41",
-  "Capitals": "40186000",
-  "NextReferencePrice": "34.41",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- },
- {
-  "Date": "1150907",
-  "SecuritiesCompanyCode": "00696B",
-  "CompanyName": "富邦美債20年",
-  "Close": "27.94",
-  "Change": "-0.15 ",
-  "Open": "28.02",
-  "High": "28.02",
-  "Low": "27.92",
-  "Average": "27.95",
-  "TradingShares": "1864014",
-  "TransactionAmount": "52100805",
-  "TransactionNumber": "209",
-  "LatestBidPrice": "27.92",
-  "LatesAskPrice": "27.94",
-  "Capitals": "618181000",
-  "NextReferencePrice": "27.94",
-  "NextLimitUp": "9999.95",
-  "NextLimitDown": "0.01"
- }
-]
+{
+ "Date": "1150601",
+ "Code": "70006C",
+ "Name": "元債20富邦56牛01",
+ "ListedDate": "20250604",
+ "ExpiryDate": "20260603",
+ "UnderlyingStockCode": "00679B",
+ "UnderlyingStock": "元大美",
+ "Type": "認購",
+ "American/European": "歐式",
+ "CapPrice/Index": "",
+ "FloorPrice/Index": "21.77",
+ "Reset": "Y",
+ "LatestExercisePrice": "21.28",
+ "Latest ExerciseRatio": "0.312",
+ "InitialIssuance": "20000",
+ "Accum.Accum.Issuance": "0",
+ "Accum.CanceledWarrant": "0"
+}
 ```
 
-## E. 備援來源測試
 
-- ✅ 證交所 上市基金基本資料 — 271 筆，命中目標代號：無
-- ✅ 證交所 上市每日行情 — 1382 筆，命中目標代號：無
-- ❌ 集保 OpenAPI 規格 `https://openapi-t.tdcc.com.tw/v3/api-docs` — HTTP 404
+## 外部備援：集保結算所
+
+- ❌ `https://openapi.tdcc.com.tw/v1/swagger.json` — HTTP 404
+- ❌ `https://openapi.tdcc.com.tw/swagger/v1/swagger.json` — HTTP 404
+- ❌ `https://www.tdcc.com.tw/portal/zh/openAPI` — HTTP 404
 
 ---
 
