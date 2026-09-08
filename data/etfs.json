@@ -9,9 +9,9 @@
     "categorySource": "依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題；市值限定被動原型 ETF",
     "syncNote": "分類取自證交所 ETF e添富即時篩選結果；日成交量取自 STOCK_DAY_ALL 的 TradeVolume，原始單位為股，以 1,000 股換算為 1 張",
     "lastSuccessfulSyncAt": "2026-09-08T04:48:16.350Z",
-    "lastAttemptAt": "2026-09-08T07:49:53.960Z",
-    "syncStatus": "error",
-    "syncWarning": "最近一次同步失敗（terminated）；畫面顯示的是最後一次成功保存的資料。",
+    "lastAttemptAt": "2026-09-08T10:03:43.559Z",
+    "syncStatus": "fallback",
+    "syncWarning": "證交所目前提供的官方資料日為 2026.09.07，尚未提供 2026.09.08 的完整資料；已保留上一次成功保存的資料。",
     "schedule": "每個交易日 18:00 更新；失敗時於 18:15、18:45 自動重試（GitHub Actions，台灣時間）",
     "units": {
       "size": "億元",
