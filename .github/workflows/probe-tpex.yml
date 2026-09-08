@@ -1,0 +1,37 @@
+name: Probe TPEx endpoints
+
+# 一次性調查用：手動執行，探測櫃買中心有哪些公開資料端點與欄位。
+# 不會碰 data/etfs.json，也沒有排程。調查完可以連同 scripts/probe-tpex.mjs 和 probe/ 一起刪除。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Probe TPEx
+        continue-on-error: true
+        run: node scripts/probe-tpex.mjs
+
+      - name: Commit report
+        run: |
+          if [ -z "$(git status --porcelain probe/)" ]; then
+            echo "沒有產生報告或內容未變更。"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add probe/
+          git commit -m "probe: TPEx endpoint survey"
+          git push
