@@ -304,6 +304,7 @@ if (existing?.meta?.officialDate === today && existing?.meta?.syncStatus === 'su
 }
 
 let dataset;
+let skipReason = '';
 try {
   const [allRows, homeResponse, dailyResponse, fundResponse, ...groupRows] = await Promise.all([
     fetchRows(),
@@ -368,8 +369,12 @@ try {
   const twseCodes = new Set(twseEtfs.map((row) => row.code));
   let tpexEtfs = [];
   let tpexWarning = '';
+  let otcOfficialDate = null;
   try {
     const tpexRows = await fetchTpexRows();
+    // 櫃買回傳的 Date 是民國年（例如 1150907），轉成與證交所一致的 YYYY.MM.DD。
+    const roc = String(tpexRows.find((row) => row?.Date)?.Date ?? '').trim();
+    if (/^\d{7}$/.test(roc)) otcOfficialDate = `${Number(roc.slice(0, 3)) + 1911}.${roc.slice(3, 5)}.${roc.slice(5, 7)}`;
     // 同一代號若兩邊都有，以證交所官方資料為準（正常情況不會發生）。
     tpexEtfs = buildTpexEtfs(tpexRows).filter((row) => !twseCodes.has(row.code));
     } catch (error) {
@@ -377,6 +382,7 @@ try {
     const previousOtc = (existing?.etfs ?? []).filter((row) => row.market === '上櫃');
     if (previousOtc.length < 80) throw new Error(`櫃買中心資料取得失敗，且沒有可沿用的上櫃資料：${error.message}`);
     tpexEtfs = previousOtc;
+    otcOfficialDate = existing?.meta?.otcOfficialDate ?? null;
     tpexWarning = `櫃買中心本次資料取得失敗（${error.message}），上櫃 ${previousOtc.length} 檔沿用上一次成功保存的資料；上市資料已正常更新。`;
     console.warn(`::warning::${tpexWarning}`);
   }
@@ -436,13 +442,22 @@ try {
     throw new Error(`ETF 筆數異常減少：${previousCount} → ${etfs.length}`);
   }
 
-  // 假日或當日資料尚未發布：視為本次同步未完成，保留上一交易日版本。
-  if (officialDate !== today) {
-    await keepExisting(existing, 'fallback', `證交所目前提供的官方資料日為 ${officialDate}，尚未提供 ${today} 的完整資料；已保留上一次成功保存的資料。`);
-    console.warn(`::warning::官方資料日 ${officialDate} 非台灣當天 ${today}，保留既有資料。`);
-    process.exit(0);
-  }
+  // 證交所 ETF e添富 的「資料更新時間」不一定當天就翻新（實測平日 18:30 仍停在前一交易日），
+  // 因此不要求 officialDate 必須等於今天。只要日期沒有倒退、且通過全部驗證就照常保存，
+  // 並在資料日非當天時附上說明；否則遇到交易所更新較慢，資料會永遠停在舊版本。
+  const staleNotice = officialDate === today
+    ? ''
+    : `證交所目前發布的官方資料日為 ${officialDate}（尚未更新至 ${today}），畫面顯示的是該日的官方數字。`;
+  if (staleNotice) console.warn(`::warning::${staleNotice}`);
 
+  // 內容與上一次成功保存的完全相同（假日、或交易所尚未更新）就不寫檔，避免無意義的提交。
+  const unchanged = existing?.meta?.syncStatus === 'success'
+    && previousDate === officialDate
+    && JSON.stringify(existing.etfs) === JSON.stringify(etfs);
+
+  if (unchanged) {
+    skipReason = `資料與上一次成功保存的內容完全相同（官方資料日 ${officialDate}），本次不寫入。`;
+  } else {
   const nowIso = new Date().toISOString();
   dataset = {
     meta: {
@@ -451,6 +466,7 @@ try {
       sourceUrl,
       tpexSourceUrl,
       officialDate,
+      otcOfficialDate,
       syncedAt: nowIso,
       count: etfs.length,
       listedCount: twseEtfs.length,
@@ -460,19 +476,31 @@ try {
       lastSuccessfulSyncAt: nowIso,
       lastAttemptAt: nowIso,
       syncStatus: 'success',
-      syncWarning: tpexWarning,
-      schedule: '每個交易日 18:00 更新；失敗時於 18:15、18:45 自動重試（GitHub Actions，台灣時間）',
+      syncWarning: [staleNotice, tpexWarning].filter(Boolean).join('　'),
+      schedule: '每個交易日 18:00 起檢查更新，18:15、18:45、20:00、22:00 與隔日 08:30 再次確認（GitHub Actions，台灣時間）',
       units: { size: '億元', price: '元', dailyTradingVolume: '張', holders: '人' },
     },
     etfs,
   };
 
   if (dataset.meta.count !== dataset.etfs.length) throw new Error('meta.count 與 ETF 陣列長度不一致');
+  }
 } catch (error) {
   await keepExisting(existing, 'error', `最近一次同步失敗（${error.message}）；畫面顯示的是最後一次成功保存的資料。`);
   console.error(`::error::ETF 同步失敗：${error.message}`);
   process.exit(1);
 }
 
+if (skipReason) {
+  console.log(skipReason);
+  process.exit(0);
+}
+
 await writeAtomic(dataset);
-console.log(JSON.stringify({ status: 'success', count: dataset.etfs.length, officialDate: dataset.meta.officialDate }));
+console.log(JSON.stringify({
+  status: 'success',
+  count: dataset.etfs.length,
+  listed: dataset.meta.listedCount,
+  otc: dataset.meta.otcCount,
+  officialDate: dataset.meta.officialDate,
+}));
