@@ -91,21 +91,27 @@ const parseTwseDate = (payload) => {
 };
 
 const fetchListedPriceDate = async () => {
+  const notes = [];
   for (const { url, label } of LISTED_DATE_SOURCES) {
     try {
-      const payload = await fetchJson(url, { headers: twseHeaders }, { tries: 2, label, timeout: 60000 });
+      const payload = await fetchJson(url, { headers: twseHeaders }, { tries: 3, label, timeout: 60000 });
       const date = parseTwseDate(payload);
       if (date) {
         console.log(`上市收盤價日期取自「${label}」：${date}`);
-        return { date, source: label };
+        return { date, source: label, note: '' };
       }
-      console.warn(`「${label}」沒有可解析的日期，改試下一支。`);
+      const reason = `${label}：回應中沒有可解析的日期（頂層欄位 ${Object.keys(payload ?? {}).join('/') || '無'}）`;
+      notes.push(reason);
+      console.warn(reason);
     } catch (error) {
-      console.warn(`取得上市收盤價日期失敗（${label}）：${describeError(error)}`);
+      const reason = `${label}：${describeError(error)}`;
+      notes.push(reason);
+      console.warn(`取得上市收盤價日期失敗 ${reason}`);
     }
-    await pause(800);
+    await pause(1500);
   }
-  return { date: null, source: null };
+  // 把失敗原因保留到 meta，之後不用翻 Actions 記錄就能查
+  return { date: null, source: null, note: notes.join('｜').slice(0, 400) };
 };
 
 // 櫃買端點回傳約 11,000 筆、數 MB，最容易在傳輸中途斷線，逾時放寬到 150 秒。
@@ -360,6 +366,13 @@ let dataset;
 let skipReason = '';
 let stage = '啟動';
 try {
+  // 先取收盤價日期。這三支端點若排在十幾個請求之後容易被證交所擋下，
+  // 放在最前面時成功率最高；即使失敗也只是少一個日期標示，不影響其他資料。
+  stage = '上市收盤價日期';
+  const { date: listedPriceDate, source: listedPriceDateSource, note: listedPriceDateNote } = await fetchListedPriceDate();
+  if (!listedPriceDate) console.warn(`::warning::取不到上市收盤價日期：${listedPriceDateNote}`);
+  await pause(1000);
+
   stage = '證交所 e添富 商品清單';
   const allRows = await fetchRows();
 
@@ -432,10 +445,6 @@ try {
   }).filter((row) => row.code && row.name);
 
   /* ---------- 上櫃：櫃買中心 ---------- */
-  stage = '上市收盤價日期';
-  const { date: listedPriceDate, source: listedPriceDateSource } = await fetchListedPriceDate();
-  if (!listedPriceDate) console.warn('::warning::三個來源都取不到上市收盤價日期，本次不標示。');
-
   stage = '櫃買中心上櫃行情';
   const twseCodes = new Set(twseEtfs.map((row) => row.code));
   let tpexEtfs = [];
@@ -539,6 +548,7 @@ try {
       officialDate,
       listedPriceDate,
       listedPriceDateSource,
+      listedPriceDateNote,
       otcOfficialDate,
       syncedAt: nowIso,
       count: etfs.length,
