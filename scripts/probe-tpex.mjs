@@ -1,150 +1,176 @@
-// 一次性探測腳本：確認櫃買中心（TPEx）有哪些公開資料端點、欄位長什麼樣。
-// 只讀取、不寫入任何正式資料；結果寫到 probe/tpex-probe.md。
-// 確認完就可以把 scripts/probe-tpex.mjs、.github/workflows/probe-tpex.yml、probe/ 一起刪掉。
+// 櫃買中心（TPEx）資料端點探測 v2
+// 第一版已確認 https://www.tpex.org.tw/openapi/swagger.json 可讀、共 225 個端點。
+// 這一版專門回答三個問題，並且由腳本自己下結論、只輸出精簡結果：
+//   Q1 上櫃 ETF 的「代號 / 名稱 / 收盤價 / 成交量」拿不拿得到？
+//   Q2 上櫃 ETF 的「資產規模 / 受益人數」拿不拿得到？
+//   Q3 上櫃 ETF 到底有幾檔？
+// 只讀取，不寫入 data/etfs.json。結果寫到 probe/tpex-probe.md。
 
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
+const SWAGGER = 'https://www.tpex.org.tw/openapi/swagger.json';
+const BASE = 'https://www.tpex.org.tw/openapi/v1';
+
 const lines = [];
 const say = (s = '') => { lines.push(s); console.log(s); };
 
-const get = async (url, asJson = true) => {
-  try {
-    const res = await fetch(url, {
-      headers: { 'user-agent': UA, accept: asJson ? 'application/json,*/*' : 'text/html,*/*', referer: 'https://www.tpex.org.tw/' },
-      redirect: 'follow',
-    });
-    const text = await res.text();
-    let json = null;
-    if (asJson) { try { json = JSON.parse(text); } catch { /* 不是 JSON */ } }
-    return { ok: res.ok, status: res.status, type: res.headers.get('content-type') || '', text, json };
-  } catch (error) {
-    return { ok: false, status: 0, type: '', text: String(error.message), json: null };
+// 目標代號：三檔知名上櫃債券 ETF + 唯一的上櫃股票型 ETF
+const TARGETS = ['00679B', '00687B', '00937B', '00772B', '00773B', '006201'];
+const isEtfCode = (s) => /^00\d{3,4}[A-Z]?$/.test(String(s ?? '').trim());
+
+const fetchJson = async (url, tries = 3) => {
+  for (let i = 1; i <= tries; i += 1) {
+    try {
+      const res = await fetch(url, {
+        headers: { 'user-agent': UA, accept: 'application/json,*/*', referer: 'https://www.tpex.org.tw/' },
+        redirect: 'follow',
+        signal: AbortSignal.timeout(60000),
+      });
+      const text = await res.text();
+      if (!res.ok) { if (i === tries) return { ok: false, status: res.status, note: `HTTP ${res.status}` }; continue; }
+      try { return { ok: true, status: res.status, json: JSON.parse(text), size: text.length }; }
+      catch { return { ok: false, status: res.status, note: `回傳不是 JSON（前 120 字：${text.slice(0, 120).replace(/\s+/g, ' ')}）` }; }
+    } catch (error) {
+      if (i === tries) return { ok: false, status: 0, note: `連線失敗：${error.message}` };
+      await new Promise((r) => setTimeout(r, 3000));
+    }
   }
+  return { ok: false, status: 0, note: '未知錯誤' };
 };
 
-const preview = (value, max = 260) => JSON.stringify(value).slice(0, max);
+const rowsOf = (json) => (Array.isArray(json) ? json : Array.isArray(json?.data) ? json.data : null);
 
-/* ---------- 1. 找 OpenAPI 規格 ---------- */
-say('# 櫃買中心（TPEx）資料端點探測報告');
+const describe = (rows) => {
+  const keys = Object.keys(rows[0] ?? {});
+  const flat = JSON.stringify(rows);
+  const hits = TARGETS.filter((c) => flat.includes(c));
+  const etfLike = rows.filter((row) => Object.values(row).slice(0, 3).some(isEtfCode));
+  return { keys, hits, etfLike };
+};
+
+say('# 櫃買中心（TPEx）資料端點探測報告 v2');
 say('');
 say(`探測時間：${new Date().toISOString()}`);
 say('');
-say('## 1. 尋找 OpenAPI 規格');
-say('');
 
-const specCandidates = [
-  'https://www.tpex.org.tw/openapi/swagger.json',
-  'https://www.tpex.org.tw/openapi/v1/swagger.json',
-  'https://www.tpex.org.tw/openapi/v3/api-docs',
-  'https://www.tpex.org.tw/openapi/doc.json',
-  'https://www.tpex.org.tw/openapi/v1/',
-  'https://www.tpex.org.tw/openapi/',
-];
-
-let spec = null;
-for (const url of specCandidates) {
-  const r = await get(url);
-  say(`- \`${url}\` → HTTP ${r.status}，${r.type.split(';')[0] || '無 content-type'}，長度 ${r.text.length}`);
-  if (!spec && r.json && (r.json.paths || Array.isArray(r.json))) spec = { url, json: r.json };
-}
-say('');
-
-/* ---------- 2. 列出所有端點，挑出 ETF / 債券相關 ---------- */
-say('## 2. 端點清單');
-say('');
-
-let etfPaths = [];
-if (spec?.json?.paths) {
-  const entries = Object.entries(spec.json.paths);
-  say(`從 \`${spec.url}\` 取得 **${entries.length}** 個端點。`);
-  say('');
-  const interesting = entries.filter(([path, def]) => {
-    const blob = `${path} ${JSON.stringify(def).slice(0, 800)}`;
-    return /etf|bond|債券|基金|受益|規模|净值|淨值/i.test(blob);
-  });
-  say(`其中與 ETF／債券／基金相關的有 **${interesting.length}** 個：`);
-  say('');
-  interesting.forEach(([path, def]) => {
-    const summary = def?.get?.summary || def?.get?.description || Object.values(def)[0]?.summary || '';
-    say(`- \`${path}\` — ${String(summary).slice(0, 120)}`);
-    etfPaths.push(path);
-  });
-  say('');
-  say('<details><summary>全部端點路徑</summary>');
-  say('');
-  entries.forEach(([path, def]) => {
-    const summary = def?.get?.summary || Object.values(def)[0]?.summary || '';
-    say(`- \`${path}\` — ${String(summary).slice(0, 90)}`);
-  });
-  say('');
-  say('</details>');
+/* ================= 0. 取得 swagger ================= */
+const spec = await fetchJson(SWAGGER);
+if (!spec.ok) {
+  say(`## ❌ 無法取得 swagger.json（${spec.note}）`);
 } else {
-  say('沒有取得可解析的 OpenAPI 規格，改用猜測的端點清單。');
-}
-say('');
+  const paths = Object.entries(spec.json.paths ?? {});
+  say(`swagger.json 讀取成功，共 **${paths.length}** 個端點。`);
+  say('');
 
-/* ---------- 3. 實際打端點，看欄位 ---------- */
-say('## 3. 實際回傳的欄位');
-say('');
+  const summaryOf = (def) => {
+    const op = def?.get ?? Object.values(def ?? {})[0] ?? {};
+    return String(op.summary || op.description || '').replace(/\s+/g, ' ').trim();
+  };
 
-const base = 'https://www.tpex.org.tw/openapi/v1';
-const guesses = [
-  '/tpex_mainboard_daily_close_quotes',
-  '/tpex_bond_etf_close_quotes',
-  '/tpex_etf_close_quotes',
-  '/tpex_etf_nav',
-  '/tpex_esb_latest_statistics',
-];
-const targets = [...new Set([...etfPaths.map((p) => (p.startsWith('http') ? p : `${base}${p}`)), ...guesses.map((g) => `${base}${g}`)])].slice(0, 25);
+  /* ---------- A. 哪些端點的說明裡有「ETF」 ---------- */
+  say('## A. 說明含「ETF」的端點');
+  say('');
+  const etfPaths = paths.filter(([p, def]) => /ETF/i.test(`${p} ${summaryOf(def)}`));
+  if (!etfPaths.length) say('**沒有任何端點的名稱或說明包含 ETF。**');
+  else etfPaths.forEach(([p, def]) => say(`- \`${p}\` — ${summaryOf(def)}`));
+  say('');
 
-for (const url of targets) {
-  const r = await get(url);
-  if (!r.ok) { say(`### ❌ \`${url}\``); say(`HTTP ${r.status}`); say(''); continue; }
-  const rows = Array.isArray(r.json) ? r.json : Array.isArray(r.json?.data) ? r.json.data : null;
-  say(`### ✅ \`${url}\``);
-  if (!rows) {
-    say(`回傳不是陣列。前 260 字：\`${r.text.slice(0, 260).replace(/\s+/g, ' ')}\``);
-    say('');
-    continue;
+  /* ---------- B. 哪些端點的說明裡有規模 / 受益人數 / 淨值 ---------- */
+  say('## B. 說明含「受益人數／規模／淨值／資產」的端點');
+  say('');
+  const sizePaths = paths.filter(([p, def]) => /受益|規模|淨值|資產|發行額/.test(`${p} ${summaryOf(def)}`));
+  if (!sizePaths.length) say('**沒有任何端點提到受益人數、規模、淨值或資產。**');
+  else sizePaths.forEach(([p, def]) => say(`- \`${p}\` — ${summaryOf(def)}`));
+  say('');
+
+  /* ---------- C. 每日行情類端點 ---------- */
+  say('## C. 每日行情／收盤類端點');
+  say('');
+  const quotePaths = paths.filter(([p, def]) => /行情|收盤|成交|quote|close/i.test(`${p} ${summaryOf(def)}`));
+  quotePaths.slice(0, 30).forEach(([p, def]) => say(`- \`${p}\` — ${summaryOf(def)}`));
+  say('');
+
+  /* ---------- D. 實際打行情端點，找 ETF ---------- */
+  say('## D. 實測：行情端點裡找得到上櫃 ETF 嗎');
+  say('');
+
+  const candidates = [...new Set([
+    ...quotePaths.map(([p]) => p),
+    '/tpex_mainboard_daily_close_quotes',
+  ])].slice(0, 12);
+
+  let best = null;
+  for (const p of candidates) {
+    const url = p.startsWith('http') ? p : `${BASE}${p}`;
+    const r = await fetchJson(url, 2);
+    if (!r.ok) { say(`- ❌ \`${p}\` — ${r.note}`); continue; }
+    const rows = rowsOf(r.json);
+    if (!rows || !rows.length) { say(`- ⚠️ \`${p}\` — 回傳空資料`); continue; }
+    const { keys, hits, etfLike } = describe(rows);
+    say(`- ✅ \`${p}\` — ${rows.length} 筆，疑似 ETF 代號 ${etfLike.length} 筆，命中目標代號：${hits.length ? hits.join('、') : '無'}`);
+    if (hits.length && (!best || hits.length > best.hits.length)) best = { path: p, url, rows, keys, hits, etfLike };
   }
-  say(`筆數：**${rows.length}**`);
-  if (rows.length) {
+  say('');
+
+  if (best) {
+    say('### 🎯 找到了');
     say('');
-    say(`欄位：\`${Object.keys(rows[0]).join('`, `')}\``);
+    say(`端點：\`${best.url}\``);
+    say(`總筆數：**${best.rows.length}**，其中代號長得像 ETF 的有 **${best.etfLike.length}** 筆`);
     say('');
-    say('前 2 筆：');
+    say(`欄位：\`${best.keys.join('`, `')}\``);
+    say('');
+    say('目標代號的完整資料：');
     say('');
     say('```json');
-    say(preview(rows.slice(0, 2), 900));
+    const samples = best.rows.filter((row) => TARGETS.some((c) => JSON.stringify(row).includes(c)));
+    say(JSON.stringify(samples.slice(0, 4), null, 1));
     say('```');
-    // 這批資料裡有沒有我們關心的代號？
-    const flat = JSON.stringify(rows);
-    const hits = ['00679B', '00687B', '00937B', '006201', '00772B'].filter((c) => flat.includes(c));
     say('');
-    say(`包含的指標代號：${hits.length ? hits.join('、') : '（都沒有）'}`);
-    const bondish = rows.filter((row) => /^00\d{3,4}[A-Z]?$/.test(String(Object.values(row)[0] ?? '').trim()));
-    say(`看起來像 ETF 代號的筆數（第一欄符合 00xxx 格式）：${bondish.length}`);
+    say('前 8 筆疑似 ETF：');
+    say('');
+    say('```json');
+    say(JSON.stringify(best.etfLike.slice(0, 8), null, 1));
+    say('```');
+  } else {
+    say('### ❌ 所有行情端點都找不到目標 ETF 代號');
   }
   say('');
 }
 
-/* ---------- 4. 舊式網站 JSON（備援） ---------- */
-say('## 4. 網站用的舊式 JSON（備援路徑）');
+/* ================= E. 備援來源 ================= */
+say('## E. 備援來源測試');
 say('');
-const legacy = [
-  'https://www.tpex.org.tw/www/zh-tw/bond/bondEtf',
-  'https://www.tpex.org.tw/web/etf/etf_specification_bond.php?l=zh-tw',
-  'https://www.tpex.org.tw/zh-tw/etf/bond.html',
+
+const fallbacks = [
+  ['證交所 上市基金基本資料', 'https://openapi.twse.com.tw/v1/opendata/t187ap47_L'],
+  ['證交所 上市每日行情', 'https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL'],
+  ['集保 OpenAPI 規格', 'https://openapi-t.tdcc.com.tw/v3/api-docs'],
 ];
-for (const url of legacy) {
-  const r = await get(url, false);
-  say(`- \`${url}\` → HTTP ${r.status}，長度 ${r.text.length}${r.text.includes('00679B') ? '，**內容含 00679B**' : ''}`);
+
+for (const [label, url] of fallbacks) {
+  const r = await fetchJson(url, 1);
+  if (!r.ok) { say(`- ❌ ${label} \`${url}\` — ${r.note}`); continue; }
+  const rows = rowsOf(r.json);
+  if (!rows) { say(`- ✅ ${label} — 可讀，非陣列格式（${r.size} bytes）`); continue; }
+  const flat = JSON.stringify(rows);
+  const hits = TARGETS.filter((c) => flat.includes(c));
+  say(`- ✅ ${label} — ${rows.length} 筆，命中目標代號：${hits.length ? hits.join('、') : '無'}`);
+  if (hits.length) {
+    const sample = rows.find((row) => JSON.stringify(row).includes(hits[0]));
+    say('');
+    say('```json');
+    say(JSON.stringify(sample, null, 1).slice(0, 900));
+    say('```');
+    say('');
+  }
 }
+
 say('');
 say('---');
 say('');
-say('探測結束。這支腳本不會修改 `data/etfs.json`。');
+say('探測結束，未修改 `data/etfs.json`。');
 
 await mkdir('probe', { recursive: true });
 await writeFile('probe/tpex-probe.md', `${lines.join('\n')}\n`, 'utf8');
