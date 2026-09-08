@@ -1,112 +1,205 @@
-// 探測 v4：找出證交所哪一支端點會回傳「上市收盤價的交易日」。
-// 目前 meta.listedPriceDate 是 null，代表先前猜的兩支端點沒給日期，
-// 所以上市 ETF 的收盤價下方標不出日期（上櫃有，因為櫃買每列都帶 Date）。
+// 驗證 info.tpex.org.tw 的 ETF 專區 API 是否可用、能否取代目前的推估規模。
 //
-// 這支腳本很輕：總共只發 7 個 GET，逐一送出、每個間隔 1.5 秒，不會造成負擔。
-// 結果寫到 probe/tpex-probe.md。跑完就可以連同工作流程一起刪掉。
+// 要回答的問題：
+//   Q1 etfFilter 怎麼呼叫？不帶條件是否回傳全部上櫃 ETF？
+//   Q2 totalAv（規模）、holders（受益人數）、listingDate、indexName、issuer 是否每檔都有值？
+//   Q3 回傳裡有沒有收盤價欄位？（若有，或許能省掉每日行情那支數 MB 的大請求）
+//   Q4 檔數與代號，跟我們現在的 119 檔是否一致？
+//   Q5 官方分類篩選參數是否可用？結果跟我們的代號末碼推導是否吻合？
+//   Q6 單一商品頁網址是否有效？
+//
+// 只發 6 個請求，全部打 info.tpex.org.tw（全新主機，不影響現有來源）。
+// 與現有資料的比對直接讀本機 data/etfs.json，不額外發請求。
+// 報告寫到 probe/etf-filter-probe.md。
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
+const FILTER_PAGE = 'https://info.tpex.org.tw/ETF/zh/filter.html';
+const API = 'https://info.tpex.org.tw/api/etfFilter';
 const lines = [];
 const say = (s = '') => { lines.push(s); console.log(s); };
 const pause = (ms) => new Promise((done) => setTimeout(done, ms));
+const headers = {
+  'user-agent': UA,
+  accept: 'application/json, text/plain, */*',
+  'accept-language': 'zh-TW,zh;q=0.9',
+  referer: FILTER_PAGE,
+  origin: 'https://info.tpex.org.tw',
+};
 
-const get = async (url) => {
-  try {
-    const response = await fetch(url, {
-      headers: {
-        'user-agent': UA,
-        accept: 'application/json, text/html, */*',
-        'accept-language': 'zh-TW,zh;q=0.9',
-        referer: 'https://www.twse.com.tw/zh/',
-      },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(60000),
-    });
-    const text = await response.text();
-    let json = null;
-    try { json = JSON.parse(text); } catch { /* 不是 JSON */ }
-    return { ok: response.ok, status: response.status, text, json };
-  } catch (error) {
-    const cause = error?.cause?.message;
-    return { ok: false, status: 0, text: '', json: null, error: cause ? `${error.message}：${cause}` : error.message };
+// 不確定它吃哪一種呼叫方式，依序試：表單 POST → JSON POST → GET
+const callApi = async (params = {}) => {
+  const styles = [
+    { name: 'POST 表單', init: { method: 'POST', headers: { ...headers, 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' }, body: new URLSearchParams(params) } },
+    { name: 'POST JSON', init: { method: 'POST', headers: { ...headers, 'content-type': 'application/json' }, body: JSON.stringify(params) } },
+    { name: 'GET', init: { method: 'GET', headers } },
+  ];
+  const tried = [];
+  for (const style of styles) {
+    const url = style.name === 'GET' && Object.keys(params).length
+      ? `${API}?${new URLSearchParams(params)}`
+      : API;
+    try {
+      const response = await fetch(url, { ...style.init, redirect: 'follow', signal: AbortSignal.timeout(60000) });
+      const text = await response.text();
+      if (!response.ok) { tried.push(`${style.name}→HTTP ${response.status}`); continue; }
+      let json = null;
+      try { json = JSON.parse(text); } catch { tried.push(`${style.name}→非 JSON`); continue; }
+      return { ok: true, style: style.name, json, tried };
+    } catch (error) {
+      tried.push(`${style.name}→${error?.cause?.message ?? error.message}`);
+    }
+    await pause(1200);
   }
+  return { ok: false, tried };
 };
 
-// 從任意文字裡找出日期：西元 YYYYMMDD、YYYY/MM/DD、YYYY.MM.DD，或民國 115年09月08日
-const findDates = (text) => {
-  const hits = new Set();
-  for (const m of text.matchAll(/\b(20\d{2})(\d{2})(\d{2})\b/g)) hits.add(`${m[1]}.${m[2]}.${m[3]}`);
-  for (const m of text.matchAll(/\b(20\d{2})[./-](\d{1,2})[./-](\d{1,2})\b/g)) hits.add(`${m[1]}.${String(m[2]).padStart(2, '0')}.${String(m[3]).padStart(2, '0')}`);
-  for (const m of text.matchAll(/(\d{3})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日/g)) hits.add(`${Number(m[1]) + 1911}.${String(m[2]).padStart(2, '0')}.${String(m[3]).padStart(2, '0')}`);
-  return [...hits].slice(0, 6);
+// 回傳可能是陣列，也可能包在 data / aaData / rows 之類的欄位裡
+const rowsOf = (json) => {
+  if (Array.isArray(json)) return json;
+  for (const key of ['data', 'aaData', 'rows', 'result', 'list', 'items']) {
+    if (Array.isArray(json?.[key])) return json[key];
+  }
+  for (const value of Object.values(json ?? {})) if (Array.isArray(value) && value.length && typeof value[0] === 'object') return value;
+  return null;
 };
 
-const CANDIDATES = [
-  ['A', 'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json'],
-  ['B', 'https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=json'],
-  ['C', 'https://www.twse.com.tw/rwd/zh/afterTrading/BWIBBU_ALL?response=json'],
-  ['D', 'https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?type=ALL&response=json'],
-  ['E', 'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_AVG_ALL?response=json'],
-  ['F', 'https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL'],
-];
+const codeOf = (row) => String(row?.stockNo ?? row?.code ?? Object.values(row ?? {})[0] ?? '').trim();
 
-say('# 證交所「上市收盤價交易日」端點探測 v4');
+say('# info.tpex.org.tw ETF 專區 API 驗證');
 say('');
 say(`探測時間：${new Date().toISOString()}`);
 say('');
-say('目標：找出哪一支端點能提供上市收盤價的實際交易日。');
-say('');
 
-for (const [tag, url] of CANDIDATES) {
-  const r = await get(url);
-  say(`## ${tag}. \`${url}\``);
-  say('');
-  if (!r.ok) {
-    say(`❌ 失敗：${r.error ?? `HTTP ${r.status}`}`);
-    say('');
-    await pause(1500);
-    continue;
-  }
-  say(`HTTP ${r.status}，長度 ${r.text.length}，${r.json ? 'JSON' : '非 JSON'}`);
-  if (r.json && !Array.isArray(r.json)) {
-    say(`頂層欄位：\`${Object.keys(r.json).join('`, `')}\``);
-    if (r.json.date !== undefined) say(`**date 欄位：\`${r.json.date}\`** ← 這就是要的`);
-    if (r.json.title !== undefined) say(`title：\`${String(r.json.title).slice(0, 80)}\``);
-    if (r.json.stat !== undefined) say(`stat：\`${r.json.stat}\``);
-    const arr = Array.isArray(r.json.data) ? r.json.data : null;
-    if (arr) say(`data 筆數：${arr.length}`);
-  } else if (Array.isArray(r.json)) {
-    say(`陣列，${r.json.length} 筆`);
-    if (r.json.length) say(`第一筆欄位：\`${Object.keys(r.json[0]).join('`, `')}\``);
-  }
-  const dates = findDates(r.text.slice(0, 4000));
-  say(`文字中找到的日期：${dates.length ? dates.join('、') : '（無）'}`);
-  say('');
-  await pause(1500);
-}
-
-// 順便確認 e添富 首頁那行「資料更新時間」到底寫什麼、旁邊有沒有別的日期
-say('## G. e添富 首頁的日期標示');
+/* ---------- Q1 主端點 ---------- */
+say('## Q1. etfFilter 全量清單');
 say('');
-const home = await get('https://www.twse.com.tw/rwd/zh/ETFortune/index');
-if (!home.ok) say(`❌ 失敗：${home.error ?? `HTTP ${home.status}`}`);
-else {
-  const idx = home.text.indexOf('資料更新時間');
-  say(`HTTP ${home.status}，長度 ${home.text.length}`);
-  if (idx >= 0) {
-    const snippet = home.text.slice(Math.max(0, idx - 150), idx + 200).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-    say('「資料更新時間」附近的文字：');
-    say('');
+const base = await callApi({});
+if (!base.ok) {
+  say(`❌ 三種呼叫方式都失敗：${base.tried.join('｜')}`);
+  say('');
+  say('（後續檢查略過）');
+} else {
+  say(`✅ 成功，可用的呼叫方式：**${base.style}**${base.tried.length ? `（先前嘗試：${base.tried.join('｜')}）` : ''}`);
+  const top = Array.isArray(base.json) ? '（頂層就是陣列）' : `頂層欄位：\`${Object.keys(base.json).join('`, `')}\``;
+  say(top);
+  const rows = rowsOf(base.json);
+  if (!rows) {
+    say('⚠️ 找不到資料陣列，原始回應前 400 字：');
     say('```');
-    say(snippet);
+    say(JSON.stringify(base.json).slice(0, 400));
     say('```');
   } else {
-    say('頁面中找不到「資料更新時間」字樣。');
+    say(`資料筆數：**${rows.length}**`);
+    say('');
+    say(`第一筆的所有欄位：`);
+    say('```');
+    say(Object.keys(rows[0]).join(', '));
+    say('```');
+    say('');
+
+    /* ---------- Q2 欄位完整度 ---------- */
+    say('## Q2. 關鍵欄位完整度');
+    say('');
+    const FIELDS = ['stockNo', 'stockName', 'listingDate', 'indexName', 'totalAv', 'holders', 'issuer'];
+    say('| 欄位 | 有值筆數 | 空值筆數 |');
+    say('| --- | --- | --- |');
+    for (const f of FIELDS) {
+      const filled = rows.filter((r) => r[f] !== undefined && r[f] !== null && String(r[f]).trim() !== '' && String(r[f]).trim() !== '-').length;
+      say(`| \`${f}\` | ${filled} | ${rows.length - filled} |`);
+    }
+    say('');
+    say('指標樣本：');
+    say('');
+    say('```json');
+    const samples = ['00679B', '006201', '00937B'].map((c) => rows.find((r) => codeOf(r) === c)).filter(Boolean);
+    say(JSON.stringify(samples.length ? samples : rows.slice(0, 2), null, 1).slice(0, 1600));
+    say('```');
+    say('');
+
+    /* ---------- Q3 有沒有收盤價 ---------- */
+    say('## Q3. 是否也提供收盤價');
+    say('');
+    const priceKeys = Object.keys(rows[0]).filter((k) => /close|price|成交|收盤|volume|av$/i.test(k));
+    say(priceKeys.length ? `可能的價格／量能欄位：\`${priceKeys.join('`, `')}\`` : '沒有看起來像收盤價的欄位。');
+    say('');
+
+    /* ---------- Q4 與現有資料比對 ---------- */
+    say('## Q4. 與目前網站的 119 檔比對');
+    say('');
+    try {
+      const current = JSON.parse(await readFile('data/etfs.json', 'utf8'));
+      const ours = current.etfs.filter((e) => e.market === '上櫃');
+      const ourCodes = new Set(ours.map((e) => e.code));
+      const theirCodes = new Set(rows.map(codeOf).filter(Boolean));
+      const onlyTheirs = [...theirCodes].filter((c) => !ourCodes.has(c));
+      const onlyOurs = [...ourCodes].filter((c) => !theirCodes.has(c));
+      say(`目前網站上櫃：**${ourCodes.size}** 檔　etfFilter：**${theirCodes.size}** 檔`);
+      say(`只在 etfFilter 有的（${onlyTheirs.length} 檔）：${onlyTheirs.slice(0, 25).join('、') || '無'}`);
+      say(`只在網站有的（${onlyOurs.length} 檔）：${onlyOurs.slice(0, 25).join('、') || '無'}`);
+      say('');
+      say('### 官方規模 vs 我們的推估規模');
+      say('');
+      say('| 代號 | 名稱 | 我們推估 | 官方 totalAv | 差異 |');
+      say('| --- | --- | --- | --- | --- |');
+      let compared = 0; let sumDiff = 0;
+      for (const etf of ours) {
+        const row = rows.find((r) => codeOf(r) === etf.code);
+        const official = Number(String(row?.totalAv ?? '').replace(/,/g, ''));
+        if (!row || !Number.isFinite(official) || !official || typeof etf.size !== 'number' || !etf.size) continue;
+        compared += 1;
+        const diff = Math.abs(etf.size - official) / official * 100;
+        sumDiff += diff;
+        if (compared <= 8) say(`| ${etf.code} | ${etf.name} | ${etf.size} 億 | ${official} 億 | ${diff.toFixed(1)}% |`);
+      }
+      say('');
+      say(`可比對 ${compared} 檔，平均差異 **${compared ? (sumDiff / compared).toFixed(1) : '—'}%**`);
+    } catch (error) {
+      say(`⚠️ 讀取現有 data/etfs.json 失敗：${error.message}`);
+    }
+    say('');
+
+    /* ---------- Q5 官方分類篩選 ---------- */
+    say('## Q5. 官方分類篩選 vs 我們的代號末碼');
+    say('');
+    const suffixOf = (code) => (/[A-Z]$/.test(code) ? code.slice(-1) : '');
+    const expectations = [
+      { label: '債券', params: { assetType: 'bond' }, suffixes: ['B', 'C', 'D'] },
+      { label: '主動式', params: { etfStrategy: 'active' }, suffixes: ['A', 'D'] },
+      { label: '槓桿', params: { rewardType: 'L' }, suffixes: ['L'] },
+    ];
+    const allCodes = rows.map(codeOf).filter(Boolean);
+    for (const item of expectations) {
+      const res = await callApi(item.params);
+      const got = res.ok ? rowsOf(res.json) : null;
+      const expected = allCodes.filter((c) => item.suffixes.includes(suffixOf(c)));
+      if (!got) {
+        say(`- ❌ ${item.label}（\`${new URLSearchParams(item.params)}\`）：${res.tried.join('｜')}`);
+      } else {
+        const gotCodes = new Set(got.map(codeOf).filter(Boolean));
+        const missing = expected.filter((c) => !gotCodes.has(c));
+        const extra = [...gotCodes].filter((c) => !expected.includes(c));
+        say(`- ✅ ${item.label}：官方 **${gotCodes.size}** 檔　我們代號末碼推得 **${expected.length}** 檔　官方多出 ${extra.length} 檔${extra.length ? `（${extra.slice(0, 10).join('、')}）` : ''}　官方少了 ${missing.length} 檔${missing.length ? `（${missing.slice(0, 10).join('、')}）` : ''}`);
+      }
+      await pause(1500);
+    }
+    say('');
   }
-  say('');
-  say(`整頁找到的日期：${findDates(home.text).join('、') || '（無）'}`);
+}
+
+/* ---------- Q6 商品頁 ---------- */
+say('## Q6. 單一商品頁網址');
+say('');
+const detailUrl = 'https://info.tpex.org.tw/ETF/zh/detail.html?query=00679B';
+try {
+  const r = await fetch(detailUrl, { headers, redirect: 'follow', signal: AbortSignal.timeout(45000) });
+  const text = await r.text();
+  say(`\`${detailUrl}\` → HTTP ${r.status}，長度 ${text.length}`);
+  say(`內容含「00679B」：${text.includes('00679B') ? '是' : '否'}　含「元大」：${text.includes('元大') ? '是' : '否'}`);
+  say('（若是前端渲染的頁面，內容可能不含代號，仍需人工開網址確認）');
+} catch (error) {
+  say(`❌ 失敗：${error?.cause?.message ?? error.message}`);
 }
 
 say('');
@@ -115,5 +208,5 @@ say('');
 say('探測結束，未修改 `data/etfs.json`。');
 
 await mkdir('probe', { recursive: true });
-await writeFile('probe/tpex-probe.md', `${lines.join('\n')}\n`, 'utf8');
-console.log('\n報告已寫入 probe/tpex-probe.md');
+await writeFile('probe/etf-filter-probe.md', `${lines.join('\n')}\n`, 'utf8');
+console.log('\n報告已寫入 probe/etf-filter-probe.md');
