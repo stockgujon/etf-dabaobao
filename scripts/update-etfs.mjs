@@ -241,7 +241,9 @@ const buildInvestmentTarget = (fundType, indexName, name, categories) => {
   else if (includesAny(text, ['銅'])) market = '銅';
   else if (includesAny(text, ['白銀'])) market = '白銀';
   else if (categories.includes('商品型') || includesAny(text, ['原物料', '期貨信託'])) market = '原物料';
-  else if (categories.includes('外匯型') || includesAny(text, ['美元', '日圓', '人民幣正', '外匯'])) market = '外匯';
+  // 債券 ETF 的指數名稱常含「美元」（例如「美元投資等級公司債指數」），
+  // 若先比對外匯關鍵字會把債券誤判成外匯，所以官方已歸為債券型時不走外匯關鍵字。
+  else if (categories.includes('外匯型') || (!categories.includes('債券型') && includesAny(text, ['美元', '日圓', '人民幣正', '外匯']))) market = '外匯';
   else if (categories.includes('REITs') || includesAny(text, ['REIT', '不動產'])) market = 'REITs';
   else if (categories.includes('多資產') || includesAny(text, ['平衡型', '多資產'])) market = '多資產';
   else if (categories.includes('債券型') || includesAny(text, ['債券', '公債', '公司債', '金融債', '高收益債'])) {
