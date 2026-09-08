@@ -18,6 +18,13 @@ const sourceUrl = 'https://www.twse.com.tw/zh/ETFortune/products';
 const productsEndpoint = 'https://www.twse.com.tw/rwd/zh/ETFortune/ajaxProductsResult';
 const userAgent = 'ETF-Lens/1.0 (github pages snapshot build)';
 
+// 上櫃（櫃買中心）——證交所 ETF e添富 只涵蓋上市，上櫃 ETF 需另外從櫃買中心取得。
+// 已實測：/tpex_mainboard_daily_close_quotes 是唯一同時提供代號、名稱、收盤價、
+// 成交股數與已發行受益權單位數（Capitals）的端點；櫃買未公開受益人數與基金基本資料。
+const tpexSourceUrl = 'https://www.tpex.org.tw/zh-tw/index.html';
+const tpexEndpoint = 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes';
+const isEtfCode = (value) => /^00\d{3,4}[A-Z]?$/.test(String(value ?? '').trim());
+
 const FILTER_GROUPS = [
   { name: '市值型', filters: [['hashtag', 'ff808081899b8efc0189aa066a5a0020'], ['hashtag', 'ff808081899b8efc0189aa06d5ce0021'], ['hashtag', 'ff808081899b8efc0189aa070e910022']] },
   { name: '產業型', filters: [['hashtag', 'ff808081899b8efc0189aa074b8d0023'], ['hashtag', 'ff808081899b8efc0189aa0786cb0024'], ['hashtag', 'ff808081899b8efc0189aa07ec700025'], ['hashtag', 'ff808081899b8efc0189aa082e6d0026']] },
@@ -162,6 +169,64 @@ const buildRiskNotes = (fundType, categories, investmentTarget) => {
   return notes;
 };
 
+/* ---------------- 上櫃 ETF ---------------- */
+// 櫃買中心沒有證交所 ETF e添富 那種官方分類篩選器，但代號末碼本身就是櫃買的官方規則：
+// B 台幣計價債券、C 外幣計價債券、D 主動式債券、A 主動式股票、
+// L 槓桿、R 反向、T 多資產、U 期貨信託、無尾碼為一般股票型。
+// 依此推導出 categories，再交給與上市共用的 classifyEtf／buildInvestmentTarget，
+// 確保兩個市場的欄位語意一致。策略／主題（市值、高股息…）櫃買沒有官方來源，一律留空。
+const tpexCategoriesFromCode = (code) => {
+  const suffix = /[A-Z]$/.test(code) ? code.slice(-1) : '';
+  const categories = [];
+  if (suffix === 'B' || suffix === 'C') categories.push('債券型');
+  if (suffix === 'D') categories.push('債券型', '主動型');
+  if (suffix === 'A') categories.push('主動型');
+  if (suffix === 'L') categories.push('槓桿型');
+  if (suffix === 'R') categories.push('反向型');
+  if (suffix === 'T') categories.push('多資產');
+  if (suffix === 'U') categories.push('商品型');
+  return categories.length ? categories : ['其他'];
+};
+
+const buildTpexEtfs = (rows) => rows
+  .filter((row) => isEtfCode(row?.SecuritiesCompanyCode))
+  .map((row) => {
+    const code = String(row.SecuritiesCompanyCode).trim();
+    const name = String(row.CompanyName ?? '').trim();
+    const categories = tpexCategoriesFromCode(code);
+    const price = toNumber(row.Close);
+    const units = toNumber(row.Capitals); // 已發行受益權單位數
+    // 櫃買未公開基金規模；以「已發行單位數 × 收盤價」推估市值（億元），並標記為推估值。
+    const size = price !== null && units !== null ? Math.round((units * price) / 1e8) : null;
+    const investmentTarget = buildInvestmentTarget('', '', name, categories);
+    const classification = classifyEtf({ fundType: '', indexName: '', investmentTarget, name, categories });
+    return {
+      code,
+      name,
+      listingDate: '',
+      indexName: '',
+      benchmarkName: '',
+      fundType: '',
+      investmentTarget,
+      size,
+      price,
+      holders: null, // 櫃買中心未公開受益人數
+      dailyTradingVolume: sharesToLots(row.TradingShares),
+      issuer: '',
+      manager: '',
+      custodian: '',
+      categories,
+      managementStyle: classification.managementStyle,
+      productStructure: classification.productStructure,
+      assetClass: classification.assetClass,
+      themes: classification.themes,
+      riskNotes: buildRiskNotes('', categories, investmentTarget),
+      market: '上櫃',
+      sizeIsEstimated: true,
+    };
+  })
+  .filter((row) => row.code && row.name);
+
 /* ---------------- 讀取現有資料 ---------------- */
 const readExisting = async () => {
   try {
@@ -210,11 +275,12 @@ if (existing?.meta?.officialDate === today && existing?.meta?.syncStatus === 'su
 
 let dataset;
 try {
-  const [allRows, homeResponse, dailyResponse, fundResponse, ...groupRows] = await Promise.all([
+  const [allRows, homeResponse, dailyResponse, fundResponse, tpexResponse, ...groupRows] = await Promise.all([
     fetchRows(),
     fetch('https://www.twse.com.tw/rwd/zh/ETFortune/index', { headers: { 'user-agent': userAgent }, redirect: 'follow' }),
     fetch('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL', { headers: { 'user-agent': userAgent } }),
     fetch('https://openapi.twse.com.tw/v1/opendata/t187ap47_L', { headers: { 'user-agent': userAgent } }),
+    fetch(tpexEndpoint, { headers: { 'user-agent': userAgent, accept: 'application/json' }, signal: AbortSignal.timeout(90000) }),
     ...FILTER_GROUPS.map((group) => fetchRows(group.filters)),
   ]);
 
@@ -233,7 +299,7 @@ try {
   if (!Array.isArray(fundRows)) throw new Error('Unexpected TWSE fund payload');
   const fundByCode = new Map(fundRows.map((row) => [String(row['基金代號'] ?? '').trim(), row]));
 
-  const etfs = allRows.map((row) => {
+  const twseEtfs = allRows.map((row) => {
     const code = String(row.stockNo ?? '').trim();
     const categories = FILTER_GROUPS.filter((group) => categorySets.get(group.name)?.has(code)).map((group) => group.name);
     const safeCategories = categories.length ? categories : ['其他'];
@@ -264,10 +330,24 @@ try {
       assetClass: classification.assetClass,
       themes: classification.themes,
       riskNotes: buildRiskNotes(fundType, safeCategories, investmentTarget),
+      market: '上市',
+      sizeIsEstimated: false,
     };
   }).filter((row) => row.code && row.name);
 
+  /* ---------- 上櫃：櫃買中心 ---------- */
+  if (!tpexResponse.ok) throw new Error(`TPEx response ${tpexResponse.status}`);
+  const tpexRows = await tpexResponse.json();
+  if (!Array.isArray(tpexRows)) throw new Error('Unexpected TPEx payload');
+  const twseCodes = new Set(twseEtfs.map((row) => row.code));
+  // 同一代號若兩邊都有，以證交所官方資料為準（正常情況不會發生）。
+  const tpexEtfs = buildTpexEtfs(tpexRows).filter((row) => !twseCodes.has(row.code));
+
+  const etfs = [...twseEtfs, ...tpexEtfs];
+
   /* ---------- 驗證（全部通過才允許替換資料） ---------- */
+  if (twseEtfs.length < 100) throw new Error(`上市 ETF 筆數異常：${twseEtfs.length}`);
+  if (tpexEtfs.length < 80) throw new Error(`上櫃 ETF 筆數異常：${tpexEtfs.length}`);
   if (etfs.length < 100) throw new Error(`ETF 筆數異常：${etfs.length}`);
   const codes = new Set();
   for (const etf of etfs) {
@@ -296,6 +376,16 @@ try {
     throw new Error('日成交量（張）出現負值');
   }
 
+  // 上櫃守門員：00679B（元大美債20年）是規模最大的上櫃債券 ETF 之一，
+  // 若不存在或推估規模過小，代表櫃買資料抓歪或單位換算錯誤。
+  const etf00679B = tpexEtfs.find((row) => row.code === '00679B');
+  if (!etf00679B) throw new Error('上櫃資料缺少 00679B');
+  if (typeof etf00679B.size !== 'number' || etf00679B.size < 1000) throw new Error(`00679B 推估規模異常：${etf00679B.size}`);
+  if (etf00679B.assetClass !== '債券') throw new Error('00679B 應分類為債券');
+  if (!tpexEtfs.some((row) => row.code === '006201')) throw new Error('上櫃資料缺少 006201');
+  if (tpexEtfs.some((row) => row.themes.length)) throw new Error('上櫃 ETF 不應帶有策略／主題標籤（櫃買無官方分類來源）');
+  if (etfs.some((row) => row.market !== '上市' && row.market !== '上櫃')) throw new Error('有 ETF 缺少市場別');
+
   const homeHtml = homeResponse.ok ? await homeResponse.text() : '';
   const officialDate = homeHtml.match(/資料更新時間[：:]\s*(\d{4}\.\d{2}\.\d{2})/)?.[1] ?? null;
   if (!officialDate) throw new Error('無法取得官方資料日');
@@ -318,14 +408,17 @@ try {
   const nowIso = new Date().toISOString();
   dataset = {
     meta: {
-      dataset: 'TWSE ETF e添富投資篩選器',
-      source: '臺灣證券交易所 ETF e添富',
+      dataset: 'TWSE ETF e添富投資篩選器 + TPEx 上櫃行情',
+      source: '臺灣證券交易所 ETF e添富、證券櫃檯買賣中心',
       sourceUrl,
+      tpexSourceUrl,
       officialDate,
       syncedAt: nowIso,
       count: etfs.length,
-      categorySource: '依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題；市值限定被動原型 ETF',
-      syncNote: '分類取自證交所 ETF e添富即時篩選結果；日成交量取自 STOCK_DAY_ALL 的 TradeVolume，原始單位為股，以 1,000 股換算為 1 張',
+      listedCount: twseEtfs.length,
+      otcCount: tpexEtfs.length,
+      categorySource: '上市依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題（市值限定被動原型 ETF）；上櫃依櫃買中心代號末碼規則推導，策略／主題無官方來源故留空',
+      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃取自櫃買中心上櫃股票行情。日成交量兩市場皆以 1,000 股換算為 1 張。上櫃資產規模為「已發行受益權單位數 × 收盤價」之推估市值（櫃買未公開基金規模），受益人數與基本資料櫃買亦未公開',
       lastSuccessfulSyncAt: nowIso,
       lastAttemptAt: nowIso,
       syncStatus: 'success',

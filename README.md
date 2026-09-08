@@ -1,6 +1,6 @@
-# 國內上市ETF大秘寶｜國內上市ETF清單
+# 國內ETF大秘寶｜國內上市與上櫃ETF清單
 
-以純 HTML / CSS / JavaScript（ES modules）建置的臺灣上市 ETF 資料工具，可直接放進 GitHub repository 並用 GitHub Pages 發布。網站開啟時只讀取本 repository 的 `./data/etfs.json`，搜尋、篩選、排序、比較與投入試算全部在瀏覽器本機完成。
+以純 HTML / CSS / JavaScript（ES modules）建置的臺灣 ETF 資料工具，涵蓋證交所全部上市 ETF 與櫃買中心全部上櫃 ETF，可直接放進 GitHub repository 並用 GitHub Pages 發布。網站開啟時只讀取本 repository 的 `./data/etfs.json`，搜尋、篩選、排序、比較與投入試算全部在瀏覽器本機完成。
 
 - 沒有 React / Next.js / Vue / Vite / npm build。
 - 沒有登入、會員、後台管理頁或資料輸入表單。
@@ -67,12 +67,29 @@ fetch('./data/etfs.json?ts=' + Date.now(), { cache: 'no-store' })
 
 它只是重新讀取 GitHub Pages 上目前的資料檔，看看排程有沒有更新過內容。它**不會**觸發 GitHub Actions、不會呼叫證交所或 GitHub API，也**不會影響每日同步的執行時間與頻率**。讀取失敗時會保留畫面上已有的資料，只顯示錯誤提示。
 
+## 兩個市場的資料差異
+
+| 欄位 | 上市（證交所） | 上櫃（櫃買中心） |
+| --- | --- | --- |
+| 代號、名稱、收盤價 | ✅ 官方 | ✅ 官方 |
+| 日成交量（張） | ✅ `TradeVolume / 1000` | ✅ `TradingShares / 1000`（同口徑） |
+| 資產規模 | ✅ ETF e添富官方 AUM | ⚠️ 推估：`已發行受益權單位數 × 收盤價`，畫面標示「推估」 |
+| 受益人數 | ✅ 官方 | ❌ 櫃買未公開 |
+| 掛牌日期、發行人、經理人、保管機構、標的指數 | ✅ 官方 | ❌ 櫃買未公開 |
+| 管理方式、產品結構、資產類別 | ✅ ETF e添富官方篩選 | ✅ 依櫃買代號末碼規則推導 |
+| 策略／主題（市值、高股息、產業、ESG、因子） | ✅ 官方篩選 | ➖ 一律留空（櫃買無官方分類來源） |
+
+櫃買代號末碼規則：`B` 台幣計價債券、`C` 外幣計價債券、`D` 主動式債券、`A` 主動式股票、`L` 槓桿、`R` 反向、`T` 多資產、`U` 期貨信託、無尾碼為一般股票型。
+
+上櫃規模為推估值一事，在表格、比較卡與詳情視窗三處都有明確標示，排序與篩選照常可用。
+
 ## 官方資料來源
 
 - 商品與官方分類入口：<https://www.twse.com.tw/zh/ETFortune/products>
 - ETF e添富商品結果：`https://www.twse.com.tw/rwd/zh/ETFortune/ajaxProductsResult`
 - 收盤價與成交股數：`https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL`
 - 基金基本資料：`https://openapi.twse.com.tw/v1/opendata/t187ap47_L`
+- 上櫃 ETF 行情：`https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes`
 
 分類一律採用證交所 ETF e添富的官方篩選結果交叉比對，不以名稱關鍵字猜測。「市值」僅限官方市值型、被動式、非槓桿、非反向的 ETF；主動式 ETF 不會出現在市值篩選結果。
 

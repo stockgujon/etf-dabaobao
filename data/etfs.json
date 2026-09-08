@@ -9,16 +9,19 @@
     "categorySource": "依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題；市值限定被動原型 ETF",
     "syncNote": "分類取自證交所 ETF e添富即時篩選結果；日成交量取自 STOCK_DAY_ALL 的 TradeVolume，原始單位為股，以 1,000 股換算為 1 張",
     "lastSuccessfulSyncAt": "2026-09-08T04:48:16.350Z",
-    "lastAttemptAt": "2026-09-08T06:25:51.660Z",
-    "syncStatus": "fallback",
-    "syncWarning": "證交所目前提供的官方資料日為 2026.09.07，尚未提供 2026.09.08 的完整資料；已保留上一次成功保存的資料。",
+    "lastAttemptAt": "2026-09-08T04:48:16.350Z",
+    "syncStatus": "success",
+    "syncWarning": "",
     "schedule": "每個交易日 18:00 更新；失敗時於 18:15、18:45 自動重試（GitHub Actions，台灣時間）",
     "units": {
       "size": "億元",
       "price": "元",
       "dailyTradingVolume": "張",
       "holders": "人"
-    }
+    },
+    "listedCount": 240,
+    "otcCount": 0,
+    "tpexSourceUrl": "https://www.tpex.org.tw/zh-tw/index.html"
   },
   "etfs": [
     {
@@ -48,7 +51,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00401A",
@@ -75,7 +80,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00402A",
@@ -106,7 +113,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00403A",
@@ -133,7 +142,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00404A",
@@ -159,7 +170,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00405A",
@@ -191,7 +204,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00406A",
@@ -218,7 +233,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00407A",
@@ -248,7 +265,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00408A",
@@ -278,7 +297,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00409A",
@@ -305,7 +326,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00410A",
@@ -334,7 +357,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0050",
@@ -362,7 +387,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0051",
@@ -390,7 +417,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0052",
@@ -418,7 +447,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0053",
@@ -446,7 +477,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0055",
@@ -474,7 +507,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0056",
@@ -502,7 +537,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0057",
@@ -530,7 +567,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "0061",
@@ -558,7 +597,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "006203",
@@ -586,7 +627,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "006204",
@@ -614,7 +657,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "006205",
@@ -640,7 +685,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "006206",
@@ -668,7 +715,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "006207",
@@ -696,7 +745,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "006208",
@@ -724,7 +775,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00625K",
@@ -750,7 +803,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00631L",
@@ -777,7 +832,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00632R",
@@ -804,7 +861,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00633L",
@@ -831,7 +890,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00634R",
@@ -858,7 +919,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00635U",
@@ -884,7 +947,9 @@
       "themes": [],
       "riskNotes": [
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00636",
@@ -910,7 +975,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00636K",
@@ -936,7 +1003,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00637L",
@@ -963,7 +1032,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00638R",
@@ -990,7 +1061,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00639",
@@ -1018,7 +1091,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00640L",
@@ -1046,7 +1121,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00641R",
@@ -1074,7 +1151,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00642U",
@@ -1100,7 +1179,9 @@
       "themes": [],
       "riskNotes": [
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00643",
@@ -1126,7 +1207,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00643K",
@@ -1152,7 +1235,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00645",
@@ -1180,7 +1265,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00646",
@@ -1208,7 +1295,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00647L",
@@ -1236,7 +1325,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00648R",
@@ -1264,7 +1355,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00650L",
@@ -1291,7 +1384,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00651R",
@@ -1318,7 +1413,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00652",
@@ -1346,7 +1443,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00653L",
@@ -1374,7 +1473,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00654R",
@@ -1402,7 +1503,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00655L",
@@ -1430,7 +1533,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00656R",
@@ -1458,7 +1563,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00657",
@@ -1484,7 +1591,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00657K",
@@ -1510,7 +1619,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00660",
@@ -1538,7 +1649,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00661",
@@ -1566,7 +1679,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00662",
@@ -1594,7 +1709,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00663L",
@@ -1621,7 +1738,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00664R",
@@ -1648,7 +1767,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00665L",
@@ -1675,7 +1796,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00666R",
@@ -1702,7 +1825,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00668",
@@ -1728,7 +1853,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00668K",
@@ -1754,7 +1881,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00669R",
@@ -1782,7 +1911,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00670L",
@@ -1810,7 +1941,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00671R",
@@ -1838,7 +1971,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00673R",
@@ -1866,7 +2001,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00674R",
@@ -1894,7 +2031,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00675L",
@@ -1921,7 +2060,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00676R",
@@ -1948,7 +2089,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00678",
@@ -1977,7 +2120,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00680L",
@@ -2007,7 +2152,9 @@
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "債券價格會受利率、信用品質與存續期變化影響。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00681R",
@@ -2037,7 +2184,9 @@
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "債券價格會受利率、信用品質與存續期變化影響。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00682U",
@@ -2063,7 +2212,9 @@
       "themes": [],
       "riskNotes": [
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00683L",
@@ -2091,7 +2242,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00684R",
@@ -2119,7 +2272,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00685L",
@@ -2145,7 +2300,9 @@
       "themes": [],
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00686R",
@@ -2171,7 +2328,9 @@
       "themes": [],
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00688L",
@@ -2201,7 +2360,9 @@
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "債券價格會受利率、信用品質與存續期變化影響。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00689R",
@@ -2231,7 +2392,9 @@
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "債券價格會受利率、信用品質與存續期變化影響。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00690",
@@ -2259,7 +2422,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00692",
@@ -2289,7 +2454,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00693U",
@@ -2315,7 +2482,9 @@
       "themes": [],
       "riskNotes": [
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00700",
@@ -2343,7 +2512,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00701",
@@ -2373,7 +2544,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00702",
@@ -2403,7 +2576,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00703",
@@ -2431,7 +2606,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00706L",
@@ -2459,7 +2636,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00707R",
@@ -2487,7 +2666,9 @@
       "riskNotes": [
         "反向型以每日反向報酬為目標，不等於長期反向績效。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00708L",
@@ -2515,7 +2696,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00709",
@@ -2543,7 +2726,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00710B",
@@ -2569,7 +2754,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00711B",
@@ -2595,7 +2782,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00712",
@@ -2624,7 +2813,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00713",
@@ -2654,7 +2845,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00714",
@@ -2680,7 +2873,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00715L",
@@ -2708,7 +2903,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00717",
@@ -2736,7 +2933,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00728",
@@ -2764,7 +2963,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00730",
@@ -2792,7 +2993,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00731",
@@ -2820,7 +3023,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00733",
@@ -2850,7 +3055,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00735",
@@ -2879,7 +3086,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00736",
@@ -2907,7 +3116,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00737",
@@ -2936,7 +3147,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00738U",
@@ -2962,7 +3175,9 @@
       "themes": [],
       "riskNotes": [
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00739",
@@ -2990,7 +3205,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00752",
@@ -3018,7 +3235,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00753L",
@@ -3046,7 +3265,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00757",
@@ -3079,7 +3300,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00762",
@@ -3110,7 +3333,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00763U",
@@ -3136,7 +3361,9 @@
       "themes": [],
       "riskNotes": [
         "期貨型商品可能受轉倉成本、期貨正逆價差與原物料波動影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00770",
@@ -3165,7 +3392,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00771",
@@ -3193,7 +3422,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00775B",
@@ -3222,7 +3453,9 @@
       ],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00783",
@@ -3250,7 +3483,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00830",
@@ -3281,7 +3516,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00850",
@@ -3309,7 +3546,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00851",
@@ -3338,7 +3577,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00852L",
@@ -3366,7 +3607,9 @@
       "riskNotes": [
         "槓桿型追求每日倍數報酬，長期累積結果可能偏離標的指數倍數。",
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00861",
@@ -3397,7 +3640,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00865B",
@@ -3426,7 +3671,9 @@
       ],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00875",
@@ -3455,7 +3702,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00876",
@@ -3486,7 +3735,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00878",
@@ -3516,7 +3767,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00881",
@@ -3544,7 +3797,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00882",
@@ -3572,7 +3827,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00885",
@@ -3600,7 +3857,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00891",
@@ -3631,7 +3890,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00892",
@@ -3660,7 +3921,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00893",
@@ -3689,7 +3952,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00894",
@@ -3719,7 +3984,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00895",
@@ -3748,7 +4015,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00896",
@@ -3776,7 +4045,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00897",
@@ -3805,7 +4076,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00898",
@@ -3834,7 +4107,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00899",
@@ -3863,7 +4138,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00900",
@@ -3891,7 +4168,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00901",
@@ -3921,7 +4200,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00902",
@@ -3950,7 +4231,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00903",
@@ -3979,7 +4262,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00904",
@@ -4007,7 +4292,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00905",
@@ -4035,7 +4322,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00907",
@@ -4067,7 +4356,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00908",
@@ -4096,7 +4387,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00909",
@@ -4125,7 +4418,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00910",
@@ -4156,7 +4451,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00911",
@@ -4185,7 +4482,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00912",
@@ -4215,7 +4514,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00913",
@@ -4243,7 +4544,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00915",
@@ -4273,7 +4576,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00916",
@@ -4301,7 +4606,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00917",
@@ -4330,7 +4637,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00918",
@@ -4362,7 +4671,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00919",
@@ -4390,7 +4701,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00920",
@@ -4421,7 +4734,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00921",
@@ -4449,7 +4764,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00922",
@@ -4477,7 +4794,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00923",
@@ -4505,7 +4824,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00924",
@@ -4535,7 +4856,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00926",
@@ -4563,7 +4886,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00927",
@@ -4589,7 +4914,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00929",
@@ -4619,7 +4946,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00930",
@@ -4651,7 +4980,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00932",
@@ -4683,7 +5014,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00934",
@@ -4711,7 +5044,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00935",
@@ -4741,7 +5076,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00936",
@@ -4773,7 +5110,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00938",
@@ -4801,7 +5140,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00939",
@@ -4831,7 +5172,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00940",
@@ -4861,7 +5204,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00941",
@@ -4890,7 +5235,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00943",
@@ -4922,7 +5269,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00944",
@@ -4952,7 +5301,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00945B",
@@ -4978,7 +5329,9 @@
       "themes": [],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00946",
@@ -5008,7 +5361,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00947",
@@ -5036,7 +5391,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00949",
@@ -5064,7 +5421,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00951",
@@ -5093,7 +5452,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00952",
@@ -5123,7 +5484,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00953B",
@@ -5149,7 +5512,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00954",
@@ -5178,7 +5543,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00956",
@@ -5206,7 +5573,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00960",
@@ -5234,7 +5603,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00961",
@@ -5264,7 +5635,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00962",
@@ -5294,7 +5667,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00963",
@@ -5322,7 +5697,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00964",
@@ -5350,7 +5727,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00965",
@@ -5381,7 +5760,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00971",
@@ -5412,7 +5793,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00972",
@@ -5442,7 +5825,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009800",
@@ -5473,7 +5858,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009801",
@@ -5502,7 +5889,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009802",
@@ -5532,7 +5921,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009803",
@@ -5562,7 +5953,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009804",
@@ -5590,7 +5983,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009805",
@@ -5619,7 +6014,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009808",
@@ -5647,7 +6044,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009809",
@@ -5677,7 +6076,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00980A",
@@ -5704,7 +6105,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009810",
@@ -5732,7 +6135,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009811",
@@ -5760,7 +6165,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009812",
@@ -5788,7 +6195,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009813",
@@ -5816,7 +6225,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009816",
@@ -5842,7 +6253,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009817",
@@ -5870,7 +6283,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009818",
@@ -5901,7 +6316,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009819",
@@ -5930,7 +6347,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00981A",
@@ -5957,7 +6376,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00981T",
@@ -5983,7 +6404,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009820",
@@ -6016,7 +6439,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009821",
@@ -6042,7 +6467,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009824",
@@ -6071,7 +6498,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009826",
@@ -6099,7 +6528,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009827",
@@ -6128,7 +6559,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009828",
@@ -6157,7 +6590,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "009829",
@@ -6185,7 +6620,9 @@
       ],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00982A",
@@ -6212,7 +6649,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00982D",
@@ -6239,7 +6678,9 @@
       "themes": [],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00982T",
@@ -6268,7 +6709,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00983A",
@@ -6300,7 +6743,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00983D",
@@ -6327,7 +6772,9 @@
       "themes": [],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00984A",
@@ -6359,7 +6806,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00984D",
@@ -6386,7 +6835,9 @@
       "themes": [],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00985A",
@@ -6413,7 +6864,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00985B",
@@ -6442,7 +6895,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00986A",
@@ -6469,7 +6924,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00987A",
@@ -6496,7 +6953,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00988A",
@@ -6527,7 +6986,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00989A",
@@ -6557,7 +7018,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00990A",
@@ -6587,7 +7050,9 @@
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。",
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00991A",
@@ -6614,7 +7079,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00991B",
@@ -6643,7 +7110,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00992A",
@@ -6672,7 +7141,9 @@
       ],
       "riskNotes": [
         "產業或主題型 ETF 集中度較高，波動可能大於廣泛市場型 ETF。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00993A",
@@ -6702,7 +7173,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00994A",
@@ -6732,7 +7205,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00995A",
@@ -6759,7 +7234,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00996A",
@@ -6786,7 +7263,9 @@
       "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00997A",
@@ -6813,7 +7292,9 @@
       "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     },
     {
       "code": "00999A",
@@ -6842,7 +7323,9 @@
       ],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
-      ]
+      ],
+      "market": "上市",
+      "sizeIsEstimated": false
     }
   ]
 }

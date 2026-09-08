@@ -1,4 +1,4 @@
-// 國內上市ETF大秘寶｜GitHub Pages 版前端
+// 國內ETF大秘寶｜GitHub Pages 版前端
 // 全站只讀取本 repository 的 ./data/etfs.json；不從瀏覽器呼叫證交所、GitHub API
 // 或任何後台排程介面。搜尋、篩選、排序、比較與試算全部在瀏覽器本機完成。
 
@@ -10,9 +10,16 @@ import {
   classifyEtf,
 } from './etf-classification.js';
 
+const MARKET_OPTIONS = ['全部市場', '上市', '上櫃'];
 const DATA_URL = './data/etfs.json';
 const SOURCE_URL = 'https://www.twse.com.tw/zh/ETFortune/products';
+const TPEX_URL = 'https://www.tpex.org.tw/zh-tw/index.html';
 const etfInfoUrl = (code) => `https://www.twse.com.tw/zh/ETFortune/etfInfo/${encodeURIComponent(code)}`;
+// 上市有證交所單一商品頁；櫃買中心沒有對應的單一商品頁網址，退回官網首頁。
+const officialUrlOf = (etf) => (marketOf(etf) === '上櫃' ? TPEX_URL : etfInfoUrl(etf.code));
+const officialLabelOf = (etf) => (marketOf(etf) === '上櫃' ? '櫃買中心官網 ↗' : '證交所商品頁 ↗');
+// 上櫃缺欄位時，說明「櫃買未公開」比一個破折號有用。
+const orMissing = (value, etf) => value || (marketOf(etf) === '上櫃' ? '櫃買中心未公開' : '—');
 
 /* ---------------- 格式化 ---------------- */
 const intFormatter = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 });
@@ -22,6 +29,10 @@ const formatDecimal = (value, digits = 2) => (value === null || value === undefi
   : new Intl.NumberFormat('zh-TW', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value));
 // 日成交量單位為「張」（1,000 股 = 1 張），畫面一律取整數顯示。
 const formatLots = (value) => (value === null || value === undefined || Number.isNaN(value) ? '—' : intFormatter.format(Math.trunc(value)));
+// 規模不足 1 億時，直接寫「不足 1 億」，避免顯示成 0 億被誤認為沒資料。
+const formatSize = (value) => (value === null || value === undefined || Number.isNaN(value)
+  ? '—'
+  : value === 0 ? '不足 1 億' : `${formatInteger(value)} 億`);
 const formatAssetScale = (value) => (value >= 10000 ? `${(value / 10000).toFixed(2)} 兆` : `${formatInteger(value)} 億`);
 const formatTime = (value) => {
   if (!value) return null;
@@ -35,6 +46,7 @@ const state = {
   syncState: 'loading', // loading | ready | syncing | error
   syncMessage: '正在載入已查證的證交所資料快照',
   query: '',
+  market: '全部市場',
   managementStyle: '全部方式',
   productStructure: '全部結構',
   assetClass: '全部資產',
@@ -63,6 +75,7 @@ const el = {
   statDate: $('stat-date'),
   search: $('search-input'),
   selects: {
+    掛牌市場: $('select-market'),
     管理方式: $('select-management'),
     產品結構: $('select-structure'),
     資產類別: $('select-asset'),
@@ -129,15 +142,18 @@ const getClassification = (etf) => {
 };
 
 const etfs = () => state.dataset?.etfs ?? [];
+const marketOf = (etf) => etf.market || '上市';
+const isEstimated = (etf) => etf.sizeIsEstimated === true;
 
 const getFiltered = () => {
   const normalized = state.query.trim().toLowerCase();
   const list = etfs().filter((etf) => {
     const c = getClassification(etf);
     const themeAliases = c.themes.flatMap((theme) => [theme, `${theme}型`]);
-    const searchable = [etf.code, etf.name, etf.indexName, etf.investmentTarget, c.managementStyle, c.productStructure, c.assetClass, ...themeAliases].join(' ').toLowerCase();
+    const searchable = [etf.code, etf.name, etf.indexName, etf.investmentTarget, marketOf(etf), c.managementStyle, c.productStructure, c.assetClass, ...themeAliases].join(' ').toLowerCase();
     const price = etf.price ?? -1;
     return (!normalized || searchable.includes(normalized))
+      && (state.market === '全部市場' || marketOf(etf) === state.market)
       && (state.managementStyle === '全部方式' || c.managementStyle === state.managementStyle)
       && (state.productStructure === '全部結構' || c.productStructure === state.productStructure)
       && (state.assetClass === '全部資產' || c.assetClass === state.assetClass)
@@ -279,7 +295,7 @@ const renderRows = (filtered) => {
     const name = document.createElement('small');
     name.textContent = fund.name;
     const tags = document.createElement('em');
-    tags.textContent = [c.managementStyle, c.assetClass, ...c.themes].slice(0, 3).join('・');
+    tags.textContent = [marketOf(fund), c.managementStyle, c.assetClass, ...c.themes].slice(0, 3).join('・');
     info.append(code, name, tags);
     wrap.append(badge, info);
     fundTd.append(wrap);
@@ -290,8 +306,15 @@ const renderRows = (filtered) => {
     const sizeTd = document.createElement('td');
     const sizeStrong = document.createElement('strong');
     sizeStrong.className = 'verified-number';
-    sizeStrong.textContent = `${formatInteger(fund.size)} 億`;
+    sizeStrong.textContent = formatSize(fund.size);
     sizeTd.append(sizeStrong);
+    if (isEstimated(fund)) {
+      const badge = document.createElement('i');
+      badge.className = 'est-badge';
+      badge.textContent = '推估';
+      badge.title = '櫃買中心未公開基金規模，此為已發行單位數 × 收盤價之推估市值';
+      sizeTd.append(badge);
+    }
 
     const volumeTd = document.createElement('td');
     volumeTd.textContent = `${formatLots(fund.dailyTradingVolume)} 張`;
@@ -329,7 +352,7 @@ const renderCompare = () => {
   el.selectCount.textContent = state.selected.length;
   el.selectHint.textContent = state.selected.length
     ? `已選 ${state.selected.length} 檔；${state.selected.length < 2 ? '再選 1 檔即可比較' : '可以開始比較'}`
-    : '勾選 2–3 檔，即可比較證交所官方欄位';
+    : '勾選 2–3 檔，即可比較官方欄位';
   el.gotoCompare.className = state.selected.length < 2 ? 'disabled' : '';
 
   if (comparison.length < 2) {
@@ -370,14 +393,14 @@ const renderCompare = () => {
     yieldValue.append(sup);
 
     const caption = document.createElement('small');
-    caption.textContent = '最近營業日資產規模';
+    caption.textContent = isEstimated(fund) ? '最近營業日推估市值（櫃買未公開規模）' : '最近營業日資產規模';
 
     const dl = document.createElement('dl');
     [
       ['收盤價', fund.price === null || fund.price === undefined ? '—' : `${formatDecimal(fund.price)} 元`],
       ['日成交量', `${formatLots(fund.dailyTradingVolume)} 張`],
       ['受益人數', `${formatInteger(fund.holders)} 人`],
-      ['上市日期', fund.listingDate || '—'],
+      ['掛牌日期', orMissing(fund.listingDate, fund)],
     ].forEach(([label, value]) => {
       const row = document.createElement('div');
       const dt = document.createElement('dt');
@@ -390,6 +413,10 @@ const renderCompare = () => {
 
     const official = document.createElement('div');
     official.className = 'official-detail';
+    const marketLabel = document.createElement('span');
+    marketLabel.textContent = '掛牌市場';
+    const marketValue = document.createElement('b');
+    marketValue.textContent = marketOf(fund);
     const targetLabel = document.createElement('span');
     targetLabel.textContent = '投資標的';
     const targetValue = document.createElement('b');
@@ -397,13 +424,13 @@ const renderCompare = () => {
     const issuerLabel = document.createElement('span');
     issuerLabel.textContent = '發行人';
     const issuerValue = document.createElement('b');
-    issuerValue.textContent = fund.issuer || '—';
+    issuerValue.textContent = orMissing(fund.issuer, fund);
     const link = document.createElement('a');
-    link.href = etfInfoUrl(fund.code);
+    link.href = officialUrlOf(fund);
     link.target = '_blank';
     link.rel = 'noreferrer';
-    link.textContent = '證交所商品頁 ↗';
-    official.append(targetLabel, targetValue, issuerLabel, issuerValue, link);
+    link.textContent = officialLabelOf(fund);
+    official.append(marketLabel, marketValue, targetLabel, targetValue, issuerLabel, issuerValue, link);
 
     article.append(remove, codeLine, title, yieldValue, caption, dl, official);
     el.compareGrid.append(article);
@@ -500,7 +527,7 @@ const renderDetail = () => {
   }
   document.body.style.overflow = 'hidden';
   const c = getClassification(fund);
-  const infoUrl = etfInfoUrl(fund.code);
+  const infoUrl = officialUrlOf(fund);
 
   const close = document.createElement('button');
   close.type = 'button';
@@ -522,7 +549,7 @@ const renderDetail = () => {
   metrics.className = 'detail-metrics';
   [
     ['收盤價', fund.price === null || fund.price === undefined ? '—' : `${formatDecimal(fund.price)} 元`],
-    ['資產規模', `${formatInteger(fund.size)} 億`],
+    ['資產規模', `${formatSize(fund.size)}${isEstimated(fund) ? '（推估）' : ''}`],
     ['日成交量', `${formatLots(fund.dailyTradingVolume)} 張`],
     ['受益人數', `${formatInteger(fund.holders)} 人`],
   ].forEach(([label, value]) => {
@@ -539,20 +566,23 @@ const renderDetail = () => {
   sections.className = 'detail-sections';
 
   sections.append(detailSection('01・商品身分', [
+    detailRow('掛牌市場', marketOf(fund)),
     detailRow('管理方式', c.managementStyle),
     detailRow('產品結構', c.productStructure),
     detailRow('資產類別', c.assetClass),
-    detailRow('官方基金類型', fund.fundType || '—'),
-    detailRow('上市日期', fund.listingDate || '—'),
-    detailRow('發行人', fund.issuer || '—'),
-    detailRow('基金經理人', fund.manager || '—'),
-    detailRow('保管機構', fund.custodian || '—'),
-  ]));
+    detailRow('官方基金類型', orMissing(fund.fundType, fund)),
+    detailRow('掛牌日期', orMissing(fund.listingDate, fund)),
+    detailRow('發行人', orMissing(fund.issuer, fund)),
+    detailRow('基金經理人', orMissing(fund.manager, fund)),
+    detailRow('保管機構', orMissing(fund.custodian, fund)),
+  ], marketOf(fund) === '上櫃'
+    ? '櫃買中心未公開上櫃 ETF 的基金基本資料與受益人數；分類依櫃買代號末碼規則（B/C 債券、D 主動債券、A 主動股票、L 槓桿、R 反向、T 多資產、U 期貨信託）推導。'
+    : ''));
 
   const investRows = [
     detailRow('投資標的', fund.investmentTarget || '—'),
     detailRow('策略／主題', c.themes.join('、') || '未歸入指定主題'),
-    detailRow('完整標的指數', fund.indexName || '主動式 ETF 不適用'),
+    detailRow('完整標的指數', fund.indexName || (marketOf(fund) === '上櫃' ? '櫃買中心未公開' : '主動式 ETF 不適用')),
   ];
   if (fund.benchmarkName) investRows.push(detailRow('績效指標', fund.benchmarkName));
   investRows.push(detailRow('前十大持股', '各基金公司每日公告，本版整合中'));
@@ -566,12 +596,12 @@ const renderDetail = () => {
 
   sections.append(detailSection('04・配息資料', [
     detailRow('配息頻率', '依公開說明書約定'),
-    detailRow('歷史配息', { href: infoUrl, text: '證交所歷史資料 ↗' }, true),
+    detailRow('歷史配息', { href: infoUrl, text: officialLabelOf(fund) }, true),
   ], '有配息紀錄不代表未來固定配息或保證收益。'));
 
   sections.append(detailSection('05・市場資訊', [
-    detailRow('淨值與折溢價', { href: infoUrl, text: '開啟證交所動態圖表 ↗' }, true),
-    detailRow('一／三／五年績效', { href: infoUrl, text: '查看官方績效資料 ↗' }, true),
+    detailRow('淨值與折溢價', { href: infoUrl, text: officialLabelOf(fund) }, true),
+    detailRow('一／三／五年績效', { href: infoUrl, text: officialLabelOf(fund) }, true),
   ], '績效與折溢價會隨日期變動，點開官方頁面可查看最新數值。'));
 
   const risk = document.createElement('article');
@@ -595,7 +625,7 @@ const renderDetail = () => {
   link.href = infoUrl;
   link.target = '_blank';
   link.rel = 'noreferrer';
-  link.textContent = '前往證交所商品頁 ';
+  link.textContent = marketOf(fund) === '上櫃' ? '前往櫃買中心官網 ' : '前往證交所商品頁 ';
   const arrow = document.createElement('span');
   arrow.textContent = '↗';
   link.append(arrow);
@@ -617,6 +647,7 @@ const toggleCompare = (code) => {
 
 const resetFilters = () => {
   state.query = '';
+  state.market = '全部市場';
   state.managementStyle = '全部方式';
   state.productStructure = '全部結構';
   state.assetClass = '全部資產';
@@ -626,6 +657,7 @@ const resetFilters = () => {
   state.maxPrice = 9999;
   state.sort = 'size-desc';
   el.search.value = '';
+  el.selects.掛牌市場.value = state.market;
   el.selects.管理方式.value = state.managementStyle;
   el.selects.產品結構.value = state.productStructure;
   el.selects.資產類別.value = state.assetClass;
@@ -655,12 +687,14 @@ const render = () => {
 };
 
 const bindEvents = () => {
+  fillSelect(el.selects.掛牌市場, MARKET_OPTIONS, state.market);
   fillSelect(el.selects.管理方式, MANAGEMENT_OPTIONS, state.managementStyle);
   fillSelect(el.selects.產品結構, STRUCTURE_OPTIONS, state.productStructure);
   fillSelect(el.selects.資產類別, ASSET_CLASS_OPTIONS, state.assetClass);
   fillSelect(el.selects.策略主題, THEME_OPTIONS, state.strategyTheme);
 
   el.search.addEventListener('input', (event) => { state.query = event.target.value; render(); });
+  el.selects.掛牌市場.addEventListener('change', (event) => { state.market = event.target.value; render(); });
   el.selects.管理方式.addEventListener('change', (event) => { state.managementStyle = event.target.value; render(); });
   el.selects.產品結構.addEventListener('change', (event) => { state.productStructure = event.target.value; render(); });
   el.selects.資產類別.addEventListener('change', (event) => { state.assetClass = event.target.value; render(); });

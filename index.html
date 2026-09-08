@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>國內上市ETF大秘寶｜國內上市ETF清單</title>
-<meta name="description" content="一次載入臺灣證券交易所 ETF e添富資料，依官方條件分類，在本機完成搜尋、篩選、排序、比較與投入模擬。" />
-<meta property="og:title" content="國內上市ETF大秘寶｜國內上市ETF清單" />
-<meta property="og:description" content="涵蓋證交所 ETF e添富全部上市 ETF，支援官方分類、重新載入與本機篩選比較。" />
+<title>國內ETF大秘寶｜國內上市與上櫃ETF清單</title>
+<meta name="description" content="一次載入臺灣證券交易所與證券櫃檯買賣中心的全部上市、上櫃 ETF，依官方條件分類，在本機完成搜尋、篩選、排序、比較與投入模擬。" />
+<meta property="og:title" content="國內ETF大秘寶｜國內上市與上櫃ETF清單" />
+<meta property="og:description" content="涵蓋證交所與櫃買中心的全部上市、上櫃 ETF，支援官方分類、重新載入與本機篩選比較。" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="./assets/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -19,7 +19,7 @@
 <body>
 <main>
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="國內上市ETF大秘寶首頁"><span>國內上市ETF大秘寶</span></a>
+    <a class="brand" href="#top" aria-label="國內ETF大秘寶首頁"><span>國內ETF大秘寶</span></a>
     <nav aria-label="主要導覽">
       <a class="active" href="#screener">ETF 篩選器</a>
       <a href="#compare">比較清單</a>
@@ -34,20 +34,20 @@
   </header>
 
   <div class="sync-banner" id="sync-banner" role="status" aria-live="polite">
-    <span id="sync-message">正在載入已查證的證交所資料快照</span>
+    <span id="sync-message">正在載入已查證的官方資料快照</span>
     <a id="banner-source" href="https://www.twse.com.tw/zh/ETFortune/products" target="_blank" rel="noreferrer">查看官方來源 ↗</a>
   </div>
 
   <section class="hero" id="top">
     <div>
-      <p class="eyebrow">TWSE VERIFIED ETF DATA</p>
-      <h1>國內上市<em>ETF清單</em></h1>
-      <p class="hero-copy">涵蓋臺灣證券交易所 ETF e添富篩選器的全部上市 ETF。查證完成後，搜尋、篩選、排序、比較與試算都在你的瀏覽器本機完成。</p>
+      <p class="eyebrow">TWSE ・ TPEX VERIFIED ETF DATA</p>
+      <h1>國內<em>ETF清單</em></h1>
+      <p class="hero-copy">涵蓋臺灣證券交易所 ETF e添富的全部上市 ETF，以及證券櫃檯買賣中心的全部上櫃 ETF。查證完成後，搜尋、篩選、排序、比較與試算都在你的瀏覽器本機完成。</p>
     </div>
     <div class="hero-stats" aria-label="資料摘要">
-      <article><span>符合條件</span><strong id="stat-filtered">0</strong><small id="stat-total">共 0 檔上市 ETF</small></article>
+      <article><span>符合條件</span><strong id="stat-filtered">0</strong><small id="stat-total">共 0 檔國內 ETF</small></article>
       <article><span>資產規模合計</span><strong class="stat-scale" id="stat-scale">—</strong><small>依目前篩選</small></article>
-      <article><span>官方資料日</span><strong class="stat-date" id="stat-date">—</strong><small>來源：證交所 ETF e添富</small></article>
+      <article><span>官方資料日</span><strong class="stat-date" id="stat-date">—</strong><small id="stat-date-note">來源：證交所・櫃買中心</small></article>
     </div>
   </section>
 
@@ -63,6 +63,7 @@
         <kbd>Ctrl K</kbd>
       </label>
       <div class="classification-fields" aria-label="ETF 分類條件">
+        <label class="select-field"><span>掛牌市場</span><select id="select-market"></select></label>
         <label class="select-field"><span>管理方式</span><select id="select-management"></select></label>
         <label class="select-field"><span>產品結構</span><select id="select-structure"></select></label>
         <label class="select-field"><span>資產類別</span><select id="select-asset"></select></label>
@@ -84,7 +85,7 @@
       <button class="primary-button" type="button" id="jump-results">查看 <b id="jump-count">0</b> 筆結果 <span>→</span></button>
       <div class="data-note">
         <b>查證狀態</b>
-        <p id="note-source">臺灣證券交易所 ETF e添富</p>
+        <p id="note-source">臺灣證券交易所 ETF e添富、證券櫃檯買賣中心</p>
         <small id="note-official">官方資料日：—</small>
         <small id="note-success">最後成功更新：—</small>
         <small id="note-attempt">最近嘗試：尚未執行</small>
@@ -101,7 +102,7 @@
       <div class="results-heading">
         <div>
           <span class="step">02</span>
-          <div><h2>全部上市 ETF</h2><p id="results-summary">已載入 0 檔・目前顯示 0 檔・最多比較 3 檔</p></div>
+          <div><h2>全部國內 ETF</h2><p id="results-summary">已載入 0 檔・目前顯示 0 檔・最多比較 3 檔</p></div>
         </div>
         <label class="sort-label">
           <span class="sr-only">排序方式</span>
@@ -110,7 +111,7 @@
             <option value="price-desc">收盤價：高到低</option>
             <option value="volume-desc">日成交量：高到低</option>
             <option value="holders-desc">受益人數：高到低</option>
-            <option value="listing-desc">上市日期：新到舊</option>
+            <option value="listing-desc">掛牌日期：新到舊</option>
             <option value="code-asc">代號：小到大</option>
           </select>
         </label>
@@ -127,7 +128,7 @@
         </div>
       </div>
       <div class="result-footer">
-        <p id="select-hint">勾選 2–3 檔，即可比較證交所官方欄位</p>
+        <p id="select-hint">勾選 2–3 檔，即可比較官方欄位</p>
         <a id="goto-compare" class="disabled" href="#compare">前往比較 <span id="select-count">0</span></a>
       </div>
     </div>
@@ -136,7 +137,7 @@
   <section class="compare-section" id="compare">
     <div class="section-title">
       <div><span>03</span><p>COMPARE</p><h2>把官方數字放在同一張表上</h2></div>
-      <small>比較資料直接取自最後一次成功保存的證交所資料</small>
+      <small>比較資料直接取自最後一次成功保存的證交所與櫃買中心資料</small>
     </div>
     <div class="compare-empty" id="compare-empty">
       <b id="compare-empty-title">還差 2 檔</b>
