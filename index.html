@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>國內上市ETF大秘寶｜國內上市ETF清單</title>
+<meta name="description" content="一次載入臺灣證券交易所 ETF e添富資料，依官方條件分類，在本機完成搜尋、篩選、排序、比較與投入模擬。" />
+<meta property="og:title" content="國內上市ETF大秘寶｜國內上市ETF清單" />
+<meta property="og:description" content="涵蓋證交所 ETF e添富全部上市 ETF，支援官方分類、重新載入與本機篩選比較。" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="./assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./assets/styles.css" />
+</head>
+<body>
+<main>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="國內上市ETF大秘寶首頁"><span>國內上市ETF大秘寶</span></a>
+    <nav aria-label="主要導覽">
+      <a class="active" href="#screener">ETF 篩選器</a>
+      <a href="#compare">比較清單</a>
+      <a href="#simulator">投入模擬</a>
+    </nav>
+    <div class="sync-actions">
+      <div class="update-pill" id="update-pill"><span></span><b id="update-pill-text">載入中</b></div>
+      <button class="sync-button" id="reload-button" type="button" title="只重新讀取本站 data/etfs.json，不會觸發或改變每日排程">
+        <i aria-hidden="true">↻</i><b id="reload-label">重新載入最新資料</b>
+      </button>
+    </div>
+  </header>
+
+  <div class="sync-banner" id="sync-banner" role="status" aria-live="polite">
+    <span id="sync-message">正在載入已查證的證交所資料快照</span>
+    <a id="banner-source" href="https://www.twse.com.tw/zh/ETFortune/products" target="_blank" rel="noreferrer">查看官方來源 ↗</a>
+  </div>
+
+  <section class="hero" id="top">
+    <div>
+      <p class="eyebrow">TWSE VERIFIED ETF DATA</p>
+      <h1>國內上市<em>ETF清單</em></h1>
+      <p class="hero-copy">涵蓋臺灣證券交易所 ETF e添富篩選器的全部上市 ETF。查證完成後，搜尋、篩選、排序、比較與試算都在你的瀏覽器本機完成。</p>
+    </div>
+    <div class="hero-stats" aria-label="資料摘要">
+      <article><span>符合條件</span><strong id="stat-filtered">0</strong><small id="stat-total">共 0 檔上市 ETF</small></article>
+      <article><span>資產規模合計</span><strong class="stat-scale" id="stat-scale">—</strong><small>依目前篩選</small></article>
+      <article><span>官方資料日</span><strong class="stat-date" id="stat-date">—</strong><small>來源：證交所 ETF e添富</small></article>
+    </div>
+  </section>
+
+  <section class="workspace" id="screener">
+    <aside class="filter-panel">
+      <div class="panel-heading">
+        <div><span>01</span><h2>設定條件</h2></div>
+        <button type="button" id="reset-button">全部重設</button>
+      </div>
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input id="search-input" aria-label="搜尋 ETF" placeholder="搜尋代號、名稱、指數或投資標的…" />
+        <kbd>Ctrl K</kbd>
+      </label>
+      <div class="classification-fields" aria-label="ETF 分類條件">
+        <label class="select-field"><span>管理方式</span><select id="select-management"></select></label>
+        <label class="select-field"><span>產品結構</span><select id="select-structure"></select></label>
+        <label class="select-field"><span>資產類別</span><select id="select-asset"></select></label>
+        <label class="select-field"><span>策略／主題</span><select id="select-theme"></select></label>
+      </div>
+      <label class="range-control">
+        <div><span>資產規模下限</span><b id="min-size-label">0 億</b></div>
+        <input type="range" id="min-size" min="0" max="1000" step="100" value="0" />
+        <small>0 億</small><small id="min-size-max">1,000 億</small>
+      </label>
+      <div class="price-filter">
+        <span>收盤價範圍</span>
+        <div>
+          <label><small>最低</small><input type="number" id="min-price" min="0" value="0" /></label>
+          <b>—</b>
+          <label><small>最高</small><input type="number" id="max-price" min="0" value="9999" /></label>
+        </div>
+      </div>
+      <button class="primary-button" type="button" id="jump-results">查看 <b id="jump-count">0</b> 筆結果 <span>→</span></button>
+      <div class="data-note">
+        <b>查證狀態</b>
+        <p id="note-source">臺灣證券交易所 ETF e添富</p>
+        <small id="note-official">官方資料日：—</small>
+        <small id="note-success">最後成功更新：—</small>
+        <small id="note-attempt">最近嘗試：尚未執行</small>
+        <small class="category-source" id="note-schedule">排程：每個交易日 18:00 更新</small>
+        <small class="category-source" id="note-category">分類：依證交所官方條件交叉比對</small>
+        <small class="category-source">重新載入：僅重讀本站資料檔，不會觸發或改變每日排程</small>
+        <small class="sync-warning" id="note-warning" hidden></small>
+        <small class="category-source" id="note-sync" hidden></small>
+        <a id="note-link" href="https://www.twse.com.tw/zh/ETFortune/products" target="_blank" rel="noreferrer">開啟資料來源 ↗</a>
+      </div>
+    </aside>
+
+    <div class="results-panel">
+      <div class="results-heading">
+        <div>
+          <span class="step">02</span>
+          <div><h2>全部上市 ETF</h2><p id="results-summary">已載入 0 檔・目前顯示 0 檔・最多比較 3 檔</p></div>
+        </div>
+        <label class="sort-label">
+          <span class="sr-only">排序方式</span>
+          <select id="sort-select">
+            <option value="size-desc">規模：大到小</option>
+            <option value="price-desc">收盤價：高到低</option>
+            <option value="volume-desc">日成交量：高到低</option>
+            <option value="holders-desc">受益人數：高到低</option>
+            <option value="listing-desc">上市日期：新到舊</option>
+            <option value="code-asc">代號：小到大</option>
+          </select>
+        </label>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>比較</th><th>ETF</th><th>收盤價</th><th>資產規模</th><th>日成交量</th><th>受益人數</th><th>投資標的</th><th>詳情</th></tr></thead>
+          <tbody id="etf-rows"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" hidden>
+          <b>沒有符合條件的 ETF</b>
+          <p>放寬條件或清除搜尋關鍵字後再試一次。</p>
+          <button type="button" id="empty-reset">清除全部條件</button>
+        </div>
+      </div>
+      <div class="result-footer">
+        <p id="select-hint">勾選 2–3 檔，即可比較證交所官方欄位</p>
+        <a id="goto-compare" class="disabled" href="#compare">前往比較 <span id="select-count">0</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="compare-section" id="compare">
+    <div class="section-title">
+      <div><span>03</span><p>COMPARE</p><h2>把官方數字放在同一張表上</h2></div>
+      <small>比較資料直接取自最後一次成功保存的證交所資料</small>
+    </div>
+    <div class="compare-empty" id="compare-empty">
+      <b id="compare-empty-title">還差 2 檔</b>
+      <p>回到上方結果表勾選 ETF，這裡會即時產生比較表。</p>
+      <a href="#screener">選擇 ETF ↑</a>
+    </div>
+    <div class="compare-grid" id="compare-grid" hidden></div>
+  </section>
+
+  <section class="simulator-section" id="simulator">
+    <div class="section-title inverse">
+      <div><span>04</span><p>SIMULATOR</p><h2>先算投入，再談期待</h2></div>
+      <small>報酬率由使用者自行假設，非證交所資料</small>
+    </div>
+    <div class="simulator-grid">
+      <div class="sim-controls">
+        <label><span>模擬標的</span><select id="sim-code"></select></label>
+        <label><span>初始投入</span><div class="number-input"><b>NT$</b><input type="number" id="sim-initial" min="0" step="10000" value="100000" /></div></label>
+        <label><span>每月投入</span><div class="number-input"><b>NT$</b><input type="number" id="sim-monthly" min="0" step="1000" value="10000" /></div></label>
+        <label><span>投資年數</span><input type="range" id="sim-years" min="1" max="30" value="10" /><b class="range-value" id="sim-years-label">10 年</b></label>
+        <label><span>自行假設年化報酬</span><input type="range" id="sim-return" min="0" max="12" step="0.5" value="6" /><b class="range-value" id="sim-return-label">6.0%</b></label>
+      </div>
+      <div class="sim-result">
+        <p id="sim-target">—</p>
+        <span id="sim-years-text">10 年後試算資產</span>
+        <strong id="sim-projected">NT$ 0</strong>
+        <div class="projection-bar"><i id="sim-bar" style="width:5%"></i></div>
+        <div class="result-split">
+          <div><small>累計投入</small><b id="sim-invested">NT$ 0</b></div>
+          <div><small>試算增值</small><b class="lime" id="sim-gain">+ NT$ 0</b></div>
+        </div>
+        <p class="formula-note">以使用者設定的年化報酬率、每月複利與期末投入估算；未計交易成本、稅負及配息。此為數學試算，不是報酬預測。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>資料來源：<a href="https://www.twse.com.tw/zh/ETFortune/products" target="_blank" rel="noreferrer">臺灣證券交易所 ETF e添富</a>・資料僅供參考，不構成投資建議。</p>
+    <p>GitHub Actions 每日集中更新・前台篩選與比較均在本機完成</p>
+  </footer>
+
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <section class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title" id="detail-modal"></section>
+  </div>
+</main>
+<script type="module" src="./assets/app.js"></script>
+</body>
+</html>
