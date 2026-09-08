@@ -27,58 +27,68 @@ const tpexSourceUrl = 'https://www.tpex.org.tw/zh-tw/index.html';
 const tpexEndpoint = 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes';
 const isEtfCode = (value) => /^00\d{3,4}[A-Z]?$/.test(String(value ?? '').trim());
 
+// undici 的 fetch 失敗常包一層，真正原因在 error.cause，錯誤訊息要一併帶出來才查得到。
+const describeError = (error) => {
+  const cause = error?.cause?.message;
+  const main = String(error?.message ?? error);
+  return cause && cause !== main ? `${main}：${cause}` : main;
+};
+
+// 交易所偶爾會在傳輸中途切斷連線（undici 回報 terminated），所以整個 body 讀完才算成功，
+// 失敗則遞增等待後重試。所有對外請求一律走這裡。
+const fetchText = async (url, options = {}, { tries = 3, label = url, timeout = 90000 } = {}) => {
+  let lastError = null;
+  for (let attempt = 1; attempt <= tries; attempt += 1) {
+    try {
+      const response = await fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(timeout), ...options });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return await response.text();
+    } catch (error) {
+      lastError = error;
+      console.warn(`[${label}] 第 ${attempt}/${tries} 次失敗：${describeError(error)}`);
+      if (attempt < tries) await new Promise((done) => setTimeout(done, 4000 * attempt));
+    }
+  }
+  throw new Error(`${label} 連續 ${tries} 次失敗（${describeError(lastError)}）`);
+};
+
+const fetchJson = async (url, options = {}, meta = {}) => {
+  const text = await fetchText(url, options, meta);
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`${meta.label ?? url} 回傳的不是 JSON（前 120 字：${text.slice(0, 120).replace(/\s+/g, ' ')}）`);
+  }
+};
+
+const twseHeaders = { 'user-agent': userAgent, accept: 'application/json, text/plain, */*', 'accept-language': 'zh-TW,zh;q=0.9', referer: sourceUrl };
+const tpexHeaders = { 'user-agent': userAgent, accept: 'application/json, text/plain, */*', 'accept-language': 'zh-TW,zh;q=0.9', referer: 'https://www.tpex.org.tw/' };
+const pause = (ms) => new Promise((done) => setTimeout(done, ms));
+
 // e添富 的商品結果不含日期，其收盤價實際上是最近交易日的。
 // 證交所「每日收盤行情」的 RWD 端點會回傳 date 欄位（YYYYMMDD），用來標示收盤價日期。
 // 取不到就留 null，畫面上寧可不標日期，也不要標一個猜的。
 const fetchListedPriceDate = async () => {
-  const candidates = [
+  for (const url of [
     'https://www.twse.com.tw/rwd/zh/afterTrading/STOCK_DAY_ALL?response=json',
     'https://www.twse.com.tw/exchangeReport/STOCK_DAY_ALL?response=json',
-  ];
-  for (const url of candidates) {
+  ]) {
     try {
-      const response = await fetch(url, {
-        headers: { 'user-agent': userAgent, accept: 'application/json', referer: sourceUrl },
-        redirect: 'follow',
-        signal: AbortSignal.timeout(45000),
-      });
-      if (!response.ok) continue;
-      const payload = await response.json();
+      const payload = await fetchJson(url, { headers: twseHeaders }, { tries: 2, label: '上市收盤價日期', timeout: 60000 });
       const raw = String(payload?.date ?? '').trim();
       if (/^\d{8}$/.test(raw)) return `${raw.slice(0, 4)}.${raw.slice(4, 6)}.${raw.slice(6, 8)}`;
     } catch (error) {
-      console.warn(`取得上市收盤價日期失敗（${url}）：${error.message}`);
+      console.warn(`取得上市收盤價日期失敗：${describeError(error)}`);
     }
   }
   return null;
 };
 
-// 櫃買端點回傳約 11,000 筆、數 MB，偶爾會中斷，因此獨立重試。
-const fetchTpexRows = async (tries = 3) => {
-  let lastError = null;
-  for (let attempt = 1; attempt <= tries; attempt += 1) {
-    try {
-      const response = await fetch(tpexEndpoint, {
-        headers: {
-          'user-agent': userAgent,
-          accept: 'application/json, text/plain, */*',
-          'accept-language': 'zh-TW,zh;q=0.9',
-          referer: 'https://www.tpex.org.tw/',
-        },
-        redirect: 'follow',
-        signal: AbortSignal.timeout(120000),
-      });
-      if (!response.ok) throw new Error(`TPEx response ${response.status}`);
-      const rows = await response.json();
-      if (!Array.isArray(rows)) throw new Error('Unexpected TPEx payload');
-      return rows;
-    } catch (error) {
-      lastError = error;
-      console.warn(`櫃買中心第 ${attempt} 次取得失敗：${error.message}`);
-      if (attempt < tries) await new Promise((resolve) => setTimeout(resolve, 5000));
-    }
-  }
-  throw lastError ?? new Error('櫃買中心未知錯誤');
+// 櫃買端點回傳約 11,000 筆、數 MB，最容易在傳輸中途斷線，逾時放寬到 150 秒。
+const fetchTpexRows = async () => {
+  const rows = await fetchJson(tpexEndpoint, { headers: tpexHeaders }, { tries: 3, label: '櫃買中心行情', timeout: 150000 });
+  if (!Array.isArray(rows)) throw new Error('櫃買中心回傳格式異常');
+  return rows;
 };
 
 const FILTER_GROUPS = [
@@ -113,20 +123,13 @@ const createBody = (filters = []) => {
   return body;
 };
 
-const fetchRows = async (filters = []) => {
-  const response = await fetch(productsEndpoint, {
+const fetchRows = async (filters = [], label = 'e添富 商品結果') => {
+  const payload = await fetchJson(productsEndpoint, {
     method: 'POST',
-    headers: {
-      'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      referer: sourceUrl,
-      'user-agent': userAgent,
-    },
+    headers: { ...twseHeaders, 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
     body: createBody(filters),
-    redirect: 'follow',
-  });
-  if (!response.ok) throw new Error(`TWSE response ${response.status}`);
-  const payload = await response.json();
-  if (payload.status !== 'success' || !Array.isArray(payload.data)) throw new Error('Unexpected TWSE payload');
+  }, { tries: 3, label, timeout: 60000 });
+  if (payload.status !== 'success' || !Array.isArray(payload.data)) throw new Error(`${label} 回傳格式異常`);
   return payload.data;
 };
 
@@ -331,29 +334,42 @@ if (existing?.meta?.officialDate === today && existing?.meta?.syncStatus === 'su
 
 let dataset;
 let skipReason = '';
+let stage = '啟動';
 try {
-  const [allRows, homeResponse, dailyResponse, fundResponse, ...groupRows] = await Promise.all([
-    fetchRows(),
-    fetch('https://www.twse.com.tw/rwd/zh/ETFortune/index', { headers: { 'user-agent': userAgent }, redirect: 'follow' }),
-    fetch('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL', { headers: { 'user-agent': userAgent } }),
-    fetch('https://openapi.twse.com.tw/v1/opendata/t187ap47_L', { headers: { 'user-agent': userAgent } }),
-    ...FILTER_GROUPS.map((group) => fetchRows(group.filters)),
-  ]);
+  stage = '證交所 e添富 商品清單';
+  const allRows = await fetchRows();
+
+  // 原本 14 個 POST 同時送出，證交所會在傳輸中途切斷連線（terminated）。
+  // 改成逐一送出並間隔 400ms，對來源友善，也大幅降低被切斷的機率。
+  stage = '證交所 e添富 分類篩選';
+  const groupRows = [];
+  for (const group of FILTER_GROUPS) {
+    groupRows.push(await fetchRows(group.filters, `e添富 ${group.name}`));
+    await pause(400);
+  }
 
   const categorySets = new Map(FILTER_GROUPS.map((group, index) => [
     group.name,
     new Set(groupRows[index].map((row) => String(row.stockNo ?? '').trim()).filter(Boolean)),
   ]));
 
-  if (!dailyResponse.ok) throw new Error(`TWSE daily response ${dailyResponse.status}`);
-  const dailyRows = await dailyResponse.json();
-  if (!Array.isArray(dailyRows)) throw new Error('Unexpected TWSE daily payload');
+  stage = '證交所每日行情';
+  const dailyRows = await fetchJson('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL', { headers: twseHeaders }, { label: '證交所每日行情' });
+  if (!Array.isArray(dailyRows)) throw new Error('證交所每日行情回傳格式異常');
   const dailyByCode = new Map(dailyRows.map((row) => [String(row.Code ?? '').trim(), row]));
 
-  if (!fundResponse.ok) throw new Error(`TWSE fund response ${fundResponse.status}`);
-  const fundRows = await fundResponse.json();
-  if (!Array.isArray(fundRows)) throw new Error('Unexpected TWSE fund payload');
+  stage = '證交所基金基本資料';
+  const fundRows = await fetchJson('https://openapi.twse.com.tw/v1/opendata/t187ap47_L', { headers: twseHeaders }, { label: '證交所基金基本資料' });
+  if (!Array.isArray(fundRows)) throw new Error('證交所基金基本資料回傳格式異常');
   const fundByCode = new Map(fundRows.map((row) => [String(row['基金代號'] ?? '').trim(), row]));
+
+  stage = '證交所官方資料日';
+  let homeHtml = '';
+  try {
+    homeHtml = await fetchText('https://www.twse.com.tw/rwd/zh/ETFortune/index', { headers: twseHeaders }, { tries: 2, label: 'e添富 首頁', timeout: 60000 });
+  } catch (error) {
+    console.warn(`取得 e添富 首頁失敗：${describeError(error)}`);
+  }
 
   const twseEtfs = allRows.map((row) => {
     const code = String(row.stockNo ?? '').trim();
@@ -392,9 +408,11 @@ try {
   }).filter((row) => row.code && row.name);
 
   /* ---------- 上櫃：櫃買中心 ---------- */
+  stage = '上市收盤價日期';
   const listedPriceDate = await fetchListedPriceDate();
   if (!listedPriceDate) console.warn('::warning::取不到上市收盤價日期，本次不標示上市收盤價日期。');
 
+  stage = '櫃買中心上櫃行情';
   const twseCodes = new Set(twseEtfs.map((row) => row.code));
   let tpexEtfs = [];
   let tpexWarning = '';
@@ -419,6 +437,7 @@ try {
   const etfs = [...twseEtfs, ...tpexEtfs];
 
   /* ---------- 驗證（全部通過才允許替換資料） ---------- */
+  stage = '資料驗證';
   if (twseEtfs.length < 100) throw new Error(`上市 ETF 筆數異常：${twseEtfs.length}`);
   if (tpexEtfs.length < 80) throw new Error(`上櫃 ETF 筆數異常：${tpexEtfs.length}`);
   if (etfs.length < 100) throw new Error(`ETF 筆數異常：${etfs.length}`);
@@ -459,7 +478,6 @@ try {
   if (tpexEtfs.some((row) => row.themes.length)) throw new Error('上櫃 ETF 不應帶有策略／主題標籤（櫃買無官方分類來源）');
   if (etfs.some((row) => row.market !== '上市' && row.market !== '上櫃')) throw new Error('有 ETF 缺少市場別');
 
-  const homeHtml = homeResponse.ok ? await homeResponse.text() : '';
   const officialDate = homeHtml.match(/資料更新時間[：:]\s*(\d{4}\.\d{2}\.\d{2})/)?.[1] ?? null;
   if (!officialDate) throw new Error('無法取得官方資料日');
 
@@ -516,8 +534,9 @@ try {
   if (dataset.meta.count !== dataset.etfs.length) throw new Error('meta.count 與 ETF 陣列長度不一致');
   }
 } catch (error) {
-  await keepExisting(existing, 'error', `最近一次同步失敗（${error.message}）；畫面顯示的是最後一次成功保存的資料。`);
-  console.error(`::error::ETF 同步失敗：${error.message}`);
+  const detail = `在「${stage}」階段失敗：${describeError(error)}`;
+  await keepExisting(existing, 'error', `最近一次同步${detail}；畫面顯示的是最後一次成功保存的資料。`);
+  console.error(`::error::ETF 同步${detail}`);
   process.exit(1);
 }
 
