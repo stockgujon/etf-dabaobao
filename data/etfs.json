@@ -10,14 +10,14 @@
     "listedPriceDateNote": "",
     "otcOfficialDate": "2026.09.08",
     "otcOfficialFieldCount": 119,
-    "syncedAt": "2026-09-08T13:44:40.370Z",
+    "syncedAt": "2026-09-08T13:57:41.633Z",
     "count": 359,
     "listedCount": 240,
     "otcCount": 119,
     "categorySource": "上市依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題（市值限定被動原型 ETF）；上櫃依櫃買中心代號末碼規則推導，策略／主題無官方來源故留空",
     "syncNote": "上市分類取自證交所 ETF e添富即時篩選結果；上櫃的規模、受益人數、掛牌日期、標的指數與發行人取自櫃買中心 ETF 訊息中心，收盤價與成交量取自櫃買上櫃行情。日成交量兩市場皆以 1,000 股換算為 1 張。若櫃買 ETF 訊息中心暫時取不到，上櫃規模會退回「已發行受益權單位數 × 收盤價」的推估市值並標記為推估。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑），收盤價日期另見 listedPriceDate 與 otcOfficialDate",
-    "lastSuccessfulSyncAt": "2026-09-08T13:44:40.370Z",
-    "lastAttemptAt": "2026-09-08T13:44:40.370Z",
+    "lastSuccessfulSyncAt": "2026-09-08T13:57:41.633Z",
+    "lastAttemptAt": "2026-09-08T13:57:41.633Z",
     "syncStatus": "success",
     "syncWarning": "證交所目前發布的官方資料日為 2026.09.07（尚未更新至 2026.09.08），畫面顯示的是該日的官方數字。",
     "schedule": "每個交易日 18:00 起檢查更新，18:15、18:45、20:00、22:00 與隔日 08:30 再次確認（GitHub Actions，台灣時間）",
@@ -2742,7 +2742,7 @@
       "indexName": "彭博1至5年期美元高收益債券(不含中國)發行量五億美元產業10%上限指數(Bloomberg US High Yield 1-5 year ex China 500mln 10% Sector Capped Index)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "外匯",
+      "investmentTarget": "非投資級債",
       "size": 34,
       "price": 19.04,
       "holders": 3650,
@@ -2758,7 +2758,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上市",
       "sizeIsEstimated": false
@@ -2770,7 +2770,7 @@
       "indexName": "彭博新興市場10年期以上美元投資等級債券(不含中國)國家10%上限指數(Bloomberg EM USD ex China Investment Grade 10 year 10% Country Capped Index)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "外匯",
+      "investmentTarget": "投資級債",
       "size": 135,
       "price": 15.47,
       "holders": 797,
@@ -2786,7 +2786,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上市",
       "sizeIsEstimated": false
@@ -5500,7 +5500,7 @@
       "indexName": "ICE 1-5年BB-B級成熟市場信用優息美元非投資等級債券指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "外匯",
+      "investmentTarget": "非投資級債",
       "size": 436,
       "price": 9.51,
       "holders": 51229,
@@ -5516,7 +5516,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上市",
       "sizeIsEstimated": false
@@ -6880,7 +6880,7 @@
       "indexName": "ICE ESG 0-5年期BBB級成熟市場大型美元公司債指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "外匯｜ESG",
+      "investmentTarget": "債券｜ESG",
       "size": 71,
       "price": 10.06,
       "holders": 8554,
@@ -6899,7 +6899,7 @@
         "ESG"
       ],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上市",
       "sizeIsEstimated": false
@@ -7095,7 +7095,7 @@
       "indexName": "ICE TIP 10年期以上A級成熟市場美元公司債指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 33,
       "price": 14.66,
       "holders": 389,
@@ -7114,7 +7114,7 @@
         "高股息"
       ],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上市",
       "sizeIsEstimated": false
@@ -7457,7 +7457,7 @@
       "indexName": "彭博20年期(以上)美國公債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "美國公債｜20年以上",
       "size": 0.18,
       "price": 9.12,
       "holders": 16,
@@ -7473,7 +7473,8 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。",
+        "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7665,7 +7666,7 @@
       "indexName": "ICE BofA 15年期以上美元電信業公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 498.94,
       "price": 33.94,
       "holders": 13545,
@@ -7681,7 +7682,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7694,7 +7695,7 @@
       "indexName": "ICE BofA 15年期以上美元科技業公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜科技",
+      "investmentTarget": "債券｜科技",
       "size": 443.59,
       "price": 29.09,
       "holders": 471,
@@ -7710,7 +7711,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7723,7 +7724,7 @@
       "indexName": "ICE BofA 10年期以上美元金融債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "金融債｜金融",
       "size": 985.29,
       "price": 32.42,
       "holders": 6236,
@@ -7739,7 +7740,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7752,7 +7753,7 @@
       "indexName": "彭博10年期以上BBB 美元息收公司債(中國除外)指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 1248.59,
       "price": 33.64,
       "holders": 41519,
@@ -7768,7 +7769,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7781,7 +7782,7 @@
       "indexName": "彭博新興市場5 年期以上美元息收投資等級債(中國除外)指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "投資級債",
       "size": 380.79,
       "price": 31.93,
       "holders": 1731,
@@ -7797,7 +7798,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7810,7 +7811,7 @@
       "indexName": "彭博優選短期美元高收債(中國除外)指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 22.38,
       "price": 38.96,
       "holders": 728,
@@ -7826,7 +7827,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7868,7 +7869,7 @@
       "indexName": "彭博10年期以上BBB美元息收公司債(中國除外)指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 814.12,
       "price": 36.99,
       "holders": 6038,
@@ -7884,7 +7885,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7926,7 +7927,7 @@
       "indexName": "彭博美元公司債A等級9-35年發行人3%限制指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 873.97,
       "price": 34.09,
       "holders": 1329,
@@ -7942,7 +7943,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7955,7 +7956,7 @@
       "indexName": "彭博新興市場10年期以上BBB美元主權債及類主權債國家15%上限指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "新興市場債",
       "size": 341.05,
       "price": 30.61,
       "holders": 194,
@@ -7971,7 +7972,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -7984,7 +7985,7 @@
       "indexName": "彭博10年期以上美元科技業公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜科技",
+      "investmentTarget": "債券｜科技",
       "size": 46.72,
       "price": 31.45,
       "holders": 75,
@@ -8000,7 +8001,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8129,7 +8130,7 @@
       "indexName": "彭博15年期以上美元能源業公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 2.76,
       "price": 49.82,
       "holders": 126,
@@ -8145,7 +8146,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8158,7 +8159,7 @@
       "indexName": "彭博15年期以上美元製藥業公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 24.9,
       "price": 52.2,
       "holders": 122,
@@ -8174,7 +8175,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8187,7 +8188,7 @@
       "indexName": "彭博新興市場美元精選信用債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "新興市場債",
       "size": 225.98,
       "price": 51.9,
       "holders": 628,
@@ -8203,7 +8204,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8216,7 +8217,7 @@
       "indexName": "彭博10年期以上高評等流動性美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 899.14,
       "price": 32.68,
       "holders": 3463,
@@ -8232,7 +8233,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8305,7 +8306,7 @@
       "indexName": "彭博10年期以上高評級美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 1086.4,
       "price": 32.12,
       "holders": 40862,
@@ -8321,7 +8322,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8363,7 +8364,7 @@
       "indexName": "彭博15年期以上AAA至A級美元公司債精選指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 645.57,
       "price": 30.97,
       "holders": 219,
@@ -8379,7 +8380,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8392,7 +8393,7 @@
       "indexName": "彭博20年期以上美元金融債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "金融債｜金融",
       "size": 503.48,
       "price": 32.92,
       "holders": 184,
@@ -8408,7 +8409,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8451,7 +8452,7 @@
       "indexName": "彭博7-10年美元金融債精選指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "金融債｜金融",
       "size": 89.03,
       "price": 35.97,
       "holders": 1296,
@@ -8467,7 +8468,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8480,7 +8481,7 @@
       "indexName": "彭博15年期以上科技業美元公司債精選指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜科技",
+      "investmentTarget": "債券｜科技",
       "size": 2.25,
       "price": 26.93,
       "holders": 701,
@@ -8496,7 +8497,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8509,7 +8510,7 @@
       "indexName": "彭博15年期以上公用事業美元公司債精選指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 5.99,
       "price": 29.14,
       "holders": 1260,
@@ -8525,7 +8526,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8538,7 +8539,7 @@
       "indexName": "富時全球銀行產業10年以上美元投等債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "債券｜金融",
       "size": 359.62,
       "price": 33.5,
       "holders": 242,
@@ -8554,7 +8555,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8567,7 +8568,7 @@
       "indexName": "富時世界美元計價10年期以上投資級銀行債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 6.18,
       "price": 31.48,
       "holders": 1295,
@@ -8583,7 +8584,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8596,7 +8597,7 @@
       "indexName": "富時世界美元計價10年期以上投資級醫療保健債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜生技醫療",
+      "investmentTarget": "債券｜生技醫療",
       "size": 3.73,
       "price": 31.46,
       "holders": 1008,
@@ -8612,7 +8613,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8625,7 +8626,7 @@
       "indexName": "富時世界美元計價10年期以上投資級公共事業電能債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 7.18,
       "price": 28.82,
       "holders": 1469,
@@ -8641,7 +8642,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8654,7 +8655,7 @@
       "indexName": "彭博20年期以上美元A3級以上公司債流動性指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 209.22,
       "price": 45.73,
       "holders": 355,
@@ -8670,7 +8671,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8683,7 +8684,7 @@
       "indexName": "彭博1至5年期美元特選信用債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 158.87,
       "price": 56.25,
       "holders": 100,
@@ -8699,7 +8700,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8712,7 +8713,7 @@
       "indexName": "ICE 15年期以上A級成熟市場大型美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 709.69,
       "price": 30.54,
       "holders": 445,
@@ -8728,7 +8729,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8741,7 +8742,7 @@
       "indexName": "ICE 15年期以上AAA-A成熟市場大型醫療保健美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜生技醫療",
+      "investmentTarget": "債券｜生技醫療",
       "size": 0.75,
       "price": 29.49,
       "holders": 289,
@@ -8757,7 +8758,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8800,7 +8801,7 @@
       "indexName": "彭博15年期以上醫療保健業美元公司債精選指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜生技醫療",
+      "investmentTarget": "債券｜生技醫療",
       "size": 7.39,
       "price": 28.26,
       "holders": 1670,
@@ -8816,7 +8817,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8858,7 +8859,7 @@
       "indexName": "ICE 10年期以上美元A級公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 175.38,
       "price": 27.61,
       "holders": 422,
@@ -8874,7 +8875,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8887,7 +8888,7 @@
       "indexName": "彭博15年期以上美元投資等級精選公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "投資級債",
       "size": 17,
       "price": 28.48,
       "holders": 91,
@@ -8903,7 +8904,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8916,7 +8917,7 @@
       "indexName": "ICE 20年期以上AAA至AA級大型美元公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 19.19,
       "price": 27.13,
       "holders": 121,
@@ -8932,7 +8933,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8945,7 +8946,7 @@
       "indexName": "彭博美元銀行債15年期以上指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 6.05,
       "price": 29.1,
       "holders": 964,
@@ -8961,7 +8962,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -8974,7 +8975,7 @@
       "indexName": "ICE美林15年期以上美元金融債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "金融債｜金融",
       "size": 64.7,
       "price": 30.17,
       "holders": 298,
@@ -8990,7 +8991,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9003,7 +9004,7 @@
       "indexName": "富時中國以外新興市場美元5年以上投資等級債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "投資級債",
       "size": 76.92,
       "price": 32.14,
       "holders": 225,
@@ -9019,7 +9020,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9032,7 +9033,7 @@
       "indexName": "彭博歐洲區美元7-15年期銀行債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 26.01,
       "price": 34.82,
       "holders": 261,
@@ -9048,7 +9049,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9090,7 +9091,7 @@
       "indexName": "彭博新興亞洲(不含中國)美元精選綜合債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 45.26,
       "price": 33.13,
       "holders": 153,
@@ -9106,7 +9107,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9119,7 +9120,7 @@
       "indexName": "ICE新興市場0-5年期美元政府債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "新興市場債",
       "size": 180.66,
       "price": 36.91,
       "holders": 105,
@@ -9135,7 +9136,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9148,7 +9149,7 @@
       "indexName": "彭博10年期以上Aa至A級美元優質公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "美國公債",
       "size": 47.47,
       "price": 26.5,
       "holders": 2330,
@@ -9164,7 +9165,8 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。",
+        "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9296,7 +9298,7 @@
       "indexName": "ICE 1-5年期成熟市場超大型美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 1.01,
       "price": 37.6,
       "holders": 363,
@@ -9312,7 +9314,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9325,7 +9327,7 @@
       "indexName": "彭博20年期以上BBB級美元公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 268.9,
       "price": 30.44,
       "holders": 1508,
@@ -9341,7 +9343,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9354,7 +9356,7 @@
       "indexName": "彭博 10 年期以上電信業美元公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 157.54,
       "price": 30.63,
       "holders": 334,
@@ -9370,7 +9372,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9413,7 +9415,7 @@
       "indexName": "ICE美林15年期(以上)A-BBB美元電信債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 166.78,
       "price": 29.14,
       "holders": 212,
@@ -9429,7 +9431,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9442,7 +9444,7 @@
       "indexName": "ICE 新興市場15年期以上美元主權債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "新興市場債",
       "size": 154.58,
       "price": 27.2,
       "holders": 314,
@@ -9458,7 +9460,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9500,7 +9502,7 @@
       "indexName": "ICE 15年期以上新興市場美元主權低碳債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "新興市場債",
       "size": 21.56,
       "price": 28.47,
       "holders": 211,
@@ -9516,7 +9518,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9616,7 +9618,7 @@
       "indexName": "彭博MSCI 15年以上美元BBB級ESG永續公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 5.68,
       "price": 30.93,
       "holders": 700,
@@ -9632,7 +9634,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9704,7 +9706,7 @@
       "indexName": "彭博10年以上美元金融債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "金融債｜金融",
       "size": 1009.06,
       "price": 15.4,
       "holders": 78587,
@@ -9720,7 +9722,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9733,7 +9735,7 @@
       "indexName": "ICE ESG 20年期以上BBB級成熟市場大型美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 2441.01,
       "price": 14.19,
       "holders": 212777,
@@ -9749,7 +9751,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9791,7 +9793,7 @@
       "indexName": "ICE 15年期以上已開發市場投資級優化收益ESG美元公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 363.08,
       "price": 9.07,
       "holders": 26586,
@@ -9807,7 +9809,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9820,7 +9822,7 @@
       "indexName": "彭博全球美元A級公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 556.6,
       "price": 13.47,
       "holders": 12274,
@@ -9836,7 +9838,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9907,7 +9909,7 @@
       "indexName": "ICE 15年期以上投資等級美元銀行債ESG指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "投資級債",
       "size": 10.94,
       "price": 8.93,
       "holders": 4355,
@@ -9923,7 +9925,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9936,7 +9938,7 @@
       "indexName": "ICE15年期以上BBB級大型美元公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "美國公債",
       "size": 46.15,
       "price": 9,
       "holders": 9285,
@@ -9952,7 +9954,8 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。",
+        "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -9965,7 +9968,7 @@
       "indexName": "彭博MSCI全球成熟市場15年以上美元BBB級永續ESG動能加權公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 15.63,
       "price": 13.32,
       "holders": 3920,
@@ -9981,7 +9984,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10024,7 +10027,7 @@
       "indexName": "ICE優息10年期以上已開發市場投資級美元公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 70.92,
       "price": 8.9,
       "holders": 8241,
@@ -10040,7 +10043,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10083,7 +10086,7 @@
       "indexName": "ICE 20年期以上BBB美元公司債優選收益率指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 35.25,
       "price": 8.97,
       "holders": 5901,
@@ -10099,7 +10102,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10170,7 +10173,7 @@
       "indexName": "富時10年期以上特選全球美元投資等級公司債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "投資級債",
       "size": 4.9,
       "price": 9.1,
       "holders": 1514,
@@ -10186,7 +10189,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10316,7 +10319,7 @@
       "indexName": "彭博優選美元非投資等級1-5年BB至B債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "非投資級債",
       "size": 140.15,
       "price": 9.09,
       "holders": 16527,
@@ -10332,7 +10335,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10462,7 +10465,7 @@
       "indexName": "ICE 20年期以上BBB級成熟市場美元公司債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "債券",
       "size": 2.47,
       "price": 9.41,
       "holders": 768,
@@ -10478,7 +10481,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10580,7 +10583,7 @@
       "indexName": "ICE TPEx 10年期以上成熟市場投資級美元金融債指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜金融",
+      "investmentTarget": "金融債｜金融",
       "size": 1.99,
       "price": 9.55,
       "holders": 400,
@@ -10596,7 +10599,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10699,7 +10702,7 @@
       "indexName": "ICE TPEx 1-5年BB-CCC 級大型高息美元非投資等級債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯｜高股息",
+      "investmentTarget": "非投資級債｜高股息",
       "size": 31.33,
       "price": 19.36,
       "holders": 5374,
@@ -10715,7 +10718,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
@@ -10757,7 +10760,7 @@
       "indexName": "彭博TPEx 1-5年成熟市場明日之星收益優選票息美元非投資等級債券指數",
       "benchmarkName": "",
       "fundType": "",
-      "investmentTarget": "外匯",
+      "investmentTarget": "非投資級債",
       "size": 8.62,
       "price": 9.9,
       "holders": 3115,
@@ -10773,7 +10776,7 @@
       "assetClass": "債券",
       "themes": [],
       "riskNotes": [
-        "ETF 仍有市場波動、追蹤差距與折溢價風險。"
+        "債券價格會受利率、信用品質與存續期變化影響。"
       ],
       "market": "上櫃",
       "sizeIsEstimated": false,
