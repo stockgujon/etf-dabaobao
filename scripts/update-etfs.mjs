@@ -120,8 +120,21 @@ const fetchListedPriceDate = async () => {
 
 // 掛牌日期可能是 2017/01/17 或 2017.01.17，統一成 YYYY.MM.DD 才能跟上市一起排序。
 const normalizeDate = (value) => {
-  const m = String(value ?? '').trim().match(/^(\d{4})[./-](\d{1,2})[./-](\d{1,2})$/);
-  return m ? `${m[1]}.${m[2].padStart(2, '0')}.${m[3].padStart(2, '0')}` : '';
+  const raw = String(value ?? '').trim();
+  if (!raw) return '';
+  const pad = (v) => String(v).padStart(2, '0');
+  let m = raw.match(/^(\d{4})[./-](\d{1,2})[./-](\d{1,2})$/);          // 2017/01/17
+  if (m) return `${m[1]}.${pad(m[2])}.${pad(m[3])}`;
+  m = raw.match(/^(\d{2,3})[./-](\d{1,2})[./-](\d{1,2})$/);            // 民國 106/01/17
+  if (m) return `${Number(m[1]) + 1911}.${pad(m[2])}.${pad(m[3])}`;
+  m = raw.match(/^(\d{4})(\d{2})(\d{2})$/);                            // 20170117
+  if (m) return `${m[1]}.${m[2]}.${m[3]}`;
+  m = raw.match(/^(\d{3})(\d{2})(\d{2})$/);                            // 民國 1060117
+  if (m) return `${Number(m[1]) + 1911}.${m[2]}.${m[3]}`;
+  m = raw.match(/^(\d{2,4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日?$/); // 106年01月17日
+  if (m) { const y = Number(m[1]); return `${y < 1911 ? y + 1911 : y}.${pad(m[2])}.${pad(m[3])}`; }
+  console.warn(`掛牌日期格式無法解析：「${raw}」`);
+  return '';
 };
 
 // 櫃買 ETF 訊息中心：不帶條件即回傳全部上櫃 ETF 的基金面資料。
@@ -562,14 +575,22 @@ try {
   if (etf00679B.assetClass !== '債券') throw new Error('00679B 應分類為債券');
   if (!tpexEtfs.some((row) => row.code === '006201')) throw new Error('上櫃資料缺少 006201');
   // 若這次成功取得櫃買官方基金資料，關鍵欄位必須到位；取不到則允許退回推估模式。
+  // 驗證分級：規模關係到數字正確性，缺了會誤導 → 致命。
+  // 受益人數、發行人、掛牌日期只是資訊豐富度，缺了頂多欄位空白 → 只記警告，不中止整批同步。
   const otcOfficialCount = tpexEtfs.filter((row) => !row.sizeIsEstimated).length;
   if (otcOfficialCount) {
     if (etf00679B.sizeIsEstimated) throw new Error('00679B 應取得官方規模卻仍是推估值');
-    if (!(etf00679B.holders > 0)) throw new Error('00679B 未取得受益人數');
-    if (!etf00679B.issuer) throw new Error('00679B 未取得發行人');
-    if (!etf00679B.listingDate) throw new Error('00679B 未取得掛牌日期');
     if (otcOfficialCount < tpexEtfs.length * 0.9) {
-      throw new Error(`上櫃官方欄位覆蓋率過低：${otcOfficialCount}/${tpexEtfs.length}`);
+      throw new Error(`上櫃官方規模覆蓋率過低：${otcOfficialCount}/${tpexEtfs.length}`);
+    }
+    const gaps = [];
+    const missing = (field) => tpexEtfs.filter((row) => !row[field] && row[field] !== 0).length;
+    if (!(etf00679B.holders > 0)) gaps.push('受益人數');
+    if (!etf00679B.issuer) gaps.push('發行人');
+    if (!etf00679B.listingDate) gaps.push(`掛牌日期（${missing('listingDate')} 檔缺）`);
+    if (gaps.length) {
+      otcOfficialNote = `${otcOfficialNote}上櫃官方欄位有缺漏：${gaps.join('、')}；其餘資料正常。`.trim();
+      console.warn(`::warning::${otcOfficialNote}`);
     }
   }
   if (tpexEtfs.some((row) => row.themes.length)) throw new Error('上櫃 ETF 不應帶有策略／主題標籤（櫃買無官方分類來源）');
