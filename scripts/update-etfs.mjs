@@ -16,7 +16,9 @@ const TMP_PATH = resolve('data', 'etfs.json.tmp');
 
 const sourceUrl = 'https://www.twse.com.tw/zh/ETFortune/products';
 const productsEndpoint = 'https://www.twse.com.tw/rwd/zh/ETFortune/ajaxProductsResult';
-const userAgent = 'ETF-Lens/1.0 (github pages snapshot build)';
+// 櫃買中心會切斷非瀏覽器 User-Agent 的連線（實測錯誤為 fetch failed: terminated），
+// 因此兩個交易所一律使用瀏覽器 UA。
+const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 
 // 上櫃（櫃買中心）——證交所 ETF e添富 只涵蓋上市，上櫃 ETF 需另外從櫃買中心取得。
 // 已實測：/tpex_mainboard_daily_close_quotes 是唯一同時提供代號、名稱、收盤價、
@@ -24,6 +26,34 @@ const userAgent = 'ETF-Lens/1.0 (github pages snapshot build)';
 const tpexSourceUrl = 'https://www.tpex.org.tw/zh-tw/index.html';
 const tpexEndpoint = 'https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes';
 const isEtfCode = (value) => /^00\d{3,4}[A-Z]?$/.test(String(value ?? '').trim());
+
+// 櫃買端點回傳約 11,000 筆、數 MB，偶爾會中斷，因此獨立重試。
+const fetchTpexRows = async (tries = 3) => {
+  let lastError = null;
+  for (let attempt = 1; attempt <= tries; attempt += 1) {
+    try {
+      const response = await fetch(tpexEndpoint, {
+        headers: {
+          'user-agent': userAgent,
+          accept: 'application/json, text/plain, */*',
+          'accept-language': 'zh-TW,zh;q=0.9',
+          referer: 'https://www.tpex.org.tw/',
+        },
+        redirect: 'follow',
+        signal: AbortSignal.timeout(120000),
+      });
+      if (!response.ok) throw new Error(`TPEx response ${response.status}`);
+      const rows = await response.json();
+      if (!Array.isArray(rows)) throw new Error('Unexpected TPEx payload');
+      return rows;
+    } catch (error) {
+      lastError = error;
+      console.warn(`櫃買中心第 ${attempt} 次取得失敗：${error.message}`);
+      if (attempt < tries) await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+  }
+  throw lastError ?? new Error('櫃買中心未知錯誤');
+};
 
 const FILTER_GROUPS = [
   { name: '市值型', filters: [['hashtag', 'ff808081899b8efc0189aa066a5a0020'], ['hashtag', 'ff808081899b8efc0189aa06d5ce0021'], ['hashtag', 'ff808081899b8efc0189aa070e910022']] },
@@ -275,12 +305,11 @@ if (existing?.meta?.officialDate === today && existing?.meta?.syncStatus === 'su
 
 let dataset;
 try {
-  const [allRows, homeResponse, dailyResponse, fundResponse, tpexResponse, ...groupRows] = await Promise.all([
+  const [allRows, homeResponse, dailyResponse, fundResponse, ...groupRows] = await Promise.all([
     fetchRows(),
     fetch('https://www.twse.com.tw/rwd/zh/ETFortune/index', { headers: { 'user-agent': userAgent }, redirect: 'follow' }),
     fetch('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL', { headers: { 'user-agent': userAgent } }),
     fetch('https://openapi.twse.com.tw/v1/opendata/t187ap47_L', { headers: { 'user-agent': userAgent } }),
-    fetch(tpexEndpoint, { headers: { 'user-agent': userAgent, accept: 'application/json' }, signal: AbortSignal.timeout(90000) }),
     ...FILTER_GROUPS.map((group) => fetchRows(group.filters)),
   ]);
 
@@ -336,12 +365,21 @@ try {
   }).filter((row) => row.code && row.name);
 
   /* ---------- 上櫃：櫃買中心 ---------- */
-  if (!tpexResponse.ok) throw new Error(`TPEx response ${tpexResponse.status}`);
-  const tpexRows = await tpexResponse.json();
-  if (!Array.isArray(tpexRows)) throw new Error('Unexpected TPEx payload');
   const twseCodes = new Set(twseEtfs.map((row) => row.code));
-  // 同一代號若兩邊都有，以證交所官方資料為準（正常情況不會發生）。
-  const tpexEtfs = buildTpexEtfs(tpexRows).filter((row) => !twseCodes.has(row.code));
+  let tpexEtfs = [];
+  let tpexWarning = '';
+  try {
+    const tpexRows = await fetchTpexRows();
+    // 同一代號若兩邊都有，以證交所官方資料為準（正常情況不會發生）。
+    tpexEtfs = buildTpexEtfs(tpexRows).filter((row) => !twseCodes.has(row.code));
+    } catch (error) {
+    // 櫃買單邊失敗時，沿用上一次成功保存的上櫃資料，讓上市仍能正常更新。
+    const previousOtc = (existing?.etfs ?? []).filter((row) => row.market === '上櫃');
+    if (previousOtc.length < 80) throw new Error(`櫃買中心資料取得失敗，且沒有可沿用的上櫃資料：${error.message}`);
+    tpexEtfs = previousOtc;
+    tpexWarning = `櫃買中心本次資料取得失敗（${error.message}），上櫃 ${previousOtc.length} 檔沿用上一次成功保存的資料；上市資料已正常更新。`;
+    console.warn(`::warning::${tpexWarning}`);
+  }
 
   const etfs = [...twseEtfs, ...tpexEtfs];
 
@@ -422,7 +460,7 @@ try {
       lastSuccessfulSyncAt: nowIso,
       lastAttemptAt: nowIso,
       syncStatus: 'success',
-      syncWarning: '',
+      syncWarning: tpexWarning,
       schedule: '每個交易日 18:00 更新；失敗時於 18:15、18:45 自動重試（GitHub Actions，台灣時間）',
       units: { size: '億元', price: '元', dailyTradingVolume: '張', holders: '人' },
     },
