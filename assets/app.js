@@ -277,7 +277,10 @@ const renderStatus = (filtered) => {
 
   el.note.source.textContent = meta.source || '臺灣證券交易所 ETF e添富';
   el.note.official.textContent = `e添富 資料更新日：${meta.officialDate ?? '—'}（規模／受益人數口徑）`;
-  el.note.priceDate.textContent = `上市收盤價日：${fullDate(meta.listedPriceDate) ?? '證交所未提供'}`;
+  // 附註價格是從哪一個來源拿的：傍晚 e添富 常比證交所日報早一個交易日，標出來使用者才不會困惑。
+  el.note.priceDate.textContent = `上市收盤價日：${fullDate(meta.listedPriceDate) ?? '證交所未提供'}`
+    + (meta.listedPriceDate && meta.listedPriceOrigin ? `（來源：${meta.listedPriceOrigin}）` : '');
+  el.note.priceDate.title = meta.listedPriceDateSource ? `日期依據：${meta.listedPriceDateSource}` : '';
   el.note.priceWhy.hidden = Boolean(meta.listedPriceDate) || !meta.listedPriceDateNote;
   el.note.priceWhy.textContent = meta.listedPriceDateNote ? `上市收盤價日取得失敗：${meta.listedPriceDateNote}` : '';
   el.note.otcDate.hidden = !meta.otcOfficialDate;

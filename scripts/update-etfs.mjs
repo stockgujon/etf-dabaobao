@@ -619,12 +619,14 @@ try {
     ? (fortuneDate ? `e添富 收盤價，交易日以櫃買行情 ${fortuneDate} 交叉確認` : 'e添富 收盤價，交易日無法確認')
     : listedPriceDateSource;
 
-  // 健康度警告：只警告，不中止同步。
+  // 「e添富 領先、且日期已交叉確認」是每天傍晚的常態，不是異常：
+  // 只寫進執行記錄，不掛成 Actions 的黃色警告，也不進 syncWarning（否則網站每天都掛一條嚇人的提示）。
+  // 只有「真的沒辦法標日期」或「當日行情大量缺漏」才算需要注意的狀況。
   let priceWarning = '';
-  if (fortuneAhead) {
-    priceWarning = fortuneDate
-      ? `e添富 收盤價已更新至 ${fortuneDate}，證交所日報仍停在 ${listedPriceDate ?? '未知'}；已改用 e添富 價格並以櫃買同日行情佐證日期（${diffCount}/${bothCount} 檔不一致）。`
-      : `e添富 收盤價與證交所日報不一致（${diffCount}/${bothCount} 檔），但無法確認交易日，本次上市收盤價暫不標日期。`;
+  if (fortuneAhead && fortuneDate) {
+    console.log(`e添富 收盤價已更新至 ${fortuneDate}，證交所日報仍停在 ${listedPriceDate ?? '未知'}（${diffCount}/${bothCount} 檔不一致）；已改用 e添富 價格並以櫃買同日行情佐證日期。`);
+  } else if (fortuneAhead) {
+    priceWarning = `e添富 收盤價與證交所日報不一致（${diffCount}/${bothCount} 檔），但無法確認交易日，本次上市收盤價暫不標日期。`;
   } else if (twseEtfs.length && dailyCount / twseEtfs.length < 0.9) {
     priceWarning = `上市 ${twseEtfs.length} 檔中僅 ${dailyCount} 檔取得證交所當日行情收盤價，其餘沿用 e添富 價格且不標日期。`;
   }
@@ -735,6 +737,7 @@ try {
       officialDate,
       listedPriceDate: listedShownDate,
       listedPriceDateSource: listedShownSource,
+      listedPriceOrigin: fortuneAhead ? 'e添富' : '證交所每日行情',
       listedReportDate: listedPriceDate,   // 證交所日報本身的交易日，留著方便追查兩邊差幾天
       listedPriceDateNote,
       otcOfficialDate,
