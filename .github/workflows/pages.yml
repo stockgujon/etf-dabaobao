@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 每日同步是用 GITHUB_TOKEN 送出 commit，這種 commit 不會觸發上面的 push 事件，
+  # 所以改由「同步工作流程跑完」來接手重新部署，網站才會顯示當天的新資料。
   workflow_run:
     workflows: ["Update ETF snapshot"]
     types: [completed]
@@ -30,6 +32,7 @@ jobs:
           cp index.html _site/
           cp -r assets _site/assets
           cp -r data _site/data
+          [ -f robots.txt ] && cp robots.txt _site/ || true
           [ -f README.md ] && cp README.md _site/ || true
           touch _site/.nojekyll
 
