@@ -150,10 +150,16 @@ const getClassification = (etf) => {
 
 const etfs = () => state.dataset?.etfs ?? [];
 const marketOf = (etf) => etf.market || '上市';
-// 收盤價的實際交易日：上市與上櫃各有各的來源，取不到就不顯示（不猜日期）。
-const priceDateOf = (etf) => (marketOf(etf) === '上櫃'
-  ? state.dataset?.meta?.otcOfficialDate
-  : state.dataset?.meta?.listedPriceDate) || null;
+// 收盤價的實際交易日：以「每一檔自己的 priceDate」為準，取不到就不顯示（不猜日期）。
+// 同步腳本只在價格確實來自當日行情時才寫入 priceDate；價格是沿用舊值的那幾檔會是 null，
+// 這時寧可不標，也不要像先前那樣把 9/8 的價格標成 9/9。
+// 舊版資料檔沒有 priceDate 欄位，才退回 meta 的整體日期。
+const priceDateOf = (etf) => {
+  if ('priceDate' in etf) return etf.priceDate || null;
+  return (marketOf(etf) === '上櫃'
+    ? state.dataset?.meta?.otcOfficialDate
+    : state.dataset?.meta?.listedPriceDate) || null;
+};
 const shortDate = (value) => {
   const parts = String(value ?? '').split('.');
   return parts.length === 3 ? `${parts[1]}/${parts[2]}` : null;
@@ -334,6 +340,9 @@ const renderRows = (filtered) => {
       pxDate.textContent = `${pxShort} 收盤`;
       pxDate.title = `${fullDate(priceDateOf(fund))} 收盤價`;
       priceTd.append(pxDate);
+    } else if (fund.price !== null && fund.price !== undefined) {
+      // 沒有日期就不標日期，但滑鼠移上去要說得清楚為什麼，不讓使用者誤以為是當日價。
+      priceValue.title = '交易所當日行情未提供此檔收盤價，這是資料來源提供的最近價格，實際交易日不明';
     }
 
     const sizeTd = document.createElement('td');
