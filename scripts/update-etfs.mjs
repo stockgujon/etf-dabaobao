@@ -502,14 +502,9 @@ try {
     console.warn(`取得 e添富 首頁失敗：${describeError(error)}`);
   }
 
-  // 收盤價來源的取捨（2026-09-09 修）：
-  // e添富 的 close1 有自己的更新節奏，遇到當日無成交或 e添富 尚未翻新時會停在前一交易日，
-  // 但日期標示卻來自證交所日報，於是出現「9/8 的價格標成 9/9 收盤」。
-  // 改為優先採用「證交所每日行情 STOCK_DAY_ALL」的 ClosingPrice——它與日期來源同屬當日盤後檔案，
-  // 拿不到（該檔當日無成交或未列入）才退回 e添富 的價格，並且該檔不標日期，不猜。
-  let priceFromDaily = 0;
-  let priceFromFortune = 0;
-  let priceMismatch = 0;
+  // 收盤價的兩個候選來源先各自留著，等取得櫃買的交易日之後再一起決定（見下方「決定上市收盤價」）。
+  // e添富 的 close1 通常最快，但它不附日期；證交所每日行情有日期（＝日報的交易日）但可能慢半天。
+  const priceCandidates = new Map();
 
   const twseEtfs = allRows.map((row) => {
     const code = String(row.stockNo ?? '').trim();
@@ -522,13 +517,7 @@ try {
     const investmentTarget = buildInvestmentTarget(fundType, indexName, name, safeCategories);
     const classification = classifyEtf({ fundType, indexName, investmentTarget, name, categories: safeCategories });
     const daily = dailyByCode.get(code);
-    const dailyClose = toNumber(daily?.ClosingPrice);
-    const fortuneClose = toNumber(row.close1);
-    if (dailyClose === null) priceFromFortune += 1;
-    else {
-      priceFromDaily += 1;
-      if (fortuneClose !== null && Math.abs(dailyClose - fortuneClose) > 0.001) priceMismatch += 1;
-    }
+    priceCandidates.set(code, { dailyClose: toNumber(daily?.ClosingPrice), fortuneClose: toNumber(row.close1) });
     return {
       code,
       name,
@@ -538,10 +527,9 @@ try {
       fundType,
       investmentTarget,
       size: toNumber(row.totalAv),
-      price: dailyClose ?? fortuneClose,
-      // 只有價格真的來自「當日行情」時才敢標日期；退回 e添富 價格時一律留 null，前台就不顯示日期。
-      priceDate: dailyClose === null ? null : listedPriceDate,
-      priceSource: dailyClose === null ? 'e添富' : '證交所每日行情',
+      price: null,        // 這三個欄位在下方「決定上市收盤價」統一填入
+      priceDate: null,
+      priceSource: '',
       holders: toNumber(row.holders),
       dailyTradingVolume: sharesToLots(daily?.TradeVolume),
       issuer: String(row.issuer ?? '').trim(),
@@ -585,18 +573,64 @@ try {
     console.warn(`::warning::${tpexWarning}`);
   }
 
-  const etfs = [...twseEtfs, ...tpexEtfs];
+  /* ---------- 決定上市收盤價：要用哪一個來源、能不能標日期 ---------- */
+  // 實測 2026-09-09 17:40：櫃買已發布 9/9 行情，證交所的日報（BWIBBU_ALL、STOCK_DAY_ALL）卻還停在 9/8，
+  // 而 e添富 的 close1 已經是 9/9 的收盤——234 檔中有 223 檔與證交所日行情對不上。
+  // 只採用日行情會讓上市價格整整慢一天（上櫃卻是當天），只採用 e添富 又沒有日期可標。
+  // 解法：兩邊比對。價格一致就用日行情的交易日；大面積不一致代表 e添富 已經換日，
+  // 這時改用 e添富 的價格，並以「櫃買行情的交易日」為它定日期——
+  // 上市與上櫃共用同一個交易日曆與交易時段，櫃買已發布該日行情即代表該交易日確實已收盤，
+  // 這是交叉驗證，不是推測；若連櫃買也沒有更新的日期，就不標日期。
+  let bothCount = 0;
+  let diffCount = 0;
+  let dailyCount = 0;
+  for (const { dailyClose, fortuneClose } of priceCandidates.values()) {
+    if (dailyClose !== null) dailyCount += 1;
+    if (dailyClose !== null && fortuneClose !== null) {
+      bothCount += 1;
+      if (Math.abs(dailyClose - fortuneClose) > 0.001) diffCount += 1;
+    }
+  }
+  const fortuneAhead = bothCount >= 20 && diffCount / bothCount > 0.5;
+  const fortuneDate = fortuneAhead && otcOfficialDate && (!listedPriceDate || otcOfficialDate > listedPriceDate)
+    ? otcOfficialDate
+    : null;
 
-  // 收盤價來源的健康度：兩項都只記警告，不中止同步（資訊豐富度問題，不是數字錯誤）。
+  for (const etf of twseEtfs) {
+    const { dailyClose = null, fortuneClose = null } = priceCandidates.get(etf.code) ?? {};
+    if (fortuneAhead && fortuneClose !== null) {
+      etf.price = fortuneClose;
+      etf.priceSource = 'e添富';
+      etf.priceDate = fortuneDate;                 // 櫃買也沒更新就是 null，前台不標日期
+    } else if (dailyClose !== null) {
+      etf.price = dailyClose;
+      etf.priceSource = '證交所每日行情';
+      etf.priceDate = listedPriceDate;
+    } else {
+      etf.price = fortuneClose;
+      etf.priceSource = 'e添富';
+      etf.priceDate = null;                        // 沒有任何可佐證的日期，一律不猜
+    }
+  }
+
+  // 畫面左側「上市收盤價日」要跟表格裡多數列一致，所以改成實際採用的那個日期。
+  const listedShownDate = fortuneAhead ? fortuneDate : listedPriceDate;
+  const listedShownSource = fortuneAhead
+    ? (fortuneDate ? `e添富 收盤價，交易日以櫃買行情 ${fortuneDate} 交叉確認` : 'e添富 收盤價，交易日無法確認')
+    : listedPriceDateSource;
+
+  // 健康度警告：只警告，不中止同步。
   let priceWarning = '';
-  const dailyRate = twseEtfs.length ? priceFromDaily / twseEtfs.length : 0;
-  if (dailyRate < 0.9) {
-    priceWarning = `上市 ${twseEtfs.length} 檔中僅 ${priceFromDaily} 檔取得證交所當日行情收盤價，其餘 ${priceFromFortune} 檔沿用 e添富 價格且不標日期。`;
-  } else if (priceFromDaily && priceMismatch / priceFromDaily > 0.2) {
-    // 兩個來源若分屬不同交易日，價格會大面積對不上——這是最早發現「日期標錯」的訊號。
-    priceWarning = `證交所當日行情與 e添富 的收盤價有 ${priceMismatch}/${priceFromDaily} 檔不一致，兩者可能不是同一個交易日，請檢查日期標示。`;
+  if (fortuneAhead) {
+    priceWarning = fortuneDate
+      ? `e添富 收盤價已更新至 ${fortuneDate}，證交所日報仍停在 ${listedPriceDate ?? '未知'}；已改用 e添富 價格並以櫃買同日行情佐證日期（${diffCount}/${bothCount} 檔不一致）。`
+      : `e添富 收盤價與證交所日報不一致（${diffCount}/${bothCount} 檔），但無法確認交易日，本次上市收盤價暫不標日期。`;
+  } else if (twseEtfs.length && dailyCount / twseEtfs.length < 0.9) {
+    priceWarning = `上市 ${twseEtfs.length} 檔中僅 ${dailyCount} 檔取得證交所當日行情收盤價，其餘沿用 e添富 價格且不標日期。`;
   }
   if (priceWarning) console.warn(`::warning::${priceWarning}`);
+
+  const etfs = [...twseEtfs, ...tpexEtfs];
 
   /* ---------- 驗證（全部通過才允許替換資料） ---------- */
   stage = '資料驗證';
@@ -684,7 +718,7 @@ try {
   const sameValue = (a, b) => (a ?? null) === (b ?? null);
   const unchanged = existing?.meta?.syncStatus === 'success'
     && previousDate === officialDate
-    && sameValue(existing.meta.listedPriceDate, listedPriceDate)
+    && sameValue(existing.meta.listedPriceDate, listedShownDate)
     && sameValue(existing.meta.otcOfficialDate, otcOfficialDate)
     && JSON.stringify(existing.etfs) === JSON.stringify(etfs);
 
@@ -699,8 +733,9 @@ try {
       sourceUrl,
       tpexSourceUrl,
       officialDate,
-      listedPriceDate,
-      listedPriceDateSource,
+      listedPriceDate: listedShownDate,
+      listedPriceDateSource: listedShownSource,
+      listedReportDate: listedPriceDate,   // 證交所日報本身的交易日，留著方便追查兩邊差幾天
       listedPriceDateNote,
       otcOfficialDate,
       otcOfficialFieldCount: tpexEtfs.filter((row) => !row.sizeIsEstimated).length,
@@ -709,7 +744,7 @@ try {
       listedCount: twseEtfs.length,
       otcCount: tpexEtfs.length,
       categorySource: '上市依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題（市值限定被動原型 ETF）；上櫃依櫃買中心代號末碼規則推導，策略／主題無官方來源故留空',
-      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃的規模、受益人數、掛牌日期、標的指數與發行人取自櫃買中心 ETF 訊息中心，收盤價與成交量取自櫃買上櫃行情。日成交量兩市場皆以 1,000 股換算為 1 張。若櫃買 ETF 訊息中心暫時取不到，上櫃規模會退回「已發行受益權單位數 × 收盤價」的推估市值並標記為推估。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑）。上市收盤價優先取自證交所每日行情（與日期同屬當日盤後檔案），取不到才退回 e添富 價格並且不標日期；每一檔的實際價格日期記在該檔的 priceDate，meta 的 listedPriceDate 與 otcOfficialDate 只是整體參考',
+      syncNote: '上市分類取自證交所 ETF e添富即時篩選結果；上櫃的規模、受益人數、掛牌日期、標的指數與發行人取自櫃買中心 ETF 訊息中心，收盤價與成交量取自櫃買上櫃行情。日成交量兩市場皆以 1,000 股換算為 1 張。若櫃買 ETF 訊息中心暫時取不到，上櫃規模會退回「已發行受益權單位數 × 收盤價」的推估市值並標記為推估。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑）。上市收盤價比對「證交所每日行情」與「e添富」兩個來源：一致時採用並標示證交所日報的交易日；大面積不一致代表 e添富 已換日，改採 e添富 價格並以櫃買同日行情交叉確認交易日，無法確認則不標日期。每一檔實際的價格日期記在該檔的 priceDate',
       lastSuccessfulSyncAt: nowIso,
       lastAttemptAt: nowIso,
       syncStatus: 'success',
