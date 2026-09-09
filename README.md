@@ -145,6 +145,25 @@ POST https://info.tpex.org.tw/api/etfFilter        （表單格式，不帶條�
 
 頁面本身在任何寬度都不會產生水平捲軸，只有表格區塊內部會捲動。
 
+## 不讓搜尋引擎收錄
+
+本站僅供個人使用，因此做了兩件事：
+
+1. `index.html` 的 `<head>` 放入 `noindex` 指令：
+
+   ```html
+   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+   <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+   ```
+
+2. 根目錄的 `robots.txt`：**刻意允許** Googlebot 與 Bingbot 抓取，其餘爬蟲一律 `Disallow: /`。
+
+第 2 點看起來矛盾，但這是 Google 官方建議的作法：`noindex` 寫在網頁裡，爬蟲必須讀得到那一頁才看得到它。若在 `robots.txt` 直接封鎖 Googlebot，Google 讀不到 `noindex`，一旦從別處發現這個網址，反而可能在搜尋結果留下一筆「只有網址、沒有摘要」的項目，而且再也無法用 `noindex` 移除。
+
+`robots.txt` 必須被複製進 `_site/`，否則不會部署（見 `pages.yml` 的 Assemble static site 步驟）。
+
+注意：這只讓網站不出現在搜尋結果，**不等於不公開**。GitHub Pages 網址與公開 repository 的內容，任何知道網址的人都能直接開啟。
+
 ## 本機預覽
 
 必須用靜態 HTTP server 開啟（ES modules 與 `fetch` 不支援 `file://`）：

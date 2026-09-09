@@ -1,0 +1,16 @@
+# 本站僅供個人使用，不希望出現在搜尋結果中。
+#
+# 刻意「允許」Googlebot / Bingbot 抓取：
+# 搜尋引擎必須先讀得到頁面，才看得到 index.html 裡的
+# <meta name="robots" content="noindex"> 而把整頁排除在索引之外。
+# 若在這裡直接 Disallow: /，爬蟲讀不到那行 noindex，
+# 反而可能在搜尋結果留下一筆「沒有摘要的網址」。
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# 其餘所有爬蟲（含 AI 訓練用途）一律不要抓。
+User-agent: *
+Disallow: /
