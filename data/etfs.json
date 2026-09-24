@@ -12,14 +12,14 @@
     "listedPriceDateNote": "",
     "otcOfficialDate": "2026.09.24",
     "otcOfficialFieldCount": 118,
-    "syncedAt": "2026-09-24T10:03:47.230Z",
+    "syncedAt": "2026-09-24T10:50:42.116Z",
     "count": 358,
     "listedCount": 240,
     "otcCount": 118,
     "categorySource": "上市依證交所官方欄位拆分為管理方式、產品結構、資產類別與策略／主題（市值限定被動原型 ETF）；上櫃依櫃買中心代號末碼規則推導，策略／主題無官方來源故留空",
     "syncNote": "上市分類取自證交所 ETF e添富即時篩選結果；上櫃的規模、受益人數、掛牌日期、標的指數與發行人取自櫃買中心 ETF 訊息中心，收盤價與成交量取自櫃買上櫃行情。日成交量兩市場皆以 1,000 股換算為 1 張。若櫃買 ETF 訊息中心暫時取不到，上櫃規模會退回「已發行受益權單位數 × 收盤價」的推估市值並標記為推估。officialDate 為 e添富 首頁標示之資料更新日（規模／受益人數口徑）。上市收盤價比對「證交所每日行情」與「e添富」兩個來源：一致時採用並標示證交所日報的交易日；大面積不一致代表 e添富 已換日，改採 e添富 價格並以櫃買同日行情交叉確認交易日，無法確認則不標日期。每一檔實際的價格日期記在該檔的 priceDate",
-    "lastSuccessfulSyncAt": "2026-09-24T10:03:47.230Z",
-    "lastAttemptAt": "2026-09-24T10:03:47.230Z",
+    "lastSuccessfulSyncAt": "2026-09-24T10:50:42.116Z",
+    "lastAttemptAt": "2026-09-24T10:50:42.116Z",
     "syncStatus": "success",
     "syncWarning": "證交所目前發布的官方資料日為 2026.09.23（尚未更新至 2026.09.24），畫面顯示的是該日的官方數字。",
     "schedule": "每個交易日 18:00 起檢查更新，18:15、18:45、20:00、22:00 與隔日 08:30 再次確認（GitHub Actions，台灣時間）",
@@ -82,7 +82,6 @@
       "manager": "沈馨",
       "custodian": "國泰世華商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -113,7 +112,6 @@
       "manager": "洪華珍",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "產業型",
         "主動型"
       ],
@@ -148,7 +146,6 @@
       "manager": "張哲瑋",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -209,7 +206,6 @@
       "manager": "高日告欣",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "產業型",
         "高股息",
         "主動型"
@@ -245,7 +241,6 @@
       "manager": "張書廷",
       "custodian": "合作金庫商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -276,7 +271,6 @@
       "manager": "趙偉志",
       "custodian": "彰化銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型",
         "因子型"
       ],
@@ -310,7 +304,6 @@
       "manager": "張正中",
       "custodian": "臺灣中小企業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型",
         "因子型"
       ],
@@ -344,7 +337,6 @@
       "manager": "胡家菱",
       "custodian": "國泰世華商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -397,7 +389,7 @@
       "indexName": "富時臺灣證券交易所臺灣50指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 24880,
       "price": 112.4,
       "priceDate": "2026.09.24",
@@ -408,14 +400,12 @@
       "manager": "陳重銓",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -429,7 +419,7 @@
       "indexName": "臺灣中型100指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 37,
       "price": 148.15,
       "priceDate": "2026.09.24",
@@ -440,14 +430,12 @@
       "manager": "邱鉦淵",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -589,7 +577,7 @@
       "indexName": "MSCI台灣指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 5,
       "price": 333.5,
       "priceDate": "2026.09.24",
@@ -600,14 +588,12 @@
       "manager": "陳又又吉",
       "custodian": "台新國際商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -621,7 +607,7 @@
       "indexName": "滬深300指數",
       "benchmarkName": "",
       "fundType": "連結式證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 23,
       "price": 24.1,
       "priceDate": "2026.09.24",
@@ -632,14 +618,12 @@
       "manager": "張克豪",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -653,7 +637,7 @@
       "indexName": "MSCIR臺灣指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 21,
       "price": 203.2,
       "priceDate": "2026.09.24",
@@ -664,14 +648,12 @@
       "manager": "程惇亞",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -685,7 +667,7 @@
       "indexName": "臺灣證券交易所發行量加權股價指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 4,
       "price": 238.45,
       "priceDate": "2026.09.24",
@@ -696,14 +678,12 @@
       "manager": "林永祥",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -747,7 +727,7 @@
       "indexName": "上證50指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "中國股票｜市值型",
+      "investmentTarget": "中國股票",
       "size": 11,
       "price": 37.21,
       "priceDate": "2026.09.24",
@@ -758,14 +738,12 @@
       "manager": "李舒禾",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -779,7 +757,7 @@
       "indexName": "滬深300指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "國外股票｜市值型",
+      "investmentTarget": "國外股票",
       "size": 7,
       "price": 31.7,
       "priceDate": "2026.09.24",
@@ -790,14 +768,12 @@
       "manager": "廖崇文",
       "custodian": "第一商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -811,7 +787,7 @@
       "indexName": "富時臺灣證券交易所臺灣50指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 4809,
       "price": 256.85,
       "priceDate": "2026.09.24",
@@ -822,14 +798,12 @@
       "manager": "洪珮甄",
       "custodian": "第一商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -884,7 +858,6 @@
       "manager": "曾逸江",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -915,7 +888,6 @@
       "manager": "陳威志",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -946,7 +918,6 @@
       "manager": "林旻致",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -977,7 +948,6 @@
       "manager": "溫芳儀",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1098,7 +1068,6 @@
       "manager": "李舒禾",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1129,7 +1098,6 @@
       "manager": "張克豪",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1149,7 +1117,7 @@
       "indexName": "深証100指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "國外股票｜市值型",
+      "investmentTarget": "國外股票",
       "size": 15,
       "price": 15.78,
       "priceDate": "2026.09.24",
@@ -1160,14 +1128,12 @@
       "manager": "林旻致",
       "custodian": "台新國際商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1192,7 +1158,6 @@
       "manager": "陳仲愷",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1224,7 +1189,6 @@
       "manager": "林威宇",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1335,7 +1299,7 @@
       "indexName": "東証股價指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "日本股票｜市值型",
+      "investmentTarget": "日本股票",
       "size": 27,
       "price": 57.85,
       "priceDate": "2026.09.24",
@@ -1346,14 +1310,12 @@
       "manager": "陳意雯",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1367,7 +1329,7 @@
       "indexName": "標普指數(S&P 500R)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 497,
       "price": 77.15,
       "priceDate": "2026.09.24",
@@ -1378,14 +1340,12 @@
       "manager": "盧永 祥",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1410,7 +1370,6 @@
       "manager": "方雅婷",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1442,7 +1401,6 @@
       "manager": "方雅婷",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1474,7 +1432,6 @@
       "manager": "廖崇文",
       "custodian": "玉山商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1505,7 +1462,6 @@
       "manager": "廖崇文",
       "custodian": "玉山商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1525,7 +1481,7 @@
       "indexName": "NIFTY指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "印度股票｜市值型",
+      "investmentTarget": "印度股票",
       "size": 20,
       "price": 31.89,
       "priceDate": "2026.09.24",
@@ -1536,14 +1492,12 @@
       "manager": "溫芳儀",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1568,7 +1522,6 @@
       "manager": "林旻致",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1600,7 +1553,6 @@
       "manager": "黎邕墉",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1632,7 +1584,6 @@
       "manager": "楊庭杰",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1664,7 +1615,6 @@
       "manager": "楊庭杰",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1745,7 +1695,7 @@
       "indexName": "歐洲STOXX50指數(EURO STOXX 50R PR in EUR)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "歐洲股票｜市值型",
+      "investmentTarget": "歐洲股票",
       "size": 3,
       "price": 45.78,
       "priceDate": "2026.09.24",
@@ -1756,14 +1706,12 @@
       "manager": "許家瑋",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1777,7 +1725,7 @@
       "indexName": "日經225指數(Nikkei Stock Average)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "日本股票｜市值型",
+      "investmentTarget": "日本股票",
       "size": 20,
       "price": 84.9,
       "priceDate": "2026.09.24",
@@ -1788,14 +1736,12 @@
       "manager": "許家瑋",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1820,14 +1766,12 @@
       "manager": "王辰方",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -1852,7 +1796,6 @@
       "manager": "蘇鼎宇",
       "custodian": "台灣集中保管結算所託股份有限公",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1883,7 +1826,6 @@
       "manager": "蘇鼎宇",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -1914,7 +1856,6 @@
       "manager": "陳婉寧",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -1945,7 +1886,6 @@
       "manager": "黎邕墉",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -2036,7 +1976,6 @@
       "manager": "蘇鼎宇",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -2068,7 +2007,6 @@
       "manager": "陳婉寧",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -2100,7 +2038,6 @@
       "manager": "蘇筱婷",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -2196,7 +2133,6 @@
       "manager": "林威宇",
       "custodian": "華南商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -2227,7 +2163,6 @@
       "manager": "王素珍",
       "custodian": "華南商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "反向型"
       ],
       "managementStyle": "被動式",
@@ -2291,7 +2226,6 @@
       "manager": "蕭開豪",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "債券型",
         "槓桿型"
       ],
@@ -2325,7 +2259,6 @@
       "manager": "陳柏彰",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "債券型",
         "反向型"
       ],
@@ -2513,7 +2446,6 @@
       "manager": "林淑娟",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "債券型",
         "槓桿型"
       ],
@@ -2547,7 +2479,6 @@
       "manager": "林淑娟",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "債券型",
         "反向型"
       ],
@@ -2570,7 +2501,7 @@
       "indexName": "藍籌30指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 70,
       "price": 83.65,
       "priceDate": "2026.09.24",
@@ -2581,14 +2512,12 @@
       "manager": "張嘉祐",
       "custodian": "台中商業銀行",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -2613,14 +2542,12 @@
       "manager": "溫芳儀",
       "custodian": "華南商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "ESG型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "ESG"
       ],
       "riskNotes": [
@@ -2666,7 +2593,7 @@
       "indexName": "恒生中國企業指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "中國股票｜市值型",
+      "investmentTarget": "中國股票",
       "size": 5,
       "price": 16.96,
       "priceDate": "2026.09.24",
@@ -2677,14 +2604,12 @@
       "manager": "謝仲愷",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -2709,14 +2634,12 @@
       "manager": "張辰煜",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "高股息"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "高股息"
       ],
       "riskNotes": [
@@ -2743,14 +2666,12 @@
       "manager": "林淑娟",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "高股息"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "高股息"
       ],
       "riskNotes": [
@@ -2766,7 +2687,7 @@
       "indexName": "MSCI 中國指數(MSCI China Index)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "中國股票｜市值型",
+      "investmentTarget": "中國股票",
       "size": 2,
       "price": 18.94,
       "priceDate": "2026.09.24",
@@ -2777,14 +2698,12 @@
       "manager": "王惜安",
       "custodian": "玉山商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -2894,7 +2813,7 @@
       "indexName": "富時發展歐洲指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "歐洲股票｜市值型",
+      "investmentTarget": "歐洲股票",
       "size": 6,
       "price": 39.42,
       "priceDate": "2026.09.24",
@@ -2905,14 +2824,12 @@
       "manager": "陳婉寧",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -3147,7 +3064,7 @@
       "indexName": "臺灣指數公司工業菁英30指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 28,
       "price": 70.35,
       "priceDate": "2026.09.24",
@@ -3158,14 +3075,12 @@
       "manager": "曾萬勝",
       "custodian": "玉山商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -3254,14 +3169,12 @@
       "manager": "蘇筱婷",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "因子型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "因子"
       ],
       "riskNotes": [
@@ -3310,7 +3223,7 @@
       "indexName": "富時新興市場(納入A股)指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "國外股票｜市值型",
+      "investmentTarget": "國外股票",
       "size": 2,
       "price": 31.8,
       "priceDate": "2026.09.24",
@@ -3321,14 +3234,12 @@
       "manager": "陳世偉",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -3405,7 +3316,7 @@
       "indexName": "MSCI中國A股國際通指數(MSCI China A Inclusion Index)",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "中國股票｜市值型",
+      "investmentTarget": "中國股票",
       "size": 7,
       "price": 27.28,
       "priceDate": "2026.09.24",
@@ -3416,14 +3327,12 @@
       "manager": "李舒禾",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -3437,7 +3346,7 @@
       "indexName": "MSCI 中國外資自由投資50不含A及B股指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "中國股票｜市值型",
+      "investmentTarget": "中國股票",
       "size": 59,
       "price": 22.51,
       "priceDate": "2026.09.24",
@@ -3448,14 +3357,12 @@
       "manager": "陳雯卿",
       "custodian": "兆豐國際商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -3480,7 +3387,6 @@
       "manager": "陳雯卿",
       "custodian": "台北富邦商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -3512,7 +3418,6 @@
       "manager": "林良一",
       "custodian": "玉山商業銀行",
       "categories": [
-        "市值型",
         "產業型",
         "因子型"
       ],
@@ -3520,7 +3425,6 @@
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業",
         "因子"
       ],
@@ -3549,14 +3453,12 @@
       "manager": "方雅婷",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -3668,7 +3570,7 @@
       "indexName": "富時15年期以上投資等級債券指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "投資級債｜市值型",
+      "investmentTarget": "投資級債",
       "size": 72,
       "price": 30.4,
       "priceDate": "2026.09.24",
@@ -3679,15 +3581,12 @@
       "manager": "劉恆誌",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "債券型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "債券",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
       ],
@@ -3701,7 +3600,7 @@
       "indexName": "中証小盤500指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "國外股票｜市值型",
+      "investmentTarget": "國外股票",
       "size": 2,
       "price": 27.74,
       "priceDate": "2026.09.24",
@@ -3712,14 +3611,12 @@
       "manager": "陳又又吉",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -3744,14 +3641,12 @@
       "manager": "李翰林",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -3844,7 +3739,6 @@
       "manager": "蘇鼎宇",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "槓桿型"
       ],
       "managementStyle": "被動式",
@@ -3876,14 +3770,12 @@
       "manager": "方雅婷",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -3900,7 +3792,7 @@
       "indexName": "彭博美國短期公債收益指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "債券｜市值型",
+      "investmentTarget": "債券",
       "size": 159,
       "price": 48.94,
       "priceDate": "2026.09.24",
@@ -3911,15 +3803,12 @@
       "manager": "陳韻竹",
       "custodian": "台灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "債券型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "債券",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "債券價格會受利率、信用品質與存續期變化影響。"
       ],
@@ -3977,14 +3866,12 @@
       "manager": "李政剛",
       "custodian": "臺灣集中保管結算股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -4099,7 +3986,7 @@
       "indexName": "富時越南30指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "越南股票｜市值型",
+      "investmentTarget": "越南股票",
       "size": 108,
       "price": 18.04,
       "priceDate": "2026.09.24",
@@ -4110,14 +3997,12 @@
       "manager": "陳仲愷",
       "custodian": "臺灣新光商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -4243,14 +4128,12 @@
       "manager": "韓聖弘",
       "custodian": "合作金庫商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "因子型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "因子"
       ],
       "riskNotes": [
@@ -4473,14 +4356,12 @@
       "manager": "王茗冠",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -4662,7 +4543,7 @@
       "indexName": "全球入息不動產與基礎建設指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "REITs｜市值型",
+      "investmentTarget": "REITs",
       "size": 5,
       "price": 14.63,
       "priceDate": "2026.09.24",
@@ -4673,15 +4554,12 @@
       "manager": "蘇筱婷",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "REITs"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "REITs",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -4807,14 +4685,12 @@
       "manager": "韓聖弘",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "因子型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "因子"
       ],
       "riskNotes": [
@@ -4896,7 +4772,7 @@
       "indexName": "ICE FactSet全球品牌50指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "全球股票｜市值型",
+      "investmentTarget": "全球股票",
       "size": 27,
       "price": 26.99,
       "priceDate": "2026.09.24",
@@ -4907,14 +4783,12 @@
       "manager": "李翰林",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -4972,7 +4846,6 @@
       "manager": "郭修誠",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "高股息",
         "因子型"
       ],
@@ -4980,7 +4853,6 @@
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "高股息",
         "因子"
       ],
@@ -5096,7 +4968,7 @@
       "indexName": "MSCI台灣領袖50精選指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 939,
       "price": 43.87,
       "priceDate": "2026.09.24",
@@ -5107,14 +4979,12 @@
       "manager": "蘇鼎宇",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -5171,14 +5041,12 @@
       "manager": "吳允翔",
       "custodian": "台北富邦商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "因子型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "因子"
       ],
       "riskNotes": [
@@ -5301,7 +5169,6 @@
       "manager": "林永祥",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "高股息",
         "ESG型"
       ],
@@ -5309,7 +5176,6 @@
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "高股息",
         "ESG"
       ],
@@ -5405,14 +5271,12 @@
       "manager": "林怡君",
       "custodian": "野村證券投資信託股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -5439,7 +5303,6 @@
       "manager": "黃鈺民",
       "custodian": "兆豐國際商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "高股息",
         "ESG型"
       ],
@@ -5447,7 +5310,6 @@
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "高股息",
         "ESG"
       ],
@@ -5763,7 +5625,7 @@
       "indexName": "NYSE FactSet 日本護城河優勢龍頭企業指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 37,
       "price": 21.85,
       "priceDate": "2026.09.24",
@@ -5774,14 +5636,12 @@
       "manager": "劉昌祚",
       "custodian": "第一商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -5957,7 +5817,7 @@
       "indexName": "NYSE FactSet全球航運龍頭息收指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 13,
       "price": 22.02,
       "priceDate": "2026.09.24",
@@ -5968,14 +5828,12 @@
       "manager": "張怡琳",
       "custodian": "野村證券投資信託股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -6132,14 +5990,12 @@
       "manager": "李政剛",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -6167,14 +6023,12 @@
       "manager": "林怡君",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -6236,14 +6090,12 @@
       "manager": "張圭慧",
       "custodian": "合作金庫商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -6304,14 +6156,12 @@
       "manager": "林威宇",
       "custodian": "第一商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "因子型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "因子"
       ],
       "riskNotes": [
@@ -6338,14 +6188,12 @@
       "manager": "蔡長琛",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "因子型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
       "themes": [
-        "市值",
         "因子"
       ],
       "riskNotes": [
@@ -6361,7 +6209,7 @@
       "indexName": "富時臺灣證券交易所臺灣50權重上限30%指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 35,
       "price": 24.12,
       "priceDate": "2026.09.24",
@@ -6372,14 +6220,12 @@
       "manager": "周彥名",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -6426,7 +6272,7 @@
       "indexName": "臺灣指數公司特選臺灣護城河概念優選50指數",
       "benchmarkName": "",
       "fundType": "國內成分證券指數股票型基金",
-      "investmentTarget": "台灣股票｜市值型",
+      "investmentTarget": "台灣股票",
       "size": 13,
       "price": 32.16,
       "priceDate": "2026.09.24",
@@ -6437,14 +6283,12 @@
       "manager": "蔣松原",
       "custodian": "元大銀行",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "台灣股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -6469,14 +6313,12 @@
       "manager": "紀元豪",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "ESG型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "ESG"
       ],
       "riskNotes": [
@@ -6503,7 +6345,6 @@
       "manager": "游景德",
       "custodian": "華南商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -6523,7 +6364,7 @@
       "indexName": "標普全球100指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 4,
       "price": 21.34,
       "priceDate": "2026.09.24",
@@ -6534,14 +6375,12 @@
       "manager": "黃相慈",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -6555,7 +6394,7 @@
       "indexName": "NYSE美國50指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 32,
       "price": 13.5,
       "priceDate": "2026.09.24",
@@ -6566,14 +6405,12 @@
       "manager": "吳湘菱",
       "custodian": "臺灣銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -6587,7 +6424,7 @@
       "indexName": "東證股價總報酬指數",
       "benchmarkName": "",
       "fundType": "連結式證券指數股票型基金",
-      "investmentTarget": "日本股票｜市值型",
+      "investmentTarget": "日本股票",
       "size": 12,
       "price": 12.92,
       "priceDate": "2026.09.24",
@@ -6598,14 +6435,12 @@
       "manager": "張怡琳",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -6619,7 +6454,7 @@
       "indexName": "標普500卓越50指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 37,
       "price": 11.49,
       "priceDate": "2026.09.24",
@@ -6630,14 +6465,12 @@
       "manager": "楊貽甯",
       "custodian": "中國信託商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -6681,7 +6514,7 @@
       "indexName": "東証REIT總報酬指數",
       "benchmarkName": "",
       "fundType": "連結式證券指數股票型基金",
-      "investmentTarget": "REITs｜市值型",
+      "investmentTarget": "REITs",
       "size": 20,
       "price": 8.9,
       "priceDate": "2026.09.24",
@@ -6692,14 +6525,12 @@
       "manager": "游凱卉",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "REITs",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "ETF 仍有市場波動、追蹤差距與折溢價風險。"
       ],
@@ -6724,14 +6555,12 @@
       "manager": "蔣松原",
       "custodian": "彰化銀行",
       "categories": [
-        "市值型",
         "產業型"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業"
       ],
       "riskNotes": [
@@ -6792,7 +6621,6 @@
       "manager": "陳釧瑤",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -6853,7 +6681,6 @@
       "manager": "方雅婷",
       "custodian": "第一商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "產業型",
         "因子型"
       ],
@@ -6861,7 +6688,6 @@
       "productStructure": "原型",
       "assetClass": "海外股票",
       "themes": [
-        "市值",
         "產業",
         "因子"
       ],
@@ -6942,7 +6768,7 @@
       "indexName": "標普TIP世界股票指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "美國股票｜市值型",
+      "investmentTarget": "美國股票",
       "size": 85,
       "price": 10.06,
       "priceDate": "2026.09.24",
@@ -6953,14 +6779,12 @@
       "manager": "楊貽甯",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -7040,7 +6864,7 @@
       "indexName": "KOSPI 50指數",
       "benchmarkName": "",
       "fundType": "國外成分證券指數股票型基金",
-      "investmentTarget": "國外股票｜市值型",
+      "investmentTarget": "國外股票",
       "size": 35,
       "price": 11.04,
       "priceDate": "2026.09.24",
@@ -7051,14 +6875,12 @@
       "manager": "郭修誠",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型"
+        "其他"
       ],
       "managementStyle": "被動式",
       "productStructure": "原型",
       "assetClass": "海外股票",
-      "themes": [
-        "市值"
-      ],
+      "themes": [],
       "riskNotes": [
         "海外資產可能受匯率、時區與當地市場風險影響。"
       ],
@@ -7083,7 +6905,6 @@
       "manager": "陳沅易",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7245,7 +7066,6 @@
       "manager": "廖本隆",
       "custodian": "國泰世華商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "高股息",
         "主動型",
         "因子型"
@@ -7312,7 +7132,6 @@
       "manager": "林浩詳",
       "custodian": "台北富邦商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7376,7 +7195,6 @@
       "manager": "蘇聖峰",
       "custodian": "臺灣中小企業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7407,7 +7225,6 @@
       "manager": "魏永祥",
       "custodian": "彰化商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7438,7 +7255,6 @@
       "manager": "陳意婷",
       "custodian": "元大商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "產業型",
         "主動型"
       ],
@@ -7541,7 +7357,6 @@
       "manager": "呂宏宇",
       "custodian": "第一商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7638,7 +7453,6 @@
       "manager": "郭勁甫",
       "custodian": "中國信託商業銀行",
       "categories": [
-        "市值型",
         "主動型",
         "因子型"
       ],
@@ -7672,7 +7486,6 @@
       "manager": "張正中",
       "custodian": "永豐商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型",
         "因子型"
       ],
@@ -7706,7 +7519,6 @@
       "manager": "張書廷",
       "custodian": "元大商業銀行股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7737,7 +7549,6 @@
       "manager": "王仲良",
       "custodian": "元大商業銀行",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
@@ -7768,7 +7579,6 @@
       "manager": "吳承恕",
       "custodian": "臺灣集中保管結算所股份有限公司",
       "categories": [
-        "市值型",
         "主動型"
       ],
       "managementStyle": "主動式",
